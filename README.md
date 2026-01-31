@@ -1,0 +1,5 @@
+This project will be a parking system, this system will be created as an app. The system is simple, it checks when a parking spot is open or occupied based on sensors that detect objects, this system can be used by malls, restaurants, gyms, etc. 
+
+This sytem will be handled by an app, the app allows you to search for parking lots around an area using zip codes, once the user chooses the area they want to look at, the user can then look for a specific parking lot by looking up the ID of that lot and also the name of it. Once they select that lot, they will be able to see what parking spots are available all through the app. The way this will work is by storing data into a database (SQLite), which is a good, reliable way to store data the best. 
+
+The sensors, which in this case will be simulated, should be able to recognize when a car is present or isn’t present, which will then send the update to the app, showing what lot is open and also updating how many open lots are available.

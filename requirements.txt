@@ -1,0 +1,17 @@
+Backend development:
+
+variables:
+
+lot_id:
+
+lot_name:
+
+total_spots:
+
+open_spots:
+
+lot_updated: 
+
+spot_id: 
+
+occupied:
