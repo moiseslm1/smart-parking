@@ -21,4 +21,4 @@ def get_spots():
 def home():
     return "Welcome to QuickSpot Parking System"
 if __name__ == "__main__":
-    app.run(debug=True)  #debug=True enables auto-reloading and better error messages
+    app.run(host="0.0.0.0", port=5000,debug=True)  #debug=True enables auto-reloading and better error messages
