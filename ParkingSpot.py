@@ -5,25 +5,6 @@
     
 from flask import Flask, jsonify
 app = Flask (__name__)
-
-#Hardcoded data representing parking spots
-parking_spots = [
-    {"id":1, "occupied": False},
-    {"id":2, "occupied": True},
-    {"id":3, "occupied": False},
-]
-
-@app.route("/spots")
-def get_spots():
-    return jsonify(parking_spots)
-
-@app.route("/")
-def home():
-    return "Welcome to QuickSpot Parking System"
-if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=5000,debug=True)  #debug=True enables auto-reloading and better error messages
-    
-#variables
 #parking lot
 lot_id = 1
 lot_name = "Cerritos Mall"
@@ -31,9 +12,8 @@ lot_updated = None
 total_spots = 10
 #parking spots
 spot_id = None
-lot_id
 occupied_count = 0 
-open_spots = None
+open_spots = 10
 #list of parking spots in the lot
 spots = [
     {"spot_id": 1, "occupied": False},
@@ -47,10 +27,42 @@ spots = [
     {"spot_id": 9, "occupied": False},
     {"spot_id": 10, "occupied": False},
 ]
-#checks which spots are occupied and adds it to the count 
-for spot in spots:
-    if spot["occupied"]:
-        occupied_count += 1
-print("Occupied spots:", occupied_count)
-open_spots = total_spots - occupied_count
-print("Open spots:", open_spots)
+
+#Hardcoded data representing parking spots
+parking_spots = [
+    {"id":1, "occupied": False},
+    {"id":2, "occupied": True},
+    {"id":3, "occupied": False},
+]
+
+@app.route("/spots")
+def get_spots():
+    occupied_count = sum(1 for spot in spots if spot["occupied"])
+    open_spots = total_spots - occupied_count
+    data = {
+        "lot_id": lot_id,
+        "lot_name": lot_name,
+        "total_spots": total_spots,
+        "occupied_spots": occupied_count,
+        "open_spots": open_spots,
+        "spots": spots
+    }
+    return jsonify(data)
+
+@app.route("/")
+def home():
+    return "Welcome to QuickSpot Parking System"
+    #occupied_count = sum(1 for spot in spots if spot["occupied"])
+    #open_spots = total_spots - occupied_count
+    #return jsonify({
+        #"Welcome to QuickSpot Parking System": "",
+        #"lot_id": lot_id,
+        #"lot_name": lot_name,
+        #"total_spots": total_spots,
+        #"occupied_spots": occupied_count,
+        #"open_spots": open_spots,
+    #})
+if __name__ == "__main__":
+    app.run(host="0.0.0.0", port=5000,debug=True)  #debug=True enables auto-reloading and better error messages
+    
+    
