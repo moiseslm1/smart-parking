@@ -14,7 +14,9 @@ def count_available(spots):
             count += 1
     return count
 #if statements
-if spot["occupied"]:
-    print("Spot is taken")
+for spot in parking_spots:
+    if spot["occupied"]:
+        print("Spot is taken")
 else:
     print("Spot is available")
+print("Available spots:" , count_available(parking_spots))
