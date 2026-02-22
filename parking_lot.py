@@ -1,6 +1,7 @@
 
 from parking_spot import ParkingSpot
 from datetime import datetime
+from vehicle import Vehicle   
 
 
 class ParkingLot:
@@ -21,16 +22,18 @@ class ParkingLot:
     def get_occupied_spots(self):
         return [spot for spot in self.spots if spot.occupied]
 
-    def park_vehicle_in_open(self, vehicle_info):
+    def park_vehicle_in_open(self, plate_number):
         available_spots = self.get_available_spots()
         if available_spots:
-            available_spots[0].park_vehicle(vehicle_info)
+            available_spots[0].park_vehicle(plate_number)
+            self.lot_updated = datetime.now()  # Update the lot's last updated time
             return available_spots[0].spot_id
         return None  # Lot is full
 
     def leaving_vehicle_from_spot(self, spot_id):
         for spot in self.spots:
             if spot.spot_id == spot_id:
+                self.lot_updated = datetime.now()  # Update the lot's last updated time
                 return spot.leave_vehicle()
         return False  # Spot not found
 

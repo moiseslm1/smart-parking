@@ -35,6 +35,9 @@ def get_lots():
 
 @app.route("/lots/<int:lot_id>/spots")
 def get_spots(lot_id):
+    lot = manager.lots.get(lot_id)
+    if not lot:
+        return jsonify({"error": "Lot not found"}), 404
     spots = manager.get_lot_status(lot_id)
     if spots is None:
         return jsonify({"error": "Lot not found"}), 404
@@ -51,6 +54,10 @@ def get_spots(lot_id):
 @app.route("/lots/<int:lot_id>/park", methods=["POST"])
 def park_vehicle(lot_id):
     data = request.get_json()
+    plate_number = data.get("plate_number")
+    lot = manager.lots.get(lot_id)
+    if not lot:
+        return jsonify({"error": "lot not found"}), 484
     if not data or "vehicle_info" not in data:
         return jsonify({"error": "vehicle_info required"}), 400
     spot_id = manager.park_vehicle(lot_id, data["vehicle_info"])

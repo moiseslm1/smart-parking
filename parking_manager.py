@@ -30,4 +30,4 @@ class ParkingManager:
         if not lot:
             return None
         return lot.spots
-    #gives you back the number of spots in that lot, if the lot isn't found then nothing is returned 
+    #gives you back the list of spots in that lot, if the lot isn't found then nothing is returned 
