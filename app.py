@@ -83,7 +83,13 @@ def leave_vehicle(lot_id):
         "lot_id": lot_id,
         "spot_id": data["spot_id"]
     })
-        
+    
+@app.route("/lots/<int:lot_id>/simulate", methods=["POST"])
+def simulate(lot_id): 
+    if not lot:
+        return jsonify({"error": "Lot not found"}), 404
+    lot.simulate_sensor_update()
+    return jsonify({"message": "Sensor simulation complete"})
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000,debug=True)  #debug=True enables auto-reloading and better error messages

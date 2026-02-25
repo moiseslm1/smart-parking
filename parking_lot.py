@@ -1,7 +1,9 @@
 
 from parking_spot import ParkingSpot
 from datetime import datetime
-from vehicle import Vehicle   
+from vehicle import Vehicle
+import random 
+   
 
 
 class ParkingLot:
@@ -45,3 +47,14 @@ class ParkingLot:
         print("Spots Status:")
         for spot in self.spots:
             print(spot.display_info())
+            
+    def simulate_sensor_update(self):
+        for spot in self.spots:
+            if random.random() <0.2:
+                if spot.occupied:
+                    spot.leave_vehicle
+                else:
+                    fake_plate = f"SIM-(rndom.randint(100,999))"
+                    spot.park_vehicle(Vehicle(fake_plate))
+                    
+        self.lot_updated = datetime.now()
