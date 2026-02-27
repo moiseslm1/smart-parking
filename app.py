@@ -5,6 +5,7 @@
 from flask import Flask, jsonify, request
 from parking_manager import ParkingManager
 from parking_lot import ParkingLot
+from flask import render_template
 app = Flask (__name__)
 lot = ParkingLot(lot_id=1, lot_name="Cerritos Mall", total_spots=10)
 manager = ParkingManager()
@@ -18,7 +19,8 @@ manager.add_lot(lot2)
 
 @app.route("/")
 def home():
-    return "Welcome to QuickSpot Parking System"
+    lots = manager.get_all_lots()
+    return render_template("index.html", lots=lots)
 
 @app.route("/lots")
 def get_lots():
@@ -38,9 +40,6 @@ def get_spots(lot_id):
     lot = manager.lots.get(lot_id)
     if not lot:
         return jsonify({"error": "Lot not found"}), 404
-    spots = manager.get_lot_status(lot_id)
-    if spots is None:
-        return jsonify({"error": "Lot not found"}), 404
     
     spots_data = []
     for spot in lot.spots:
@@ -49,7 +48,7 @@ def get_spots(lot_id):
             "occupied": spot.occupied,
             "vehicle": spot.vehicle.plate_number if spot.vehicle else None
         })
-    return jsonify(spots_data)
+    return render_template("spots.html", lot=lot, spots=lot.spots)
     
 @app.route("/lots/<int:lot_id>/park", methods=["POST"])
 def park_vehicle(lot_id):

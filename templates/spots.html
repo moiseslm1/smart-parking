@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>QuickSpot Parking</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 40px;
+        }
+        .lot-card {
+            border: 1px solid #ccc;
+            padding: 20px;
+            margin-bottom: 15px;
+            border-radius: 8px;
+        }
+        .lot-card a {
+            text-decoration: none;
+            color: blue;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>{{lot.lot_name}} - Parking Spots</h1>
+    <h2>Select a Parking Lot</h2>
+
+    {%for spot in spots%}
+        <div class="spot-card">
+            <h3>Spot ID: {{ spot.spot_id }}</h3>
+            <p>Status:
+                {% if spot.is_occupied %}
+                    Occupied
+                {%else %}
+                    Available
+                {% endif %}
+            </p>
+        </div>
+    {% endfor %}
+
+</body>
+</html>

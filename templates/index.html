@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>QuickSpot Parking</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 40px;
+        }
+        .lot-card {
+            border: 1px solid #ccc;
+            padding: 20px;
+            margin-bottom: 15px;
+            border-radius: 8px;
+        }
+        .lot-card a {
+            text-decoration: none;
+            color: blue;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>QuickSpot Parking System</h1>
+    <h2>Select a Parking Lot</h2>
+    <img src = "{{ url_for('static', filename='Site Image.jpg') }}">
+
+    {% for lot in lots %}
+        <div class="lot-card">
+            <h3>{{ lot.lot_name }}</h3>
+            <p>Total Spots: {{ lot.total_spots }}</p>
+            <p>Available Spots: {{ lot.get_available_spots() | length }}</p>
+            <a href="/lots/{{ lot.lot_id }}/spots">View Spots</a>
+        </div>
+    {% endfor %}
+</body>
+</html>
