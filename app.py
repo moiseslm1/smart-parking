@@ -91,4 +91,4 @@ def simulate(lot_id):
     return jsonify({"message": "Sensor simulation complete"})
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=5000, debug=True)  #debug=True enables auto-reloading and better error messages
+    app.run(host="0.0.0.0", port=5001, debug=True)  #debug=True enables auto-reloading and better error messages
