@@ -5,7 +5,6 @@
 from flask import Flask, jsonify, request
 from parking_manager import ParkingManager
 from parking_lot import ParkingLot
-from flask import Flask, jsonify, request, render_template
 app = Flask (__name__)
 lot = ParkingLot(lot_id=1, lot_name="Cerritos Mall", total_spots=10)
 manager = ParkingManager()
@@ -19,7 +18,7 @@ manager.add_lot(lot2)
 
 @app.route("/")
 def home():
-    return render_template("index.html")
+    return "Welcome to QuickSpot Parking System"
 
 @app.route("/lots")
 def get_lots():
@@ -93,4 +92,4 @@ def simulate(lot_id):
     return jsonify({"message": "Sensor simulation complete"})
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=5001,debug=True)  #debug=True enables auto-reloading and better error messages
+    app.run(host="0.0.0.0", port=5000, debug=True)  #debug=True enables auto-reloading and better error messages
