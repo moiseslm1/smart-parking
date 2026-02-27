@@ -5,6 +5,7 @@
 from flask import Flask, jsonify, request
 from parking_manager import ParkingManager
 from parking_lot import ParkingLot
+from flask import Flask, jsonify, request, render_template
 app = Flask (__name__)
 lot = ParkingLot(lot_id=1, lot_name="Cerritos Mall", total_spots=10)
 manager = ParkingManager()
@@ -18,7 +19,7 @@ manager.add_lot(lot2)
 
 @app.route("/")
 def home():
-    return "Welcome to QuickSpot Parking System"
+    return render_template("index.html")
 
 @app.route("/lots")
 def get_lots():
