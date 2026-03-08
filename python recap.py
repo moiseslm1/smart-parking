@@ -1,3 +1,4 @@
+from vehicle import Vehicle
 #variables 
 spots_available = 10
 lot_name = "Main Parking Lot"

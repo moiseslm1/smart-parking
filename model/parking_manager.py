@@ -1,5 +1,5 @@
 
-from parking_lot import ParkingLot
+from model.parking_lot import ParkingLot 
 class ParkingManager:
     def __init__(self):
         self.lots = {}

@@ -13,12 +13,23 @@ class Vehicle:
 
     @staticmethod
     def generate_plate():
-        letters = '',join(random.choices(string.ascii_uppercase, k=3))
-        numbers = '',join(random.choices(string.digits, k=3))
+        letters = ''.join(random.choices(string.ascii_uppercase, k=3))
+        numbers = ''.join(random.choices(string.digits, k=3))
         return f"{letters}-{numbers}"
     
     def leave(self):
         self.exit_time = datetime.now()
     
     def to_dict(self):
+        self.exit_time = datetime.now()
+    
+    def to_dict(self):
+        return{
+            "plate_number": self.plate_number,
+            "entry_time": self.entry_time.isoformat(),
+            "exit_time": self.exit_time.isoformat() if self.exit_time else None
+        }
+    def __str__(self):
+        return self.plate_number
+        
         

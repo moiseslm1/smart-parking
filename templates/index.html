@@ -1,38 +1,729 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
     <title>QuickSpot Parking</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
     <style>
+        :root {
+            --blue:      #1a56db;
+            --blue-d:    #1447c0;
+            --blue-lt:   #eff4ff;
+            --green:     #057a55;
+            --green-lt:  #f0fdf4;
+            --red:       #c81e1e;
+            --red-lt:    #fef2f2;
+            --gray-50:   #f9fafb;
+            --gray-100:  #f3f4f6;
+            --gray-200:  #e5e7eb;
+            --gray-400:  #9ca3af;
+            --gray-500:  #6b7280;
+            --gray-700:  #374151;
+            --gray-900:  #111827;
+            --white:     #ffffff;
+            --font:      'Plus Jakarta Sans', system-ui, sans-serif;
+            --radius:    12px;
+            --shadow-sm: 0 1px 3px rgba(0,0,0,0.08), 0 1px 2px rgba(0,0,0,0.04);
+            --shadow-md: 0 4px 16px rgba(0,0,0,0.10), 0 2px 6px rgba(0,0,0,0.06);
+            --shadow-lg: 0 10px 40px rgba(0,0,0,0.14), 0 4px 12px rgba(0,0,0,0.08);
+        }
+
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
         body {
-            font-family: Arial, sans-serif;
-            padding: 40px;
+            font-family: var(--font);
+            background: var(--gray-50);
+            color: var(--gray-900);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
         }
-        .lot-card {
-            border: 1px solid #ccc;
-            padding: 20px;
-            margin-bottom: 15px;
-            border-radius: 8px;
+
+        /* ════════════════════════════
+           HEADER / NAV
+        ════════════════════════════ */
+        .header {
+            background: var(--white);
+            border-bottom: 1px solid var(--gray-200);
+            position: sticky;
+            top: 0;
+            z-index: 50;
+            animation: fadeDown 0.4s ease both;
         }
-        .lot-card a {
+
+        @keyframes fadeDown {
+            from { opacity: 0; transform: translateY(-8px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        .header-inner {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 32px;
+            height: 64px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 24px;
+        }
+
+        /* Logo */
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
             text-decoration: none;
-            color: blue;
-            font-weight: bold;
+            flex-shrink: 0;
+        }
+
+        .logo-mark {
+            width: 36px;
+            height: 36px;
+            background: var(--blue);
+            border-radius: 9px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 17px;
+            font-weight: 800;
+            letter-spacing: -1px;
+        }
+
+        .logo-text {
+            font-size: 18px;
+            font-weight: 800;
+            color: var(--gray-900);
+            letter-spacing: -0.4px;
+        }
+
+        .logo-text span { color: var(--blue); }
+
+        /* Nav links */
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            list-style: none;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--gray-500);
+            padding: 7px 14px;
+            border-radius: 8px;
+            transition: background 0.15s, color 0.15s;
+        }
+
+        .nav-links a:hover {
+            background: var(--gray-100);
+            color: var(--gray-900);
+        }
+
+        /* Live badge */
+        .live-badge {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            background: var(--green-lt);
+            color: var(--green);
+            font-size: 12px;
+            font-weight: 600;
+            padding: 5px 11px;
+            border-radius: 100px;
+            border: 1px solid #bbf7d0;
+            flex-shrink: 0;
+        }
+
+        .live-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: var(--green);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); box-shadow: 0 0 0 0 rgba(5,122,85,0.4); }
+            50%       { opacity: 0.85; transform: scale(1.1); box-shadow: 0 0 0 4px rgba(5,122,85,0); }
+        }
+
+        /* ════════════════════════════
+           HERO
+        ════════════════════════════ */
+        .hero {
+            background: var(--white);
+            border-bottom: 1px solid var(--gray-200);
+            padding: 64px 32px 72px;
+            text-align: center;
+            animation: fadeUp 0.5s 0.05s ease both;
+        }
+
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(14px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        .hero-eyebrow {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--blue);
+            background: var(--blue-lt);
+            border: 1px solid #c7d9fb;
+            padding: 4px 12px;
+            border-radius: 100px;
+            margin-bottom: 20px;
+            letter-spacing: 0.02em;
+            text-transform: uppercase;
+        }
+
+        .hero h1 {
+            font-size: clamp(32px, 5vw, 52px);
+            font-weight: 800;
+            line-height: 1.1;
+            letter-spacing: -1.5px;
+            color: var(--gray-900);
+            margin-bottom: 14px;
+        }
+
+        .hero p {
+            font-size: 17px;
+            font-weight: 400;
+            color: var(--gray-500);
+            margin-bottom: 36px;
+            line-height: 1.6;
+        }
+
+        /* ── BIG SEARCH BAR ── */
+        .search-card {
+            background: var(--white);
+            border: 1.5px solid var(--gray-200);
+            border-radius: 16px;
+            box-shadow: var(--shadow-lg);
+            display: inline-flex;
+            align-items: stretch;
+            max-width: 680px;
+            width: 100%;
+            overflow: hidden;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+
+        .search-card:focus-within {
+            border-color: var(--blue);
+            box-shadow: 0 0 0 4px rgba(26,86,219,0.1), var(--shadow-lg);
+        }
+
+        .search-field {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex: 1;
+            padding: 0 20px;
+        }
+
+        .search-icon {
+            color: var(--gray-400);
+            flex-shrink: 0;
+            width: 18px;
+            height: 18px;
+        }
+
+        .search-field input {
+            background: transparent;
+            border: none;
+            outline: none;
+            font-family: var(--font);
+            font-size: 15px;
+            font-weight: 500;
+            color: var(--gray-900);
+            width: 100%;
+            padding: 20px 0;
+        }
+
+        .search-field input::placeholder {
+            color: var(--gray-400);
+            font-weight: 400;
+        }
+
+        .search-divider {
+            width: 1px;
+            background: var(--gray-200);
+            margin: 14px 0;
+        }
+
+        .search-btn {
+            background: var(--blue);
+            border: none;
+            color: white;
+            font-family: var(--font);
+            font-size: 15px;
+            font-weight: 700;
+            padding: 0 28px;
+            cursor: pointer;
+            transition: background 0.15s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            white-space: nowrap;
+        }
+
+        .search-btn:hover { background: var(--blue-d); }
+
+        .search-btn svg { width: 16px; height: 16px; }
+
+        /* Hero trust row */
+        .hero-trust {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 28px;
+            margin-top: 24px;
+            flex-wrap: wrap;
+        }
+
+        .trust-item {
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--gray-400);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .trust-item strong {
+            color: var(--gray-700);
+            font-weight: 700;
+        }
+
+        /* ════════════════════════════
+           SECTION
+        ════════════════════════════ */
+        .section {
+            width: 100%;
+            padding: 48px 32px 80px;
+            animation: fadeUp 0.5s 0.15s ease both;
+            flex: 1;
+        }
+
+        .section-top {
+            max-width: 1200px;
+            margin: 0 auto 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .section-title {
+            font-size: 20px;
+            font-weight: 800;
+            letter-spacing: -0.4px;
+            color: var(--gray-900);
+        }
+
+        .section-subtitle {
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--gray-400);
+        }
+
+        /* ════════════════════════════
+           LOT CARDS
+        ════════════════════════════ */
+        .lots-grid {
+            max-width: 1200px;
+            margin: 0 auto 24px;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 16px;
+        }
+
+        .lot-card {
+            background: var(--white);
+            border: 1px solid var(--gray-200);
+            border-radius: var(--radius);
+            padding: 24px;
+            box-shadow: var(--shadow-sm);
+            transition: box-shadow 0.2s, transform 0.2s, border-color 0.2s;
+            display: flex;
+            flex-direction: column;
+            gap: 18px;
+        }
+
+        .lot-card:hover {
+            box-shadow: var(--shadow-md);
+            transform: translateY(-2px);
+            border-color: var(--gray-300, #d1d5db);
+        }
+
+        /* Card top */
+        .card-head {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 12px;
+        }
+
+        .lot-name {
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--gray-900);
+            letter-spacing: -0.2px;
+            line-height: 1.3;
+        }
+
+        .lot-total {
+            background: var(--gray-100);
+            color: var(--gray-500);
+            font-size: 11px;
+            font-weight: 600;
+            padding: 3px 9px;
+            border-radius: 100px;
+            white-space: nowrap;
+            flex-shrink: 0;
+        }
+
+        /* Availability pills */
+        .avail-row {
+            display: flex;
+            gap: 10px;
+        }
+
+        .avail-pill {
+            flex: 1;
+            border-radius: 10px;
+            padding: 12px 14px;
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .avail-pill.green {
+            background: var(--green-lt);
+            border: 1px solid #bbf7d0;
+        }
+
+        .avail-pill.red {
+            background: var(--red-lt);
+            border: 1px solid #fecaca;
+        }
+
+        .pill-label {
+            font-size: 10px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            color: var(--gray-500);
+        }
+
+        .pill-num {
+            font-size: 26px;
+            font-weight: 800;
+            line-height: 1;
+            letter-spacing: -1px;
+        }
+
+        .avail-pill.green .pill-num { color: var(--green); }
+        .avail-pill.red   .pill-num { color: var(--red); }
+
+        /* Progress bar */
+        .prog-wrap {}
+
+        .prog-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 6px;
+        }
+
+        .prog-label {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--gray-500);
+        }
+
+        .prog-pct {
+            font-size: 12px;
+            font-weight: 700;
+            color: var(--gray-700);
+        }
+
+        .prog-track {
+            height: 6px;
+            background: var(--gray-100);
+            border-radius: 100px;
+            overflow: hidden;
+        }
+
+        .prog-fill {
+            height: 100%;
+            border-radius: 100px;
+            background: var(--blue);
+            transition: width 0.6s ease;
+        }
+
+        .prog-fill.warn  { background: #f59e0b; }
+        .prog-fill.full  { background: var(--red); }
+
+        /* CTA button */
+        .view-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 12px 18px;
+            background: var(--blue-lt);
+            color: var(--blue);
+            border: 1.5px solid #c7d9fb;
+            border-radius: 10px;
+            font-family: var(--font);
+            font-size: 13px;
+            font-weight: 700;
+            text-decoration: none;
+            letter-spacing: 0.01em;
+            transition: background 0.15s, color 0.15s, border-color 0.15s;
+            margin-top: auto;
+        }
+
+        .view-btn:hover {
+            background: var(--blue);
+            color: var(--white);
+            border-color: var(--blue);
+        }
+
+        .view-btn svg { width: 14px; height: 14px; transition: transform 0.2s; }
+        .view-btn:hover svg { transform: translateX(3px); }
+
+        /* ════════════════════════════
+           FOOTER
+        ════════════════════════════ */
+        .footer {
+            background: var(--white);
+            border-top: 1px solid var(--gray-200);
+            padding: 24px 32px;
+        }
+
+        .footer-inner {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .footer-logo {
+            font-size: 15px;
+            font-weight: 800;
+            color: var(--gray-900);
+            letter-spacing: -0.3px;
+        }
+
+        .footer-logo span { color: var(--blue); }
+
+        .footer-copy {
+            font-size: 12px;
+            color: var(--gray-400);
+            font-weight: 500;
+        }
+
+        /* ════════════════════════════
+           RESPONSIVE
+        ════════════════════════════ */
+        @media (max-width: 640px) {
+            .header-inner { padding: 0 20px; }
+            .nav-links    { display: none; }
+            .hero         { padding: 40px 20px 48px; }
+            .search-card  { border-radius: 12px; flex-direction: column; }
+            .search-btn   { padding: 16px; justify-content: center; border-radius: 0 0 10px 10px; }
+            .search-divider { display: none; }
+            .section      { padding: 32px 20px 60px; }
+            .footer-inner { flex-direction: column; gap: 8px; text-align: center; }
         }
     </style>
 </head>
 <body>
 
-    <h1>QuickSpot Parking System</h1>
-    <h2>Select a Parking Lot</h2>
-    <img src = "{{ url_for('static', filename='Site Image.jpg') }}">
+    <!-- ══ HEADER ══ -->
+    <header class="header">
+        <div class="header-inner">
 
-    {% for lot in lots %}
-        <div class="lot-card">
-            <h3>{{ lot.lot_name }}</h3>
-            <p>Total Spots: {{ lot.total_spots }}</p>
-            <p>Available Spots: {{ lot.get_available_spots() | length }}</p>
-            <a href="/lots/{{ lot.lot_id }}/spots">View Spots</a>
+            <a href="/" class="logo">
+                <div class="logo-mark">Q</div>
+                <span class="logo-text">Quick<span>Spot</span></span>
+            </a>
+
+            <nav>
+                <ul class="nav-links">
+                    <li><a href="#">Find Parking</a></li>
+                    <li><a href="#">Monthly</a></li>
+                    <li><a href="#">Airport</a></li>
+                    <li><a href="#">Event Parking</a></li>
+                </ul>
+            </nav>
+
+            <div class="live-badge">
+                <div class="live-dot"></div>
+                Live
+            </div>
+
         </div>
-    {% endfor %}
+    </header>
+
+
+    <!-- ══ HERO ══ -->
+    <section class="hero">
+
+        <div class="hero-eyebrow">
+            Real-time availability
+        </div>
+
+        <h1>Find parking, instantly.</h1>
+        <p>Live spot availability across the city — updated every 5 seconds.</p>
+
+        <!-- Search bar -->
+        <div class="search-card">
+            <div class="search-field">
+                <svg class="search-icon" viewBox="0 0 20 20" fill="none">
+                    <circle cx="9" cy="9" r="5.5" stroke="currentColor" stroke-width="1.6"/>
+                    <path d="M13.5 13.5L17 17" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+                </svg>
+                <input type="text" placeholder="Search by city, address, or ZIP code…" autofocus>
+            </div>
+            <div class="search-divider"></div>
+            <button class="search-btn">
+                <svg viewBox="0 0 16 16" fill="none">
+                    <circle cx="7" cy="7" r="4.5" stroke="white" stroke-width="1.5"/>
+                    <path d="M10.5 10.5L14 14" stroke="white" stroke-width="1.5" stroke-linecap="round"/>
+                </svg>
+                Search
+            </button>
+        </div>
+
+        <!-- Trust row -->
+        <div class="hero-trust">
+            <div class="trust-item">
+                <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><circle cx="7" cy="7" r="6" stroke="currentColor" stroke-width="1.3"/><path d="M4.5 7l2 2 3-3" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                <strong>{{ lots | length }}</strong> lots monitored
+            </div>
+            <div class="trust-item">·</div>
+            <div class="trust-item">
+                <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><circle cx="7" cy="7" r="6" stroke="currentColor" stroke-width="1.3"/><path d="M7 4v3.5l2 1.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
+                Updates every <strong>5 sec</strong>
+            </div>
+            <div class="trust-item">·</div>
+            <div class="trust-item">
+                <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M7 1.5C4.5 4 2 5.5 2 8a5 5 0 0010 0c0-2.5-2.5-4-5-6.5z" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/></svg>
+                Available <strong>24/7</strong>
+            </div>
+        </div>
+
+    </section>
+
+
+    <!-- ══ LOTS ══ -->
+    <div class="section">
+
+        <div class="section-top">
+            <h2 class="section-title">Nearby Parking Lots</h2>
+            <span class="section-subtitle">Auto-refreshing every 5 s</span>
+        </div>
+
+        <div class="lots-grid">
+
+            {% for lot in lots %}
+
+            {% set avail    = lot.get_available_spots() | length %}
+            {% set occupied = lot.get_occupied_spots()  | length %}
+            {% set pct      = (occupied / lot.total_spots * 100) | round | int %}
+
+            <div class="lot-card" data-lot-id="{{ lot.lot_id }}">
+
+                <div class="card-head">
+                    <div class="lot-name">{{ lot.lot_name }}</div>
+                    <div class="lot-total">{{ lot.total_spots }} spots</div>
+                </div>
+
+                <div class="avail-row">
+                    <div class="avail-pill green">
+                        <span class="pill-label">Available</span>
+                        <span class="pill-num num-available">{{ avail }}</span>
+                    </div>
+                    <div class="avail-pill red">
+                        <span class="pill-label">Occupied</span>
+                        <span class="pill-num num-occupied">{{ occupied }}</span>
+                    </div>
+                </div>
+
+                <div class="prog-wrap">
+                    <div class="prog-meta">
+                        <span class="prog-label">Occupancy</span>
+                        <span class="prog-pct">{{ pct }}%</span>
+                    </div>
+                    <div class="prog-track">
+                        <div class="prog-fill {% if pct >= 90 %}full{% elif pct >= 65 %}warn{% endif %}" style="width: {{ pct }}%"></div>
+                    </div>
+                </div>
+
+                <a class="view-btn" href="/lots/{{ lot.lot_id }}/spots">
+                    View Spots
+                    <svg viewBox="0 0 14 14" fill="none">
+                        <path d="M2 7h10M8 3l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </a>
+
+            </div>
+
+            {% endfor %}
+
+        </div>
+    </div>
+
+
+    <!-- ══ FOOTER ══ -->
+    <footer class="footer">
+        <div class="footer-inner">
+            <div class="footer-logo">Quick<span>Spot</span></div>
+            <div class="footer-copy">© 2025 QuickSpot — Smart Urban Parking</div>
+        </div>
+    </footer>
+
+
+    <script>
+        async function refreshLots() {
+            try {
+                const res  = await fetch('/api/lots');
+                const lots = await res.json();
+
+                lots.forEach(lot => {
+                    const card = document.querySelector(`[data-lot-id="${lot.lot_id}"]`);
+                    if (!card) return;
+
+                    // Numbers
+                    card.querySelector('.num-available').textContent = lot.available;
+                    card.querySelector('.num-occupied').textContent  = lot.occupied;
+                    card.querySelector('.prog-pct').textContent      = lot.pct + '%';
+
+                    // Progress bar width + colour class
+                    const fill = card.querySelector('.prog-fill');
+                    fill.style.width = lot.pct + '%';
+                    fill.classList.remove('warn', 'full');
+                    if      (lot.pct >= 90) fill.classList.add('full');
+                    else if (lot.pct >= 65) fill.classList.add('warn');
+                });
+            } catch (e) {
+                console.warn('QuickSpot: could not fetch lot data', e);
+            }
+        }
+
+        // Poll every 5 seconds
+        setInterval(refreshLots, 5000);
+    </script>
+
 </body>
 </html>

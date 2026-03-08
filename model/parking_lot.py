@@ -1,7 +1,6 @@
-
-from parking_spot import ParkingSpot
+from model.parking_spot import ParkingSpot
+from model.vehicle import Vehicle
 from datetime import datetime
-from vehicle import Vehicle
 import random 
    
 
@@ -11,7 +10,7 @@ class ParkingLot:
         self.lot_id = lot_id           
         self.lot_name = lot_name             
         self.total_spots = total_spots       
-        self.lot_updated = lot_updated       
+        self.lot_updated = lot_updated or datetime.now()       
         self.spots = []                       
 
         # Initialize spots
@@ -26,10 +25,15 @@ class ParkingLot:
 
     def park_vehicle_in_open(self, plate_number):
         available_spots = self.get_available_spots()
+        
         if available_spots:
-            available_spots[0].park_vehicle(plate_number)
-            self.lot_updated = datetime.now()  # Update the lot's last updated time
-            return available_spots[0].spot_id
+             spot = available_spots[0]
+             vehicle = Vehicle(plate_number)
+
+             spot.park_vehicle(vehicle)
+             self.lot_updated = datetime.now()
+
+             return spot.spot_id
         return None  # Lot is full
 
     def leaving_vehicle_from_spot(self, spot_id):
@@ -50,11 +54,10 @@ class ParkingLot:
             
     def simulate_sensor_update(self):
         for spot in self.spots:
-            if random.random() <0.2:
+            if random.random() < 0.2:
                 if spot.occupied:
-                    spot.leave_vehicle
+                    spot.leave_vehicle()
                 else:
-                    fake_plate = f"SIM-(rndom.randint(100,999))"
+                    fake_plate = f"SIM-{random.randint(100,999)}"
                     spot.park_vehicle(Vehicle(fake_plate))
-                    
         self.lot_updated = datetime.now()
