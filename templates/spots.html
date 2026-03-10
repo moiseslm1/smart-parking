@@ -1,60 +1,764 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>QuickSpot Parking</title>
-    <meta http-equiv="refresh" content="5">
+    <title>{{ lot.lot_name }} — QuickSpot</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
     <style>
+        :root {
+            --blue:     #1a56db;
+            --blue-d:   #1447c0;
+            --blue-lt:  #eff4ff;
+            --green:    #057a55;
+            --green-lt: #f0fdf4;
+            --red:      #c81e1e;
+            --red-lt:   #fef2f2;
+            --gray-50:  #f9fafb;
+            --gray-100: #f3f4f6;
+            --gray-200: #e5e7eb;
+            --gray-400: #9ca3af;
+            --gray-500: #6b7280;
+            --gray-700: #374151;
+            --gray-900: #111827;
+            --white:    #ffffff;
+            --asphalt:  #1e2128;
+            --asphalt-lt: #272b35;
+            --lane:     #2d3340;
+            --stripe:   rgba(255,255,255,0.55);
+            --font:     'Plus Jakarta Sans', system-ui, sans-serif;
+        }
+
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
         body {
-            font-family: Arial, sans-serif;
-            padding: 40px;
+            font-family: var(--font);
+            background: var(--gray-50);
+            color: var(--gray-900);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
         }
-        .car-icon {
-            fill: currentColor;  /* This makes SVG follow text color */
-            padding: 10px; 
-        }  
-        .spot{
-            font-size: 40px;
-            padding: 20px;
-            border: 2px solid black;
+
+        /* ══ HEADER ══ */
+        .header {
+            background: var(--white);
+            border-bottom: 1px solid var(--gray-200);
+            position: sticky;
+            top: 0;
+            z-index: 50;
+        }
+
+        .header-inner {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 32px;
+            height: 64px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 24px;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+            flex-shrink: 0;
+        }
+
+        .logo-mark {
+            width: 36px;
+            height: 36px;
+            background: var(--blue);
+            border-radius: 9px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 17px;
+            font-weight: 800;
+        }
+
+        .logo-text {
+            font-size: 18px;
+            font-weight: 800;
+            color: var(--gray-900);
+            letter-spacing: -0.4px;
+        }
+
+        .logo-text span { color: var(--blue); }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            list-style: none;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--gray-500);
+            padding: 7px 14px;
+            border-radius: 8px;
+            transition: background 0.15s, color 0.15s;
+        }
+
+        .nav-links a:hover { background: var(--gray-100); color: var(--gray-900); }
+
+        .live-badge {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            background: var(--green-lt);
+            color: var(--green);
+            font-size: 12px;
+            font-weight: 600;
+            padding: 5px 11px;
+            border-radius: 100px;
+            border: 1px solid #bbf7d0;
+        }
+
+        .live-dot {
+            width: 6px; height: 6px;
+            border-radius: 50%;
+            background: var(--green);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%,100% { opacity:1; transform:scale(1); }
+            50%      { opacity:.7; transform:scale(1.2); }
+        }
+
+        /* ══ PAGE HERO ══ */
+        .page-hero {
+            background: var(--white);
+            border-bottom: 1px solid var(--gray-200);
+            padding: 28px 32px;
+            animation: fadeUp 0.4s ease both;
+        }
+
+        @keyframes fadeUp {
+            from { opacity:0; transform:translateY(10px); }
+            to   { opacity:1; transform:translateY(0); }
+        }
+
+        .page-hero-inner {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 24px;
+            flex-wrap: wrap;
+        }
+
+        .back-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--gray-500);
+            text-decoration: none;
+            padding: 6px 12px;
+            border-radius: 8px;
+            border: 1px solid var(--gray-200);
+            background: var(--white);
+            transition: all 0.15s;
+            margin-bottom: 12px;
+        }
+
+        .back-btn:hover { background: var(--gray-100); color: var(--gray-900); }
+
+        .lot-title {
+            font-size: 26px;
+            font-weight: 800;
+            letter-spacing: -0.6px;
+            color: var(--gray-900);
+        }
+
+        .lot-subtitle {
+            font-size: 14px;
+            color: var(--gray-500);
+            margin-top: 3px;
+            font-weight: 400;
+        }
+
+        /* Stat pills */
+        .stat-pills {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .stat-pill {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 16px;
             border-radius: 10px;
+            border: 1px solid;
+            font-size: 13px;
+            font-weight: 600;
         }
-        .available{
-            color: green;
+
+        .stat-pill.total {
+            background: var(--gray-100);
+            border-color: var(--gray-200);
+            color: var(--gray-700);
         }
-        .occupied{
-            color: red;
+
+        .stat-pill.green {
+            background: var(--green-lt);
+            border-color: #bbf7d0;
+            color: var(--green);
         }
-        .lot-container {
-            display: grid;
-            grid-template-columns: repeat(5, 1fr); /* 5 spots per row */
+
+        .stat-pill.red {
+            background: var(--red-lt);
+            border-color: #fecaca;
+            color: var(--red);
+        }
+
+        .stat-num {
+            font-size: 20px;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+            line-height: 1;
+        }
+
+        .stat-label {
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            opacity: 0.75;
+        }
+
+        /* ══ LEGEND ══ */
+        .legend-bar {
+            background: var(--white);
+            border-bottom: 1px solid var(--gray-200);
+            padding: 12px 32px;
+        }
+
+        .legend-inner {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
             gap: 20px;
-            width: 60%;
-            margin: 40px auto;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 7px;
+            font-size: 12px;
+            font-weight: 500;
+            color: var(--gray-600, #4b5563);
+        }
+
+        .legend-swatch {
+            width: 22px;
+            height: 14px;
+            border-radius: 4px;
+            border: 1px solid rgba(0,0,0,0.1);
+        }
+
+        .legend-swatch.avail  { background: #d1fae5; }
+        .legend-swatch.occ    { background: #fee2e2; }
+
+        /* ══ LOT CANVAS ══ */
+        .lot-canvas-wrap {
+            flex: 1;
+            padding: 32px;
+            display: flex;
+            justify-content: center;
+            animation: fadeUp 0.5s 0.1s ease both;
+        }
+
+        /* The "asphalt" lot */
+        .lot-canvas {
+            background: var(--asphalt);
+            border-radius: 16px;
+            padding: 28px 20px;
+            width: 100%;
+            max-width: 1100px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.25);
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Subtle asphalt texture */
+        .lot-canvas::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.06'/%3E%3C/svg%3E");
+            pointer-events: none;
+            border-radius: 16px;
+        }
+
+        /* Lot name watermark */
+        .lot-watermark {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: clamp(40px, 6vw, 80px);
+            font-weight: 800;
+            color: rgba(255,255,255,0.025);
+            white-space: nowrap;
+            pointer-events: none;
+            letter-spacing: -2px;
+            user-select: none;
+        }
+
+        /* ── ROWS: two columns of spots flanking a drive lane ── */
+        .lot-section {
+            display: flex;
+            flex-direction: column;
+            gap: 0;
+        }
+
+        .spots-row-pair {
+            display: flex;
+            align-items: stretch;
+            gap: 0;
+            margin-bottom: 6px;
+        }
+
+        /* Left bank of spots */
+        .spots-bank {
+            display: flex;
+            flex: 1;
+            gap: 4px;
+            flex-wrap: wrap;
+        }
+
+        .spots-bank.left  { justify-content: flex-end; }
+        .spots-bank.right { justify-content: flex-start; }
+
+        /* The driving lane in the middle */
+        .drive-lane {
+            width: 64px;
+            flex-shrink: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            gap: 6px;
+            padding: 4px 0;
+        }
+
+        /* Dashed center line */
+        .drive-lane::before {
+            content: '';
+            position: absolute;
+            top: 0; bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 3px;
+            background: repeating-linear-gradient(
+                to bottom,
+                #f0b429 0px,
+                #f0b429 14px,
+                transparent 14px,
+                transparent 26px
+            );
+            opacity: 0.7;
+        }
+
+        /* Row divider — white stripe between facing rows */
+        .row-divider {
+            height: 3px;
+            background: var(--stripe);
+            margin: 3px 0;
+            border-radius: 2px;
+            opacity: 0.3;
+        }
+
+        /* ── INDIVIDUAL PARKING SPOT ── */
+        .spot {
+            width: 68px;
+            height: 100px;
+            border: 2px solid rgba(255,255,255,0.18);
+            border-radius: 4px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            position: relative;
+            cursor: default;
+            transition: transform 0.15s, box-shadow 0.15s;
+            flex-shrink: 0;
+        }
+
+        .spot:hover {
+            transform: scale(1.06);
+            z-index: 10;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+        }
+
+        .spot.available {
+            background: rgba(5, 150, 105, 0.18);
+            border-color: rgba(52, 211, 153, 0.4);
+        }
+
+        .spot.occupied {
+            background: rgba(200, 30, 30, 0.18);
+            border-color: rgba(252, 165, 165, 0.3);
+        }
+
+        /* Left-facing spots have rounded top, right-facing have rounded bottom */
+        .spots-bank.left  .spot { border-radius: 4px 4px 4px 4px; }
+        .spots-bank.right .spot { border-radius: 4px 4px 4px 4px; }
+
+        .spot-num {
+            font-size: 11px;
+            font-weight: 700;
+            color: rgba(255,255,255,0.6);
+            letter-spacing: 0.03em;
+            line-height: 1;
+        }
+
+        .spot-icon {
+            width: 32px;
+            height: 32px;
+            opacity: 0.85;
+        }
+
+        .spot.available .spot-icon { filter: drop-shadow(0 0 4px rgba(52,211,153,0.5)); }
+        .spot.occupied  .spot-icon { filter: drop-shadow(0 0 4px rgba(252,165,165,0.4)); }
+
+        /* Tooltip on hover */
+        .spot-tooltip {
+            position: absolute;
+            bottom: calc(100% + 8px);
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--gray-900);
+            color: white;
+            font-size: 11px;
+            font-weight: 600;
+            padding: 4px 8px;
+            border-radius: 6px;
+            white-space: nowrap;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.15s;
+            z-index: 20;
+        }
+
+        .spot-tooltip::after {
+            content: '';
+            position: absolute;
+            top: 100%; left: 50%;
+            transform: translateX(-50%);
+            border: 4px solid transparent;
+            border-top-color: var(--gray-900);
+        }
+
+        .spot:hover .spot-tooltip { opacity: 1; }
+
+        /* Entrance/exit markers */
+        .lot-entrance {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            margin-top: 16px;
+        }
+
+        .entrance-marker {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 11px;
+            font-weight: 700;
+            color: rgba(255,255,255,0.5);
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+        }
+
+        .entrance-arrow {
+            font-size: 16px;
+            color: #f0b429;
+        }
+
+        /* ══ FOOTER ══ */
+        .footer {
+            background: var(--white);
+            border-top: 1px solid var(--gray-200);
+            padding: 24px 32px;
+            margin-top: auto;
+        }
+
+        .footer-inner {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .footer-logo {
+            font-size: 15px;
+            font-weight: 800;
+            color: var(--gray-900);
+            letter-spacing: -0.3px;
+        }
+
+        .footer-logo span { color: var(--blue); }
+
+        .footer-copy {
+            font-size: 12px;
+            color: var(--gray-400);
+            font-weight: 500;
+        }
+
+        @media (max-width: 640px) {
+            .header-inner  { padding: 0 20px; }
+            .nav-links     { display: none; }
+            .page-hero     { padding: 20px; }
+            .lot-canvas-wrap { padding: 16px; }
+            .spot          { width: 52px; height: 78px; }
+            .drive-lane    { width: 44px; }
+            .stat-pills    { gap: 8px; }
         }
     </style>
 </head>
-
 <body>
-<h1>{{lot.lot_name}} - Parking Layout</h1>
 
-<div class="lot-container">
-    {%for spot in spots%}
-        <div class="spot
-        {%if spot.occupied%}
-            occupied
-        {%else%}
-            available
-        {% endif %}
-        ">
-        <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" version="1.1" style="shape-rendering:geometricPrecision;text-rendering:geometricPrecision;image-rendering:optimizeQuality;" viewBox="0 0 60000 75000" x="0px" y="0px" fill-rule="evenodd" clip-rule="evenodd"><defs><style type="text/css">
-   
-    .fil0 {fill:black;fill-rule:nonzero}
-   
-  </style></defs><g><path class="car-icon" fill="currentColor" d="M36480.98 28696.07c65.89,23.62 147.71,22.85 234.36,3.03 108.2,-24.76 217.6,-79.06 313.62,-154.72 281.99,-222.2 552.69,-620.66 811.64,-1122.62 23.1,-49.26 46.44,-98.17 70.28,-146.3l2.79 1.38c477.85,-969.56 914.77,-2274.39 1307.49,-3447.4 58.21,-173.86 115.49,-344.93 171.85,-511.75 24,-71.05 47.76,-139.19 72.55,-210.31 239.52,-687.09 591.46,-1696.73 80.42,-2141.21 -2217.42,-1928.6 -5962.77,-2892.92 -9719.66,-2892.92 -3756.89,0 -7502.23,964.31 -9719.66,2892.92 -511.04,444.48 -159.1,1454.12 80.42,2141.21 24.79,71.12 48.55,139.26 72.55,210.31 56.36,166.82 113.64,337.89 171.85,511.75 393.1,1174.16 830.49,2480.36 1308.89,3450.22l8.51 -4.2c41.85,84.48 82.53,170.96 122.32,258.95 240.94,448.92 491.9,804.64 752.48,1009.97 96.02,75.66 205.42,129.96 313.62,154.72 86.64,19.82 168.46,20.6 234.36,-3.03 2019.76,-724.2 4339.89,-1086.3 6654.66,-1086.3 2314.78,0 4634.9,362.1 6654.66,1086.3zm-4077.68 16591.95c136.99,-16.18 261.17,81.76 277.35,218.75 16.18,136.99 -81.76,261.17 -218.75,277.35 -862.16,103.66 -1742.35,152.07 -2625.24,145.23 -881.02,-6.83 -1759.36,-68.96 -2619.75,-186.39 -136.45,-18.33 -232.2,-143.82 -213.87,-280.27 18.33,-136.45 143.82,-232.2 280.27,-213.87 842.77,115.02 1699.49,175.85 2555.31,182.49 855.22,6.63 1715.07,-41.14 2564.68,-143.29zm-9897.92 -15893.36c529.1,2087.83 688.59,4668.47 542.1,7245.49 -120.61,2121.7 -448.88,4248.29 -948.91,6101.13 409.54,-350.52 832.11,-555.63 1249.99,-556.11 147.11,-0.17 292.39,24.24 435.04,75.39 549.71,197.1 1118.88,365.77 1701.78,505.96 590.26,141.97 1198.26,255.26 1817.86,339.82 837.44,114.29 1687.66,174.73 2535.96,181.31 846.97,6.56 1700.72,-41.01 2546.52,-142.7 673.77,-81 1336.03,-195.98 1979.04,-344.86 638.26,-147.78 1256.57,-327.66 1847.46,-539.53 142.64,-51.14 287.91,-75.55 435.05,-75.4 396.99,0.46 798.21,185.59 1188.46,504.63 -542.77,-1891.75 -922.14,-4066.82 -1082.45,-6229.18 -186.81,-2519.79 -76.46,-5033.17 418.32,-7076.48 -90.49,40.1 -183.93,71.53 -278.14,93.09 -227.97,52.16 -463.71,46.85 -681.24,-31.15 -1926.8,-690.87 -4153.69,-1036.3 -6385.9,-1036.3 -2232.2,0 -4459.1,345.43 -6385.9,1036.3 -217.53,78 -453.27,83.31 -681.24,31.15 -85.79,-19.63 -170.93,-47.47 -253.8,-82.56zm-1199.03 15694.68c-194.96,462.91 -403.97,889.52 -625.96,1272.59 -135.11,312 -260.63,629.77 -374.13,946.32 -342.75,955.91 -573.59,1891.58 -625.8,2611.28l0 134.46 -1.52 0c17.06,1905.33 657.47,3038.46 1543.66,3719 895.62,687.78 2062.01,939.39 3100.89,1056.2l5680.71 0 5680.71 0c1038.88,-116.81 2205.27,-368.42 3100.89,-1056.2 861.88,-661.87 1491.2,-1751.94 1540.78,-3564.04 -0.91,-747.16 -246.22,-1810.75 -637.01,-2900.68 -117.51,-327.75 -247.9,-656.81 -388.49,-979.43 -226,-389.78 -441.09,-824.61 -643.79,-1296.69 -155.94,-275.06 -317.75,-534.48 -483.17,-771.55 -532.74,-763.5 -1076.43,-1278.05 -1526.85,-1278.56 -56.78,-0.06 -112.34,9.18 -166.29,28.52 -628.6,225.39 -1277.09,414.6 -1938.1,567.65 -676.08,156.53 -1366.49,276.72 -2063.4,360.5 -865.97,104.12 -1752.25,152.73 -2643.4,145.82 -888.54,-6.89 -1773.37,-69.41 -2639.1,-187.57 -639.75,-87.31 -1273.81,-205.8 -1895.98,-355.44 -612.29,-147.26 -1209.68,-324.27 -1786.16,-530.96 -53.94,-19.34 -109.5,-28.57 -166.28,-28.51 -450.42,0.51 -994.11,515.05 -1526.85,1278.55 -176.84,253.44 -349.55,532.42 -515.36,828.74zm-719.63 -344.63c570.31,-1360.78 1015.7,-3056.05 1309.49,-4875.52 -539.86,496.45 -1023.32,1066.21 -1401.88,1647.29 -470.01,721.48 -774.03,1449.59 -813.87,2057.59l0 3130.61c259.25,-676.4 568.27,-1350.03 906.26,-1959.97zm1476.09 -6051.02c84.71,-691.75 147.83,-1394.4 187.79,-2097.3 190.04,-3343.09 -142.25,-6670.25 -1144.27,-8815.41 -543.78,-1050.76 -1008.49,-2436.11 -1425.87,-3682.77l0 17215.06c46.7,-77.26 95.07,-154.36 145.11,-231.17 573.84,-880.85 1366.52,-1736.95 2237.24,-2388.41zm-3190.74 -21534.1c0,-28.04 2.91,-55.39 8.39,-81.81l0 -6446.74c0,-2200.42 437.92,-3712.25 1449.41,-4715.56 1006.83,-998.68 2546.57,-1452.78 4755.81,-1543.12l15.63 -1.56 211.61 0 9382.56 0 211.61 0 15.63 1.56c2209.25,90.34 3748.99,544.44 4755.82,1543.12 1011.49,1003.32 1449.4,2515.14 1449.4,4715.56l0 6528.55c0,687.41 65.3,1176.9 208.95,1573.61 140.65,388.44 362.89,705.65 678.31,1050.02l0.77 -0.71 2467.52 2682.36c51.8,56.32 93.14,99.55 133.35,141.6 486.7,509.05 860.79,900.31 311.05,1785.5 -25.07,40.36 -53.44,81.75 -84.95,124.08 -258.88,347.9 -569.06,493.81 -896.76,506.59 -298.8,11.64 -590.59,-96.04 -856.64,-261.26 -58.19,-36.13 -119.01,-78.12 -181.4,-124.55l-1780.2 -1324.73 0 26741.89 -1.56 3.13c-18.89,2199.06 -789.39,3531.01 -1856.2,4350.25 -1049.89,806.25 -2366.57,1090.76 -3525.58,1218.7l-28.27 3.12 -15.48 0 -11408.79 0 -28.26 -3.12c-1159.01,-127.94 -2475.69,-412.45 -3525.58,-1218.7 -1040.67,-799.17 -1799.25,-2086.38 -1853.33,-4190.33l-12.56 0c-0.1,-86.77 2.69,-177.08 8.13,-270.48l0 -6236.71 -1.4 0c-0.03,-28.93 0.48,-58.06 1.4,-87.36l0 -20316.63 -1788.59 1330.97c-62.39,46.43 -123.21,88.42 -181.4,124.55 -266.05,165.22 -557.83,272.9 -856.64,261.26 -327.7,-12.78 -637.88,-158.69 -896.76,-506.59 -31.51,-42.33 -59.88,-83.72 -84.95,-124.08 -549.73,-885.18 -175.65,-1276.45 311.05,-1785.5 40.21,-42.05 81.55,-85.28 133.35,-141.6l2467.52 -2682.36 0.77 0.71c315.42,-344.37 537.66,-661.58 678.31,-1050.02 143.65,-396.71 208.95,-886.2 208.95,-1573.61zm8.39 2797.77c-93.85,121.36 -196.67,241.7 -308.92,364.21l0 1.56 -2467.52 2682.36c-41.32,44.92 -92.78,98.73 -142.73,150.98 -245.54,256.81 -434.26,454.21 -211.05,813.62 18.16,29.24 33.95,52.83 47.45,70.96 95.3,128.08 191.72,181.1 284.26,184.71 121.43,4.73 263.66,-53.71 406.64,-142.5 46.87,-29.11 89.55,-58.23 128.28,-87.05l2263.59 -1684.44 0 -2354.41zm22247.48 2360.65l2255.2 1678.2c38.73,28.82 81.41,57.94 128.28,87.05 142.97,88.78 285.2,147.23 406.64,142.5 92.54,-3.61 188.96,-56.63 284.26,-184.71 13.49,-18.12 29.29,-41.72 47.45,-70.96 223.2,-359.4 34.49,-556.81 -211.05,-813.62 -49.95,-52.25 -101.41,-106.06 -142.73,-150.98l-2467.52 -2682.36 0 -1.56c-108.91,-118.86 -208.95,-235.67 -300.53,-353.37l0 2349.81zm-800 21315.47c-24.87,-622.78 -356.73,-1399.63 -867.62,-2170.25 -407.22,-614.23 -923.87,-1215.42 -1489.04,-1728.09 331.7,1844.5 813.16,3566.6 1404.12,4949.1 356.68,635.57 682.2,1343.51 952.54,2053.39l0 -3104.15zm-2546.59 -5082.51c895.14,655.98 1734.65,1551.64 2344.59,2471.64 70.38,106.16 137.77,212.87 202,319.78l0 -18290.96c-36.82,110.61 -73.98,217.24 -109.26,318.45 -25.28,72.52 -49.48,141.95 -69.41,200.93 -56.36,166.82 -113.64,337.89 -171.85,511.75 -398.71,1190.9 -840.56,2510.44 -1353.32,3544.84l2.4 1.18c-1039.5,2098.48 -1325.2,5418.93 -1076.34,8775.77 53.28,718.68 131.07,1438.06 231.19,2146.62zm2546.59 -17903.97l0 -3487.41 0 -6528.55c0,-1978.87 -366.16,-3311.03 -1211.9,-4149.94 -186.01,-184.51 -396.94,-347.13 -633.91,-489.49l0 13264.16c583.62,328.35 1117.53,697.35 1588.85,1107.28 101.98,88.69 186.88,183.79 256.96,283.95zm-2645.81 -1801.74l0 -8547.34 -2690.8 -1925.32c-198.77,-142.21 -372.69,-376.44 -494.73,-631.38 -123.89,-258.73 -201.12,-550.12 -201.12,-794.52l0 -1775.9 -8582.56 0 0 1775.9c0,244.4 -77.23,535.79 -201.12,794.52 -122.04,254.94 -295.96,489.17 -494.73,631.38l-2690.8 1925.32 0 8387.35c2178.52,-941.24 4841.85,-1412.02 7500.05,-1412.02 2804.74,0 5615.22,524.09 7855.81,1572.01zm-16155.86 218.55l0 -13072.2c-236.99,142.35 -447.89,304.99 -633.9,489.49 -845.75,838.91 -1211.91,2171.07 -1211.91,4149.94l0 9647.62c542.62,-457.11 1163.91,-862.06 1845.81,-1214.85zm3386.65 -13885c-1030.63,54.17 -1887.38,193.98 -2586.65,441.57l0 3696.61 2228.3 -1594.39c85.52,-61.18 170.5,-183.15 238.47,-325.14 73.84,-154.22 119.88,-319.97 119.88,-450.76l0 -1767.89zm12769.21 4138.18l0 -3696.62c-699.27,-247.6 -1556.02,-387.39 -2586.65,-441.56l0 1767.89c0,130.79 46.04,296.54 119.88,450.76 67.97,141.99 152.95,263.96 238.47,325.14l2228.3 1594.39z"/></g><text x="0" y="60015" fill="#000000" font-size="5px" font-weight="bold" font-family="'Helvetica Neue', Helvetica, Arial-Unicode, Arial, Sans-serif">Created by Olena Panasovska</text><text x="0" y="60020" fill="#000000" font-size="5px" font-weight="bold" font-family="'Helvetica Neue', Helvetica, Arial-Unicode, Arial, Sans-serif">from the Noun Project</text></svg>
-    <p>Spot {{ spot.spot_id}}</p>
-</div>
-    {% endfor %}
-</div>
-<a href="/">⬅ Back to Home</a>
+    <!-- ══ HEADER ══ -->
+    <header class="header">
+        <div class="header-inner">
+            <a href="/" class="logo">
+                <div class="logo-mark">Q</div>
+                <span class="logo-text">Quick<span>Spot</span></span>
+            </a>
+            <nav>
+                <ul class="nav-links">
+                    <li><a href="#">Find Parking</a></li>
+                    <li><a href="#">Monthly</a></li>
+                    <li><a href="#">Airport</a></li>
+                    <li><a href="#">Event Parking</a></li>
+                </ul>
+            </nav>
+            <div class="live-badge">
+                <div class="live-dot"></div>
+                Live
+            </div>
+        </div>
+    </header>
+
+
+    <!-- ══ PAGE HERO ══ -->
+    <div class="page-hero">
+        <div class="page-hero-inner">
+            <div>
+                <a href="/" class="back-btn">
+                    ← Back to lots
+                </a>
+                <div class="lot-title">{{ lot.lot_name }}</div>
+                <div class="lot-subtitle">Live parking layout — updates every 5 seconds</div>
+            </div>
+
+            <div class="stat-pills">
+                <div class="stat-pill total">
+                    <div>
+                        <div class="stat-num">{{ lot.total_spots }}</div>
+                        <div class="stat-label">Total</div>
+                    </div>
+                </div>
+                <div class="stat-pill green">
+                    <div>
+                        <div class="stat-num">{{ lot.get_available_spots() | length }}</div>
+                        <div class="stat-label">Available</div>
+                    </div>
+                </div>
+                <div class="stat-pill red">
+                    <div>
+                        <div class="stat-num">{{ lot.get_occupied_spots() | length }}</div>
+                        <div class="stat-label">Occupied</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- ══ LEGEND ══ -->
+    <div class="legend-bar">
+        <div class="legend-inner">
+            <div class="legend-item">
+                <div class="legend-swatch avail"></div>
+                Available
+            </div>
+            <div class="legend-item">
+                <div class="legend-swatch occ"></div>
+                Occupied
+            </div>
+            <div class="legend-item" style="margin-left:auto; color: var(--gray-400); font-size:11px;">
+                Hover a spot for details
+            </div>
+        </div>
+    </div>
+
+
+    <!-- ══ LOT CANVAS ══ -->
+    <div class="lot-canvas-wrap">
+        <div class="lot-canvas">
+
+            <div class="lot-watermark">{{ lot.lot_name }}</div>
+
+            <div class="lot-section">
+
+                {% set spots_per_row = 5 %}
+                {% set total = spots | length %}
+                {% set num_rows = (total / (spots_per_row * 2)) | round(0, 'ceil') | int %}
+
+                {% for row in range(num_rows) %}
+
+                    {% set left_start  = row * spots_per_row * 2 %}
+                    {% set left_end    = left_start + spots_per_row %}
+                    {% set right_start = left_end %}
+                    {% set right_end   = right_start + spots_per_row %}
+
+                    <div class="spots-row-pair">
+
+                        <!-- Left bank (faces right / down toward lane) -->
+                        <div class="spots-bank left">
+                            {% for spot in spots[left_start:left_end] %}
+                           <div class="spot {{ 'occupied' if spot.occupied else 'available' }}" data-spot-id="{{ spot.spot_id }}">
+                                <div class="spot-tooltip">
+                                    Spot {{ spot.spot_id }} — {{ 'Occupied' if spot.occupied else 'Available' }}
+                                </div>
+                                <span class="spot-num">#{{ spot.spot_id }}</span>
+                                <svg class="spot-icon" viewBox="0 0 24 24" fill="none">
+                                    {% if spot.occupied %}
+                                    <!-- Car icon (occupied) -->
+                                    <path d="M5 11l1.5-4.5h11L19 11" stroke="#fca5a5" stroke-width="1.3" stroke-linecap="round"/>
+                                    <rect x="3" y="11" width="18" height="6" rx="2" fill="rgba(252,165,165,0.25)" stroke="#fca5a5" stroke-width="1.3"/>
+                                    <circle cx="7.5" cy="17.5" r="1.5" fill="#fca5a5"/>
+                                    <circle cx="16.5" cy="17.5" r="1.5" fill="#fca5a5"/>
+                                    <path d="M3 13h18" stroke="#fca5a5" stroke-width="0.8" opacity="0.4"/>
+                                    {% else %}
+                                    <!-- Empty spot icon -->
+                                    <rect x="4" y="6" width="16" height="12" rx="2" stroke="rgba(52,211,153,0.5)" stroke-width="1.3" stroke-dasharray="3 2" fill="none"/>
+                                    <path d="M9 12h6M12 9v6" stroke="rgba(52,211,153,0.6)" stroke-width="1.3" stroke-linecap="round"/>
+                                    {% endif %}
+                                </svg>
+                            </div>
+                            {% endfor %}
+                        </div>
+
+                        <!-- Drive lane -->
+                        <div class="drive-lane"></div>
+
+                        <!-- Right bank (faces left / down toward lane) -->
+                        <div class="spots-bank right">
+                            {% for spot in spots[right_start:right_end] %}
+                            <div class="spot {{ 'occupied' if spot.occupied else 'available' }}" data-spot-id="{{ spot.spot_id }}">
+                                <div class="spot-tooltip">
+                                    Spot {{ spot.spot_id }} — {{ 'Occupied' if spot.occupied else 'Available' }}
+                                </div>
+                                <span class="spot-num">#{{ spot.spot_id }}</span>
+                                <svg class="spot-icon" viewBox="0 0 24 24" fill="none">
+                                    {% if spot.occupied %}
+                                    <path d="M5 11l1.5-4.5h11L19 11" stroke="#fca5a5" stroke-width="1.3" stroke-linecap="round"/>
+                                    <rect x="3" y="11" width="18" height="6" rx="2" fill="rgba(252,165,165,0.25)" stroke="#fca5a5" stroke-width="1.3"/>
+                                    <circle cx="7.5" cy="17.5" r="1.5" fill="#fca5a5"/>
+                                    <circle cx="16.5" cy="17.5" r="1.5" fill="#fca5a5"/>
+                                    <path d="M3 13h18" stroke="#fca5a5" stroke-width="0.8" opacity="0.4"/>
+                                    {% else %}
+                                    <rect x="4" y="6" width="16" height="12" rx="2" stroke="rgba(52,211,153,0.5)" stroke-width="1.3" stroke-dasharray="3 2" fill="none"/>
+                                    <path d="M9 12h6M12 9v6" stroke="rgba(52,211,153,0.6)" stroke-width="1.3" stroke-linecap="round"/>
+                                    {% endif %}
+                                </svg>
+                            </div>
+                            {% endfor %}
+                        </div>
+
+                    </div>
+
+                    {% if not loop.last %}
+                    <div class="row-divider"></div>
+                    {% endif %}
+
+                {% endfor %}
+
+            </div>
+
+            <!-- Entrance marker -->
+            <div class="lot-entrance">
+                <div class="entrance-marker">
+                    <span class="entrance-arrow">↕</span>
+                    Entrance / Exit
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+
+    <!-- ══ FOOTER ══ -->
+    <footer class="footer">
+        <div class="footer-inner">
+            <div class="footer-logo">Quick<span>Spot</span></div>
+            <div class="footer-copy">© 2025 QuickSpot — Smart Urban Parking</div>
+        </div>
+    </footer>
+    
+    <script>
+    const LOT_ID = {{ lot.lot_id }};
+
+    const SVG_AVAILABLE = `
+        <rect x="4" y="6" width="16" height="12" rx="2" stroke="rgba(52,211,153,0.5)" stroke-width="1.3" stroke-dasharray="3 2" fill="none"/>
+        <path d="M9 12h6M12 9v6" stroke="rgba(52,211,153,0.6)" stroke-width="1.3" stroke-linecap="round"/>`;
+
+    const SVG_OCCUPIED = `
+        <path d="M5 11l1.5-4.5h11L19 11" stroke="#fca5a5" stroke-width="1.3" stroke-linecap="round"/>
+        <rect x="3" y="11" width="18" height="6" rx="2" fill="rgba(252,165,165,0.25)" stroke="#fca5a5" stroke-width="1.3"/>
+        <circle cx="7.5" cy="17.5" r="1.5" fill="#fca5a5"/>
+        <circle cx="16.5" cy="17.5" r="1.5" fill="#fca5a5"/>
+        <path d="M3 13h18" stroke="#fca5a5" stroke-width="0.8" opacity="0.4"/>`;
+
+    async function refreshSpots() {
+        try {
+            const res  = await fetch(`/api/lots/${LOT_ID}/spots`);
+            const data = await res.json();
+
+            // Update summary pills
+            document.querySelector('.stat-pill.green .stat-num').textContent = data.available;
+            document.querySelector('.stat-pill.red   .stat-num').textContent = data.occupied;
+
+            // Update each spot
+            data.spots.forEach(s => {
+                const el = document.querySelector(`[data-spot-id="${s.spot_id}"]`);
+                if (!el) return;
+
+                el.className = `spot ${s.occupied ? 'occupied' : 'available'}`;
+                el.querySelector('.spot-icon').innerHTML = s.occupied ? SVG_OCCUPIED : SVG_AVAILABLE;
+                el.querySelector('.spot-tooltip').textContent =
+                    `Spot ${s.spot_id} — ${s.occupied ? 'Occupied' : 'Available'}`;
+            });
+
+        } catch(e) {
+            console.warn('QuickSpot: could not refresh spots', e);
+        }
+    }
+
+    setInterval(refreshSpots, 5000);
+</script>
+
 </body>
 </html>

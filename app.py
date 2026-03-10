@@ -9,11 +9,42 @@ from model.parking_lot import ParkingLot
 app = Flask(__name__)
 manager = ParkingManager()
 
+# ── Lot definitions ──────────────────────────────────────────────
+# When you add a database later, replace this list with a DB query.
+# Each lot now carries lat, lng, zip, and address for map display.
+LOT_META = {
+    1: {"lat": 33.86260359286076, "lng": -118.09482494419677, "zip": "90703", "address": "239 Los Cerritos Center, Cerritos, CA"},
+    2: {"lat": 33.83033980660525, "lng": -118.07367278827475, "zip": "90716", "address": "12120 E Carson St, Hawaiian Gardens, CA"},
+    3: {"lat": 33.9000, "lng": -118.1006, "zip": "90242", "address": "251 Stonewood St, Downey, CA"},
+    4: {"lat": 33.8850, "lng": -118.0920, "zip": "90242", "address": "8550 Florence Ave, Downey, CA"},
+    5: {"lat": 33.86022798585085, "lng": -118.04965531404206, "zip": "90703", "address": "13233 South St, Cerritos, CA"},
+}
+
 # Creation of Parking lots
-manager.add_lot(ParkingLot(1, "Cerritos Mall", 10))
+manager.add_lot(ParkingLot(1, "Los Cerritos Center", 150))
 manager.add_lot(ParkingLot(2, "EOS Fitness", 20))
 manager.add_lot(ParkingLot(3, "Stonewood Mall", 32))
 manager.add_lot(ParkingLot(4, "LA Fitness", 15))
+manager.add_lot(ParkingLot(5, "EOS Fitness", 100))
+
+# ── helpers ──────────────────────────────────────────────────────
+def lot_to_dict(lot):
+    meta = LOT_META.get(lot.lot_id, {})
+    available = len(lot.get_available_spots())
+    occupied  = len(lot.get_occupied_spots())
+    pct       = round((occupied / lot.total_spots) * 100) if lot.total_spots else 0
+    return {
+        "lot_id":    lot.lot_id,
+        "lot_name":  lot.lot_name,
+        "total":     lot.total_spots,
+        "available": available,
+        "occupied":  occupied,
+        "pct":       pct,
+        "lat":       meta.get("lat"),
+        "lng":       meta.get("lng"),
+        "zip":       meta.get("zip", ""),
+        "address":   meta.get("address", ""),
+    }
 
 @app.route("/")
 def home():
@@ -22,22 +53,45 @@ def home():
         lot.simulate_sensor_update()
     return render_template("index.html", lots=lots)
 
-@app.route("/api/lots")                    # <-- renamed from /lots to /api/lots
+@app.route("/api/lots")
 def get_lots():
     data = []
     for lot in manager.get_all_lots():
-        occupied  = len(lot.get_occupied_spots())
-        available = len(lot.get_available_spots())
-        pct       = round((occupied / lot.total_spots) * 100) if lot.total_spots else 0
-        lot.simulate_sensor_update()       # <-- simulate on each poll so numbers actually change
-        data.append({
-            "lot_id":    lot.lot_id,
-            "available": available,
-            "occupied":  occupied,
-            "total":     lot.total_spots,
-            "pct":       pct,
-        })
+        lot.simulate_sensor_update()
+        data.append(lot_to_dict(lot))
     return jsonify(data)
+
+@app.route("/api/search")
+def search_lots():
+    """
+    GET /api/search?q=<query>
+    Matches lots by name (partial, case-insensitive) OR zip code.
+    Ready to be swapped for a real DB query later.
+    """
+    q = request.args.get("q", "").strip().lower()
+    results = []
+    for lot in manager.get_all_lots():
+        meta = LOT_META.get(lot.lot_id, {})
+        name_match = q in lot.lot_name.lower()
+        zip_match  = q == meta.get("zip", "")
+        if q == "" or name_match or zip_match:
+            results.append(lot_to_dict(lot))
+    return jsonify(results)
+
+@app.route("/api/lots/<int:lot_id>/spots")
+def get_spots_api(lot_id):
+    lot = manager.lots.get(lot_id)
+    if not lot:
+        return jsonify({"error": "Lot not found"}), 404
+    lot.simulate_sensor_update()
+    return jsonify({
+        "available": len(lot.get_available_spots()),
+        "occupied":  len(lot.get_occupied_spots()),
+        "spots": [
+            {"spot_id": s.spot_id, "occupied": s.occupied}
+            for s in lot.spots
+        ]
+    })
 
 @app.route("/lots/<int:lot_id>/spots")
 def get_spots(lot_id):
@@ -79,4 +133,4 @@ def simulate(lot_id):
     return jsonify({"message": "Sensor simulation complete"})
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=5001, debug=True)
+    app.run(host="0.0.0.0", port=5000, debug=True)
