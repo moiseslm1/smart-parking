@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Log In — QuickSpot</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --blue:     #1a56db;
+            --blue-d:   #1447c0;
+            --blue-lt:  #eff4ff;
+            --green:    #057a55;
+            --green-lt: #f0fdf4;
+            --red:      #c81e1e;
+            --red-lt:   #fef2f2;
+            --gray-50:  #f9fafb;
+            --gray-100: #f3f4f6;
+            --gray-200: #e5e7eb;
+            --gray-400: #9ca3af;
+            --gray-500: #6b7280;
+            --gray-700: #374151;
+            --gray-900: #111827;
+            --white:    #ffffff;
+            --font:     'Plus Jakarta Sans', system-ui, sans-serif;
+            --shadow-md: 0 4px 16px rgba(0,0,0,0.10), 0 2px 6px rgba(0,0,0,0.06);
+        }
+
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: var(--font);
+            background: var(--gray-50);
+            color: var(--gray-900);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* ── HEADER ── */
+        .header {
+            background: var(--white);
+            border-bottom: 1px solid var(--gray-200);
+            padding: 0 32px;
+            height: 64px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .logo {
+            display: flex; align-items: center; gap: 10px;
+            text-decoration: none;
+        }
+
+        .logo-mark {
+            width: 36px; height: 36px;
+            background: var(--blue); border-radius: 9px;
+            display: flex; align-items: center; justify-content: center;
+            color: white; font-size: 17px; font-weight: 800;
+        }
+
+        .logo-text { font-size: 18px; font-weight: 800; color: var(--gray-900); letter-spacing: -0.4px; }
+        .logo-text span { color: var(--blue); }
+
+        .header-link {
+            font-size: 14px; font-weight: 500; color: var(--gray-500);
+            text-decoration: none; padding: 7px 14px; border-radius: 8px;
+            transition: background 0.15s, color 0.15s;
+        }
+
+        .header-link:hover { background: var(--gray-100); color: var(--gray-900); }
+
+        /* ── MAIN ── */
+        .main {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 48px 24px;
+        }
+
+        .card {
+            background: var(--white);
+            border: 1px solid var(--gray-200);
+            border-radius: 16px;
+            padding: 40px;
+            width: 100%;
+            max-width: 440px;
+            box-shadow: var(--shadow-md);
+            animation: fadeUp 0.4s ease both;
+        }
+
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(12px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        .card-title {
+            font-size: 24px; font-weight: 800;
+            letter-spacing: -0.5px; color: var(--gray-900);
+            margin-bottom: 6px;
+        }
+
+        .card-subtitle {
+            font-size: 14px; color: var(--gray-500);
+            margin-bottom: 28px; font-weight: 400;
+        }
+
+        /* Flash messages */
+        .flash {
+            display: flex; align-items: center; gap: 8px;
+            padding: 12px 14px; border-radius: 10px;
+            font-size: 13px; font-weight: 600;
+            margin-bottom: 20px;
+        }
+
+        .flash.error {
+            background: var(--red-lt);
+            border: 1px solid #fecaca;
+            color: var(--red);
+        }
+
+        .flash.success {
+            background: var(--green-lt);
+            border: 1px solid #bbf7d0;
+            color: var(--green);
+        }
+
+        /* Form */
+        .form-group { margin-bottom: 18px; }
+
+        label {
+            display: block;
+            font-size: 13px; font-weight: 600;
+            color: var(--gray-700); margin-bottom: 6px;
+        }
+
+        input[type="email"],
+        input[type="password"],
+        input[type="text"] {
+            width: 100%;
+            padding: 11px 14px;
+            border: 1.5px solid var(--gray-200);
+            border-radius: 10px;
+            font-family: var(--font);
+            font-size: 14px;
+            color: var(--gray-900);
+            background: var(--white);
+            outline: none;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+
+        input:focus {
+            border-color: var(--blue);
+            box-shadow: 0 0 0 3px rgba(26,86,219,0.1);
+        }
+
+        input::placeholder { color: var(--gray-400); }
+
+        .submit-btn {
+            width: 100%;
+            padding: 13px;
+            background: var(--blue);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-family: var(--font);
+            font-size: 15px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: background 0.15s;
+            margin-top: 8px;
+        }
+
+        .submit-btn:hover { background: var(--blue-d); }
+
+        .divider {
+            text-align: center;
+            font-size: 13px;
+            color: var(--gray-400);
+            margin: 22px 0 0;
+        }
+
+        .divider a {
+            color: var(--blue);
+            font-weight: 600;
+            text-decoration: none;
+        }
+
+        .divider a:hover { text-decoration: underline; }
+
+        /* ── FOOTER ── */
+        .footer {
+            background: var(--white);
+            border-top: 1px solid var(--gray-200);
+            padding: 20px 32px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .footer-logo { font-size: 15px; font-weight: 800; color: var(--gray-900); }
+        .footer-logo span { color: var(--blue); }
+        .footer-copy { font-size: 12px; color: var(--gray-400); }
+    </style>
+</head>
+<body>
+
+    <header class="header">
+        <a href="/" class="logo">
+            <div class="logo-mark">Q</div>
+            <span class="logo-text">Quick<span>Spot</span></span>
+        </a>
+        <a href="/register" class="header-link">Create account →</a>
+    </header>
+
+    <main class="main">
+        <div class="card">
+            <div class="card-title">Welcome back</div>
+            <div class="card-subtitle">Log in to your QuickSpot account</div>
+
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% for category, message in messages %}
+                    <div class="flash {{ category }}">{{ message }}</div>
+                {% endfor %}
+            {% endwith %}
+
+            <form method="POST" action="/login">
+                <div class="form-group">
+                    <label for="email_address">Email address</label>
+                    <input type="email" id="email_address" name="email_address"
+                           placeholder="you@example.com" required autofocus>
+                </div>
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" name="password"
+                           placeholder="••••••••" required>
+                </div>
+                <button type="submit" class="submit-btn">Log In</button>
+            </form>
+
+            <div class="divider">
+                Don't have an account? <a href="/register">Sign up</a>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="footer-logo">Quick<span>Spot</span></div>
+        <div class="footer-copy">© 2025 QuickSpot</div>
+    </footer>
+
+</body>
+</html>

@@ -170,6 +170,15 @@
                     <li><a href="#">Event Parking</a></li>
                 </ul>
             </nav>
+            {% if session.get('username') %}
+                <span style="font-size:14px; font-weight:500; color:var(--gray-500)">
+                    Hi, {{ session['username'] }}
+                </span>
+                <a href="/logout" style="font-size:14px; font-weight:600; color:var(--gray-500); text-decoration:none; padding:7px 14px; border-radius:8px; border:1px solid var(--gray-200);">Log out</a>
+            {% else %}
+                <a href="/login" style="font-size:14px; font-weight:600; color:var(--gray-500); text-decoration:none; padding:7px 14px; border-radius:8px; border:1px solid var(--gray-200);">Log in</a>
+                <a href="/register" style="font-size:14px; font-weight:700; color:white; background:var(--blue); text-decoration:none; padding:7px 14px; border-radius:8px;">Sign up</a>
+            {% endif %}
             <div class="live-badge">
                 <div class="live-dot"></div>
                 Live
