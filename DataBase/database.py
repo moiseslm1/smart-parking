@@ -5,16 +5,15 @@ DB_PATH = os.path.join(os.path.dirname(__file__), 'quickspot.db')
 
 
 def get_db():
-    """Open a database connection."""
     conn = sqlite3.connect(DB_PATH)
     conn.row_factory = sqlite3.Row
     return conn
 
 
 def init_db():
-    """Create all tables and seed lot data if the table is empty."""
     with get_db() as conn:
 
+        # ── Users ────────────────────────────────────────────────────
         conn.execute('''
             CREATE TABLE IF NOT EXISTS users (
                 user_id        INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -24,6 +23,7 @@ def init_db():
             )
         ''')
 
+        # ── Parking lots ─────────────────────────────────────────────
         conn.execute('''
             CREATE TABLE IF NOT EXISTS parking_lots (
                 lot_id       INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -36,6 +36,19 @@ def init_db():
             )
         ''')
 
+        # ── Parked spots (one active spot per user) ──────────────────
+        conn.execute('''
+            CREATE TABLE IF NOT EXISTS parked_spots (
+                id         INTEGER PRIMARY KEY AUTOINCREMENT,
+                user_id    INTEGER NOT NULL UNIQUE,  -- one spot per user
+                lot_id     INTEGER NOT NULL,
+                spot_id    INTEGER NOT NULL,
+                parked_at  DATETIME DEFAULT CURRENT_TIMESTAMP,
+                FOREIGN KEY (user_id) REFERENCES users(user_id)
+            )
+        ''')
+
+        # Seed lots only if table is empty
         count = conn.execute('SELECT COUNT(*) FROM parking_lots').fetchone()[0]
         if count == 0:
             seed_lots = [
@@ -52,14 +65,14 @@ def init_db():
         conn.commit()
 
 
+# ── Parking lot queries ───────────────────────────────────────────
+
 def get_all_lots():
-    """Return all parking lots as a list of Row objects."""
     with get_db() as conn:
         return conn.execute('SELECT * FROM parking_lots ORDER BY lot_id').fetchall()
 
 
 def get_lot_by_id(lot_id):
-    """Return a single lot by primary key."""
     with get_db() as conn:
         return conn.execute(
             'SELECT * FROM parking_lots WHERE lot_id = ?', (lot_id,)
@@ -67,10 +80,6 @@ def get_lot_by_id(lot_id):
 
 
 def add_lot(lot_name, total_spots, lat, lng, zip_code, address):
-    """
-    Insert a new parking lot. Returns the new lot_id.
-    Call this whenever you want to add a new lot — no need to touch app.py.
-    """
     with get_db() as conn:
         cursor = conn.execute('''
             INSERT INTO parking_lots (lot_name, total_spots, lat, lng, zip, address)
@@ -80,33 +89,49 @@ def add_lot(lot_name, total_spots, lat, lng, zip_code, address):
         return cursor.lastrowid
 
 
-def update_lot(lot_id, lot_name=None, total_spots=None, lat=None, lng=None, zip_code=None, address=None):
-    """Update individual fields on an existing lot."""
-    fields, values = [], []
-    if lot_name    is not None: fields.append('lot_name = ?');    values.append(lot_name)
-    if total_spots is not None: fields.append('total_spots = ?'); values.append(total_spots)
-    if lat         is not None: fields.append('lat = ?');         values.append(lat)
-    if lng         is not None: fields.append('lng = ?');         values.append(lng)
-    if zip_code    is not None: fields.append('zip = ?');         values.append(zip_code)
-    if address     is not None: fields.append('address = ?');     values.append(address)
-    if not fields:
-        return
-    values.append(lot_id)
-    with get_db() as conn:
-        conn.execute(f'UPDATE parking_lots SET {", ".join(fields)} WHERE lot_id = ?', values)
-        conn.commit()
-
-
 def delete_lot(lot_id):
-    """Remove a lot from the database."""
     with get_db() as conn:
         conn.execute('DELETE FROM parking_lots WHERE lot_id = ?', (lot_id,))
         conn.commit()
 
 
+# ── Parked spot queries ───────────────────────────────────────────
+
+def save_parked_spot(user_id, lot_id, spot_id):
+    """
+    Save or update the user's active parked spot.
+    A user can only have one active spot — this replaces any previous one.
+    """
+    with get_db() as conn:
+        conn.execute('''
+            INSERT INTO parked_spots (user_id, lot_id, spot_id)
+            VALUES (?, ?, ?)
+            ON CONFLICT(user_id) DO UPDATE SET
+                lot_id    = excluded.lot_id,
+                spot_id   = excluded.spot_id,
+                parked_at = CURRENT_TIMESTAMP
+        ''', (user_id, lot_id, spot_id))
+        conn.commit()
+
+
+def get_parked_spot(user_id):
+    """Return the user's current parked spot row, or None."""
+    with get_db() as conn:
+        return conn.execute(
+            'SELECT * FROM parked_spots WHERE user_id = ?', (user_id,)
+        ).fetchone()
+
+
+def clear_parked_spot(user_id):
+    """Remove the user's active parked spot (they've left)."""
+    with get_db() as conn:
+        conn.execute('DELETE FROM parked_spots WHERE user_id = ?', (user_id,))
+        conn.commit()
+
+
+# ── User queries ──────────────────────────────────────────────────
 
 def create_user(username, password_hash, email_address):
-    """Insert a new user. Returns the new user_id, or None on duplicate."""
     try:
         with get_db() as conn:
             cursor = conn.execute(

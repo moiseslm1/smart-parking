@@ -3,7 +3,6 @@
 <head>
     <title>{{ lot.lot_name }} — QuickSpot</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
     <style>
@@ -24,8 +23,6 @@
             --gray-900: #111827;
             --white:    #ffffff;
             --asphalt:  #1e2128;
-            --asphalt-lt: #272b35;
-            --lane:     #2d3340;
             --stripe:   rgba(255,255,255,0.55);
             --font:     'Plus Jakarta Sans', system-ui, sans-serif;
         }
@@ -42,497 +39,123 @@
         }
 
         /* ══ HEADER ══ */
-        .header {
-            background: var(--white);
-            border-bottom: 1px solid var(--gray-200);
-            position: sticky;
-            top: 0;
-            z-index: 50;
-        }
-
-        .header-inner {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 32px;
-            height: 64px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 24px;
-        }
-
-        .logo {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            text-decoration: none;
-            flex-shrink: 0;
-        }
-
-        .logo-mark {
-            width: 36px;
-            height: 36px;
-            background: var(--blue);
-            border-radius: 9px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-size: 17px;
-            font-weight: 800;
-        }
-
-        .logo-text {
-            font-size: 18px;
-            font-weight: 800;
-            color: var(--gray-900);
-            letter-spacing: -0.4px;
-        }
-
+        .header { background: var(--white); border-bottom: 1px solid var(--gray-200); position: sticky; top: 0; z-index: 50; }
+        .header-inner { max-width: 1200px; margin: 0 auto; padding: 0 32px; height: 64px; display: flex; align-items: center; justify-content: space-between; gap: 24px; }
+        .logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+        .logo-mark { width: 36px; height: 36px; background: var(--blue); border-radius: 9px; display: flex; align-items: center; justify-content: center; color: white; font-size: 17px; font-weight: 800; }
+        .logo-text { font-size: 18px; font-weight: 800; color: var(--gray-900); letter-spacing: -0.4px; }
         .logo-text span { color: var(--blue); }
-
-        .nav-links {
-            display: flex;
-            align-items: center;
-            gap: 4px;
-            list-style: none;
-        }
-
-        .nav-links a {
-            text-decoration: none;
-            font-size: 14px;
-            font-weight: 500;
-            color: var(--gray-500);
-            padding: 7px 14px;
-            border-radius: 8px;
-            transition: background 0.15s, color 0.15s;
-        }
-
+        .nav-links { display: flex; align-items: center; gap: 4px; list-style: none; }
+        .nav-links a { text-decoration: none; font-size: 14px; font-weight: 500; color: var(--gray-500); padding: 7px 14px; border-radius: 8px; transition: background 0.15s, color 0.15s; }
         .nav-links a:hover { background: var(--gray-100); color: var(--gray-900); }
-
-        .live-badge {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            background: var(--green-lt);
-            color: var(--green);
-            font-size: 12px;
-            font-weight: 600;
-            padding: 5px 11px;
-            border-radius: 100px;
-            border: 1px solid #bbf7d0;
-        }
-
-        .live-dot {
-            width: 6px; height: 6px;
-            border-radius: 50%;
-            background: var(--green);
-            animation: pulse 2s infinite;
-        }
-
-        @keyframes pulse {
-            0%,100% { opacity:1; transform:scale(1); }
-            50%      { opacity:.7; transform:scale(1.2); }
-        }
+        .live-badge { display: flex; align-items: center; gap: 6px; background: var(--green-lt); color: var(--green); font-size: 12px; font-weight: 600; padding: 5px 11px; border-radius: 100px; border: 1px solid #bbf7d0; }
+        .live-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--green); animation: pulse 2s infinite; }
+        @keyframes pulse { 0%,100%{opacity:1;transform:scale(1);} 50%{opacity:.7;transform:scale(1.2);} }
 
         /* ══ PAGE HERO ══ */
-        .page-hero {
-            background: var(--white);
-            border-bottom: 1px solid var(--gray-200);
-            padding: 28px 32px;
-            animation: fadeUp 0.4s ease both;
-        }
-
-        @keyframes fadeUp {
-            from { opacity:0; transform:translateY(10px); }
-            to   { opacity:1; transform:translateY(0); }
-        }
-
-        .page-hero-inner {
-            max-width: 1200px;
-            margin: 0 auto;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 24px;
-            flex-wrap: wrap;
-        }
-
-        .back-btn {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            font-size: 13px;
-            font-weight: 600;
-            color: var(--gray-500);
-            text-decoration: none;
-            padding: 6px 12px;
-            border-radius: 8px;
-            border: 1px solid var(--gray-200);
-            background: var(--white);
-            transition: all 0.15s;
-            margin-bottom: 12px;
-        }
-
+        .page-hero { background: var(--white); border-bottom: 1px solid var(--gray-200); padding: 28px 32px; animation: fadeUp 0.4s ease both; }
+        @keyframes fadeUp { from{opacity:0;transform:translateY(10px);} to{opacity:1;transform:translateY(0);} }
+        .page-hero-inner { max-width: 1200px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; gap: 24px; flex-wrap: wrap; }
+        .back-btn { display: inline-flex; align-items: center; gap: 6px; font-size: 13px; font-weight: 600; color: var(--gray-500); text-decoration: none; padding: 6px 12px; border-radius: 8px; border: 1px solid var(--gray-200); background: var(--white); transition: all 0.15s; margin-bottom: 12px; }
         .back-btn:hover { background: var(--gray-100); color: var(--gray-900); }
+        .lot-title { font-size: 26px; font-weight: 800; letter-spacing: -0.6px; }
+        .lot-subtitle { font-size: 14px; color: var(--gray-500); margin-top: 3px; }
+        .stat-pills { display: flex; gap: 10px; flex-wrap: wrap; }
+        .stat-pill { display: flex; align-items: center; gap: 8px; padding: 10px 16px; border-radius: 10px; border: 1px solid; font-size: 13px; font-weight: 600; }
+        .stat-pill.total { background: var(--gray-100); border-color: var(--gray-200); color: var(--gray-700); }
+        .stat-pill.green { background: var(--green-lt); border-color: #bbf7d0; color: var(--green); }
+        .stat-pill.red   { background: var(--red-lt);   border-color: #fecaca; color: var(--red); }
+        .stat-num   { font-size: 20px; font-weight: 800; letter-spacing: -0.5px; line-height: 1; }
+        .stat-label { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; opacity: 0.75; }
 
-        .lot-title {
-            font-size: 26px;
-            font-weight: 800;
-            letter-spacing: -0.6px;
-            color: var(--gray-900);
-        }
-
-        .lot-subtitle {
-            font-size: 14px;
-            color: var(--gray-500);
-            margin-top: 3px;
-            font-weight: 400;
-        }
-
-        /* Stat pills */
-        .stat-pills {
-            display: flex;
-            gap: 10px;
-            flex-wrap: wrap;
-        }
-
-        .stat-pill {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            padding: 10px 16px;
-            border-radius: 10px;
-            border: 1px solid;
-            font-size: 13px;
-            font-weight: 600;
-        }
-
-        .stat-pill.total {
-            background: var(--gray-100);
-            border-color: var(--gray-200);
-            color: var(--gray-700);
-        }
-
-        .stat-pill.green {
-            background: var(--green-lt);
-            border-color: #bbf7d0;
-            color: var(--green);
-        }
-
-        .stat-pill.red {
-            background: var(--red-lt);
-            border-color: #fecaca;
-            color: var(--red);
-        }
-
-        .stat-num {
-            font-size: 20px;
-            font-weight: 800;
-            letter-spacing: -0.5px;
-            line-height: 1;
-        }
-
-        .stat-label {
-            font-size: 11px;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-            opacity: 0.75;
-        }
+        /* ══ MY SPOT BANNER ══ */
+        .my-spot-banner { background: var(--blue-lt); border-bottom: 1px solid #c7d9fb; padding: 12px 32px; display: none; }
+        .my-spot-banner.visible { display: block; }
+        .my-spot-banner-inner { max-width: 1200px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+        .my-spot-text { font-size: 14px; font-weight: 600; color: var(--blue); display: flex; align-items: center; gap: 8px; }
+        .leave-btn { background: var(--red-lt); color: var(--red); border: 1px solid #fecaca; border-radius: 8px; padding: 7px 14px; font-family: var(--font); font-size: 13px; font-weight: 700; cursor: pointer; transition: background 0.15s; }
+        .leave-btn:hover { background: #fecaca; }
 
         /* ══ LEGEND ══ */
-        .legend-bar {
-            background: var(--white);
-            border-bottom: 1px solid var(--gray-200);
-            padding: 12px 32px;
-        }
-
-        .legend-inner {
-            max-width: 1200px;
-            margin: 0 auto;
-            display: flex;
-            align-items: center;
-            gap: 20px;
-        }
-
-        .legend-item {
-            display: flex;
-            align-items: center;
-            gap: 7px;
-            font-size: 12px;
-            font-weight: 500;
-            color: var(--gray-600, #4b5563);
-        }
-
-        .legend-swatch {
-            width: 22px;
-            height: 14px;
-            border-radius: 4px;
-            border: 1px solid rgba(0,0,0,0.1);
-        }
-
-        .legend-swatch.avail  { background: #d1fae5; }
-        .legend-swatch.occ    { background: #fee2e2; }
+        .legend-bar { background: var(--white); border-bottom: 1px solid var(--gray-200); padding: 12px 32px; }
+        .legend-inner { max-width: 1200px; margin: 0 auto; display: flex; align-items: center; gap: 20px; }
+        .legend-item { display: flex; align-items: center; gap: 7px; font-size: 12px; font-weight: 500; color: #4b5563; }
+        .legend-swatch { width: 22px; height: 14px; border-radius: 4px; border: 1px solid rgba(0,0,0,0.1); }
+        .legend-swatch.avail { background: #d1fae5; }
+        .legend-swatch.occ   { background: #fee2e2; }
+        .legend-swatch.mine  { background: #bfdbfe; }
 
         /* ══ LOT CANVAS ══ */
-        .lot-canvas-wrap {
-            flex: 1;
-            padding: 32px;
-            display: flex;
-            justify-content: center;
-            animation: fadeUp 0.5s 0.1s ease both;
-        }
-
-        /* The "asphalt" lot */
-        .lot-canvas {
-            background: var(--asphalt);
-            border-radius: 16px;
-            padding: 28px 20px;
-            width: 100%;
-            max-width: 1100px;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.25);
-            position: relative;
-            overflow: hidden;
-        }
-
-        /* Subtle asphalt texture */
-        .lot-canvas::before {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.06'/%3E%3C/svg%3E");
-            pointer-events: none;
-            border-radius: 16px;
-        }
-
-        /* Lot name watermark */
-        .lot-watermark {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            font-size: clamp(40px, 6vw, 80px);
-            font-weight: 800;
-            color: rgba(255,255,255,0.025);
-            white-space: nowrap;
-            pointer-events: none;
-            letter-spacing: -2px;
-            user-select: none;
-        }
-
-        /* ── ROWS: two columns of spots flanking a drive lane ── */
-        .lot-section {
-            display: flex;
-            flex-direction: column;
-            gap: 0;
-        }
-
-        .spots-row-pair {
-            display: flex;
-            align-items: stretch;
-            gap: 0;
-            margin-bottom: 6px;
-        }
-
-        /* Left bank of spots */
-        .spots-bank {
-            display: flex;
-            flex: 1;
-            gap: 4px;
-            flex-wrap: wrap;
-        }
-
+        .lot-canvas-wrap { flex: 1; padding: 32px; display: flex; justify-content: center; animation: fadeUp 0.5s 0.1s ease both; }
+        .lot-canvas { background: var(--asphalt); border-radius: 16px; padding: 28px 20px; width: 100%; max-width: 1100px; box-shadow: 0 20px 60px rgba(0,0,0,0.25); position: relative; overflow: hidden; }
+        .lot-canvas::before { content: ''; position: absolute; inset: 0; background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.06'/%3E%3C/svg%3E"); pointer-events: none; border-radius: 16px; }
+        .lot-watermark { position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%); font-size: clamp(40px,6vw,80px); font-weight: 800; color: rgba(255,255,255,0.025); white-space: nowrap; pointer-events: none; letter-spacing: -2px; user-select: none; }
+        .lot-section { display: flex; flex-direction: column; gap: 0; }
+        .spots-row-pair { display: flex; align-items: stretch; gap: 0; margin-bottom: 6px; }
+        .spots-bank { display: flex; flex: 1; gap: 4px; flex-wrap: wrap; }
         .spots-bank.left  { justify-content: flex-end; }
         .spots-bank.right { justify-content: flex-start; }
+        .drive-lane { width: 64px; flex-shrink: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; position: relative; padding: 4px 0; }
+        .drive-lane::before { content: ''; position: absolute; top: 0; bottom: 0; left: 50%; transform: translateX(-50%); width: 3px; background: repeating-linear-gradient(to bottom,#f0b429 0px,#f0b429 14px,transparent 14px,transparent 26px); opacity: 0.7; }
+        .row-divider { height: 3px; background: var(--stripe); margin: 3px 0; border-radius: 2px; opacity: 0.3; }
 
-        /* The driving lane in the middle */
-        .drive-lane {
-            width: 64px;
-            flex-shrink: 0;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            position: relative;
-            gap: 6px;
-            padding: 4px 0;
-        }
-
-        /* Dashed center line */
-        .drive-lane::before {
-            content: '';
-            position: absolute;
-            top: 0; bottom: 0;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 3px;
-            background: repeating-linear-gradient(
-                to bottom,
-                #f0b429 0px,
-                #f0b429 14px,
-                transparent 14px,
-                transparent 26px
-            );
-            opacity: 0.7;
-        }
-
-        /* Row divider — white stripe between facing rows */
-        .row-divider {
-            height: 3px;
-            background: var(--stripe);
-            margin: 3px 0;
-            border-radius: 2px;
-            opacity: 0.3;
-        }
-
-        /* ── INDIVIDUAL PARKING SPOT ── */
-        .spot {
-            width: 68px;
-            height: 100px;
-            border: 2px solid rgba(255,255,255,0.18);
-            border-radius: 4px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            gap: 6px;
-            position: relative;
-            cursor: default;
-            transition: transform 0.15s, box-shadow 0.15s;
-            flex-shrink: 0;
-        }
-
-        .spot:hover {
-            transform: scale(1.06);
-            z-index: 10;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.4);
-        }
-
-        .spot.available {
-            background: rgba(5, 150, 105, 0.18);
-            border-color: rgba(52, 211, 153, 0.4);
-        }
-
-        .spot.occupied {
-            background: rgba(200, 30, 30, 0.18);
-            border-color: rgba(252, 165, 165, 0.3);
-        }
-
-        /* Left-facing spots have rounded top, right-facing have rounded bottom */
-        .spots-bank.left  .spot { border-radius: 4px 4px 4px 4px; }
-        .spots-bank.right .spot { border-radius: 4px 4px 4px 4px; }
-
-        .spot-num {
-            font-size: 11px;
-            font-weight: 700;
-            color: rgba(255,255,255,0.6);
-            letter-spacing: 0.03em;
-            line-height: 1;
-        }
-
-        .spot-icon {
-            width: 32px;
-            height: 32px;
-            opacity: 0.85;
-        }
-
+        /* ── SPOT ── */
+        .spot { width: 68px; height: 100px; border: 2px solid rgba(255,255,255,0.18); border-radius: 4px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px; position: relative; transition: transform 0.15s, box-shadow 0.15s; flex-shrink: 0; cursor: default; }
+        .spot.available { background: rgba(5,150,105,0.18); border-color: rgba(52,211,153,0.4); cursor: pointer; }
+        .spot.available:hover { transform: scale(1.06); z-index: 10; box-shadow: 0 4px 20px rgba(52,211,153,0.3); background: rgba(5,150,105,0.3); }
+        .spot.occupied  { background: rgba(200,30,30,0.18); border-color: rgba(252,165,165,0.3); }
+        .spot.occupied:hover, .spot.mine:hover { transform: scale(1.06); z-index: 10; box-shadow: 0 4px 20px rgba(0,0,0,0.4); }
+        .spot.mine { background: rgba(26,86,219,0.3); border-color: rgba(147,197,253,0.7); box-shadow: 0 0 16px rgba(26,86,219,0.4); }
+        .spot-num { font-size: 11px; font-weight: 700; color: rgba(255,255,255,0.6); letter-spacing: 0.03em; line-height: 1; }
+        .spot-icon { width: 32px; height: 32px; opacity: 0.85; }
         .spot.available .spot-icon { filter: drop-shadow(0 0 4px rgba(52,211,153,0.5)); }
         .spot.occupied  .spot-icon { filter: drop-shadow(0 0 4px rgba(252,165,165,0.4)); }
+        .spot.mine      .spot-icon { filter: drop-shadow(0 0 6px rgba(96,165,250,0.8)); }
 
-        /* Tooltip on hover */
-        .spot-tooltip {
-            position: absolute;
-            bottom: calc(100% + 8px);
-            left: 50%;
-            transform: translateX(-50%);
-            background: var(--gray-900);
-            color: white;
-            font-size: 11px;
-            font-weight: 600;
-            padding: 4px 8px;
-            border-radius: 6px;
-            white-space: nowrap;
-            opacity: 0;
-            pointer-events: none;
-            transition: opacity 0.15s;
-            z-index: 20;
-        }
-
-        .spot-tooltip::after {
-            content: '';
-            position: absolute;
-            top: 100%; left: 50%;
-            transform: translateX(-50%);
-            border: 4px solid transparent;
-            border-top-color: var(--gray-900);
-        }
-
+        /* Tooltip */
+        .spot-tooltip { position: absolute; bottom: calc(100% + 8px); left: 50%; transform: translateX(-50%); background: var(--gray-900); color: white; font-size: 11px; font-weight: 600; padding: 4px 8px; border-radius: 6px; white-space: nowrap; opacity: 0; pointer-events: none; transition: opacity 0.15s; z-index: 20; }
+        .spot-tooltip::after { content: ''; position: absolute; top: 100%; left: 50%; transform: translateX(-50%); border: 4px solid transparent; border-top-color: var(--gray-900); }
         .spot:hover .spot-tooltip { opacity: 1; }
 
-        /* Entrance/exit markers */
-        .lot-entrance {
-            display: flex;
-            justify-content: center;
-            gap: 40px;
-            margin-top: 16px;
-        }
+        .lot-entrance { display: flex; justify-content: center; gap: 40px; margin-top: 16px; }
+        .entrance-marker { display: flex; align-items: center; gap: 8px; font-size: 11px; font-weight: 700; color: rgba(255,255,255,0.5); letter-spacing: 0.08em; text-transform: uppercase; }
+        .entrance-arrow { font-size: 16px; color: #f0b429; }
 
-        .entrance-marker {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            font-size: 11px;
-            font-weight: 700;
-            color: rgba(255,255,255,0.5);
-            letter-spacing: 0.08em;
-            text-transform: uppercase;
-        }
+        /* ══ MODAL ══ */
+        .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); backdrop-filter: blur(4px); z-index: 200; display: flex; align-items: center; justify-content: center; opacity: 0; pointer-events: none; transition: opacity 0.2s; }
+        .modal-overlay.visible { opacity: 1; pointer-events: all; }
+        .modal { background: var(--white); border-radius: 16px; padding: 32px; width: 100%; max-width: 380px; box-shadow: 0 20px 60px rgba(0,0,0,0.3); transform: translateY(12px); transition: transform 0.2s; }
+        .modal-overlay.visible .modal { transform: translateY(0); }
+        .modal-icon { width: 52px; height: 52px; background: var(--blue-lt); border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 24px; margin-bottom: 18px; }
+        .modal-title { font-size: 20px; font-weight: 800; letter-spacing: -0.4px; margin-bottom: 6px; }
+        .modal-subtitle { font-size: 14px; color: var(--gray-500); margin-bottom: 24px; line-height: 1.5; }
+        .modal-actions { display: flex; gap: 10px; }
+        .modal-cancel  { flex: 1; padding: 12px; background: var(--gray-100); color: var(--gray-700); border: 1px solid var(--gray-200); border-radius: 10px; font-family: var(--font); font-size: 14px; font-weight: 600; cursor: pointer; transition: background 0.15s; }
+        .modal-cancel:hover { background: var(--gray-200); }
+        .modal-confirm { flex: 1; padding: 12px; background: var(--blue); color: white; border: none; border-radius: 10px; font-family: var(--font); font-size: 14px; font-weight: 700; cursor: pointer; transition: background 0.15s; }
+        .modal-confirm:hover { background: var(--blue-d); }
+        .modal-confirm:disabled { opacity: 0.6; cursor: not-allowed; }
 
-        .entrance-arrow {
-            font-size: 16px;
-            color: #f0b429;
-        }
+        /* ══ TOAST ══ */
+        .toast { position: fixed; bottom: 28px; left: 50%; transform: translateX(-50%) translateY(20px); background: var(--gray-900); color: white; font-size: 14px; font-weight: 600; padding: 12px 20px; border-radius: 10px; box-shadow: 0 8px 24px rgba(0,0,0,0.3); opacity: 0; pointer-events: none; transition: opacity 0.25s, transform 0.25s; z-index: 300; white-space: nowrap; }
+        .toast.show  { opacity: 1; transform: translateX(-50%) translateY(0); }
+        .toast.green { background: var(--green); }
+        .toast.red   { background: var(--red); }
 
         /* ══ FOOTER ══ */
-        .footer {
-            background: var(--white);
-            border-top: 1px solid var(--gray-200);
-            padding: 24px 32px;
-            margin-top: auto;
-        }
-
-        .footer-inner {
-            max-width: 1200px;
-            margin: 0 auto;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .footer-logo {
-            font-size: 15px;
-            font-weight: 800;
-            color: var(--gray-900);
-            letter-spacing: -0.3px;
-        }
-
+        .footer { background: var(--white); border-top: 1px solid var(--gray-200); padding: 24px 32px; margin-top: auto; }
+        .footer-inner { max-width: 1200px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; }
+        .footer-logo { font-size: 15px; font-weight: 800; color: var(--gray-900); }
         .footer-logo span { color: var(--blue); }
-
-        .footer-copy {
-            font-size: 12px;
-            color: var(--gray-400);
-            font-weight: 500;
-        }
+        .footer-copy { font-size: 12px; color: var(--gray-400); }
 
         @media (max-width: 640px) {
-            .header-inner  { padding: 0 20px; }
-            .nav-links     { display: none; }
-            .page-hero     { padding: 20px; }
+            .header-inner { padding: 0 20px; }
+            .nav-links    { display: none; }
+            .page-hero    { padding: 20px; }
             .lot-canvas-wrap { padding: 16px; }
-            .spot          { width: 52px; height: 78px; }
-            .drive-lane    { width: 44px; }
-            .stat-pills    { gap: 8px; }
+            .spot         { width: 52px; height: 78px; }
+            .drive-lane   { width: 44px; }
         }
     </style>
 </head>
@@ -553,10 +176,7 @@
                     <li><a href="#">Event Parking</a></li>
                 </ul>
             </nav>
-            <div class="live-badge">
-                <div class="live-dot"></div>
-                Live
-            </div>
+            <div class="live-badge"><div class="live-dot"></div> Live</div>
         </div>
     </header>
 
@@ -565,33 +185,26 @@
     <div class="page-hero">
         <div class="page-hero-inner">
             <div>
-                <a href="/" class="back-btn">
-                    ← Back to lots
-                </a>
+                <a href="/" class="back-btn">← Back to lots</a>
                 <div class="lot-title">{{ lot.lot_name }}</div>
-                <div class="lot-subtitle">Live parking layout — updates every 5 seconds</div>
+                <div class="lot-subtitle">Live parking layout — click an available spot to park</div>
             </div>
-
             <div class="stat-pills">
-                <div class="stat-pill total">
-                    <div>
-                        <div class="stat-num">{{ lot.total_spots }}</div>
-                        <div class="stat-label">Total</div>
-                    </div>
-                </div>
-                <div class="stat-pill green">
-                    <div>
-                        <div class="stat-num">{{ lot.get_available_spots() | length }}</div>
-                        <div class="stat-label">Available</div>
-                    </div>
-                </div>
-                <div class="stat-pill red">
-                    <div>
-                        <div class="stat-num">{{ lot.get_occupied_spots() | length }}</div>
-                        <div class="stat-label">Occupied</div>
-                    </div>
-                </div>
+                <div class="stat-pill total"><div><div class="stat-num">{{ lot.total_spots }}</div><div class="stat-label">Total</div></div></div>
+                <div class="stat-pill green"><div><div class="stat-num">{{ lot.get_available_spots() | length }}</div><div class="stat-label">Available</div></div></div>
+                <div class="stat-pill red"><div><div class="stat-num">{{ lot.get_occupied_spots() | length }}</div><div class="stat-label">Occupied</div></div></div>
             </div>
+        </div>
+    </div>
+
+
+    <!-- ══ MY SPOT BANNER ══ -->
+    <div class="my-spot-banner {% if user_spot_id %}visible{% endif %}" id="my-spot-banner">
+        <div class="my-spot-banner-inner">
+            <div class="my-spot-text">
+                🅿 You are parked in <strong id="my-spot-label">Spot #{{ user_spot_id or '' }}</strong>
+            </div>
+            <button class="leave-btn" id="leave-btn">Leave Spot</button>
         </div>
     </div>
 
@@ -599,16 +212,12 @@
     <!-- ══ LEGEND ══ -->
     <div class="legend-bar">
         <div class="legend-inner">
-            <div class="legend-item">
-                <div class="legend-swatch avail"></div>
-                Available
-            </div>
-            <div class="legend-item">
-                <div class="legend-swatch occ"></div>
-                Occupied
-            </div>
-            <div class="legend-item" style="margin-left:auto; color: var(--gray-400); font-size:11px;">
-                Hover a spot for details
+            <div class="legend-item"><div class="legend-swatch avail"></div> Available{% if logged_in %} — click to park{% endif %}</div>
+            <div class="legend-item"><div class="legend-swatch occ"></div> Occupied</div>
+            <div class="legend-item"><div class="legend-swatch mine"></div> Your spot</div>
+            <div class="legend-item" style="margin-left:auto; color:var(--gray-400); font-size:11px;">
+                {% if not logged_in %}<a href="/login" style="color:var(--blue);font-weight:600;">Log in</a> to claim a spot
+                {% else %}Hover a spot for details{% endif %}
             </div>
         </div>
     </div>
@@ -617,9 +226,7 @@
     <!-- ══ LOT CANVAS ══ -->
     <div class="lot-canvas-wrap">
         <div class="lot-canvas">
-
             <div class="lot-watermark">{{ lot.lot_name }}</div>
-
             <div class="lot-section">
 
                 {% set spots_per_row = 5 %}
@@ -627,85 +234,77 @@
                 {% set num_rows = (total / (spots_per_row * 2)) | round(0, 'ceil') | int %}
 
                 {% for row in range(num_rows) %}
-
                     {% set left_start  = row * spots_per_row * 2 %}
                     {% set left_end    = left_start + spots_per_row %}
                     {% set right_start = left_end %}
                     {% set right_end   = right_start + spots_per_row %}
 
                     <div class="spots-row-pair">
-
-                        <!-- Left bank (faces right / down toward lane) -->
                         <div class="spots-bank left">
                             {% for spot in spots[left_start:left_end] %}
-                           <div class="spot {{ 'occupied' if spot.occupied else 'available' }}" data-spot-id="{{ spot.spot_id }}">
+                            {% set is_mine = (user_spot_id == spot.spot_id) %}
+                            <div class="spot {{ 'mine' if is_mine else ('occupied' if spot.occupied else 'available') }}" data-spot-id="{{ spot.spot_id }}">
                                 <div class="spot-tooltip">
-                                    Spot {{ spot.spot_id }} — {{ 'Occupied' if spot.occupied else 'Available' }}
+                                    {% if is_mine %}Your spot — #{{ spot.spot_id }}
+                                    {% elif spot.occupied %}Spot {{ spot.spot_id }} — Occupied
+                                    {% else %}Spot {{ spot.spot_id }} — Click to park{% endif %}
                                 </div>
                                 <span class="spot-num">#{{ spot.spot_id }}</span>
                                 <svg class="spot-icon" viewBox="0 0 24 24" fill="none">
-                                    {% if spot.occupied %}
-                                    <!-- Car icon (occupied) -->
-                                    <path d="M5 11l1.5-4.5h11L19 11" stroke="#fca5a5" stroke-width="1.3" stroke-linecap="round"/>
-                                    <rect x="3" y="11" width="18" height="6" rx="2" fill="rgba(252,165,165,0.25)" stroke="#fca5a5" stroke-width="1.3"/>
-                                    <circle cx="7.5" cy="17.5" r="1.5" fill="#fca5a5"/>
-                                    <circle cx="16.5" cy="17.5" r="1.5" fill="#fca5a5"/>
-                                    <path d="M3 13h18" stroke="#fca5a5" stroke-width="0.8" opacity="0.4"/>
+                                    {% if is_mine %}
+                                        <circle cx="12" cy="8" r="4" stroke="#93c5fd" stroke-width="1.4"/>
+                                        <path d="M4 20c0-4 3.6-7 8-7s8 3 8 7" stroke="#93c5fd" stroke-width="1.4" stroke-linecap="round"/>
+                                    {% elif spot.occupied %}
+                                        <path d="M5 11l1.5-4.5h11L19 11" stroke="#fca5a5" stroke-width="1.3" stroke-linecap="round"/>
+                                        <rect x="3" y="11" width="18" height="6" rx="2" fill="rgba(252,165,165,0.25)" stroke="#fca5a5" stroke-width="1.3"/>
+                                        <circle cx="7.5" cy="17.5" r="1.5" fill="#fca5a5"/>
+                                        <circle cx="16.5" cy="17.5" r="1.5" fill="#fca5a5"/>
                                     {% else %}
-                                    <!-- Empty spot icon -->
-                                    <rect x="4" y="6" width="16" height="12" rx="2" stroke="rgba(52,211,153,0.5)" stroke-width="1.3" stroke-dasharray="3 2" fill="none"/>
-                                    <path d="M9 12h6M12 9v6" stroke="rgba(52,211,153,0.6)" stroke-width="1.3" stroke-linecap="round"/>
+                                        <rect x="4" y="6" width="16" height="12" rx="2" stroke="rgba(52,211,153,0.5)" stroke-width="1.3" stroke-dasharray="3 2" fill="none"/>
+                                        <path d="M9 12h6M12 9v6" stroke="rgba(52,211,153,0.6)" stroke-width="1.3" stroke-linecap="round"/>
                                     {% endif %}
                                 </svg>
                             </div>
                             {% endfor %}
                         </div>
 
-                        <!-- Drive lane -->
                         <div class="drive-lane"></div>
 
-                        <!-- Right bank (faces left / down toward lane) -->
                         <div class="spots-bank right">
                             {% for spot in spots[right_start:right_end] %}
-                            <div class="spot {{ 'occupied' if spot.occupied else 'available' }}" data-spot-id="{{ spot.spot_id }}">
+                            {% set is_mine = (user_spot_id == spot.spot_id) %}
+                            <div class="spot {{ 'mine' if is_mine else ('occupied' if spot.occupied else 'available') }}" data-spot-id="{{ spot.spot_id }}">
                                 <div class="spot-tooltip">
-                                    Spot {{ spot.spot_id }} — {{ 'Occupied' if spot.occupied else 'Available' }}
+                                    {% if is_mine %}Your spot — #{{ spot.spot_id }}
+                                    {% elif spot.occupied %}Spot {{ spot.spot_id }} — Occupied
+                                    {% else %}Spot {{ spot.spot_id }} — Click to park{% endif %}
                                 </div>
                                 <span class="spot-num">#{{ spot.spot_id }}</span>
                                 <svg class="spot-icon" viewBox="0 0 24 24" fill="none">
-                                    {% if spot.occupied %}
-                                    <path d="M5 11l1.5-4.5h11L19 11" stroke="#fca5a5" stroke-width="1.3" stroke-linecap="round"/>
-                                    <rect x="3" y="11" width="18" height="6" rx="2" fill="rgba(252,165,165,0.25)" stroke="#fca5a5" stroke-width="1.3"/>
-                                    <circle cx="7.5" cy="17.5" r="1.5" fill="#fca5a5"/>
-                                    <circle cx="16.5" cy="17.5" r="1.5" fill="#fca5a5"/>
-                                    <path d="M3 13h18" stroke="#fca5a5" stroke-width="0.8" opacity="0.4"/>
+                                    {% if is_mine %}
+                                        <circle cx="12" cy="8" r="4" stroke="#93c5fd" stroke-width="1.4"/>
+                                        <path d="M4 20c0-4 3.6-7 8-7s8 3 8 7" stroke="#93c5fd" stroke-width="1.4" stroke-linecap="round"/>
+                                    {% elif spot.occupied %}
+                                        <path d="M5 11l1.5-4.5h11L19 11" stroke="#fca5a5" stroke-width="1.3" stroke-linecap="round"/>
+                                        <rect x="3" y="11" width="18" height="6" rx="2" fill="rgba(252,165,165,0.25)" stroke="#fca5a5" stroke-width="1.3"/>
+                                        <circle cx="7.5" cy="17.5" r="1.5" fill="#fca5a5"/>
+                                        <circle cx="16.5" cy="17.5" r="1.5" fill="#fca5a5"/>
                                     {% else %}
-                                    <rect x="4" y="6" width="16" height="12" rx="2" stroke="rgba(52,211,153,0.5)" stroke-width="1.3" stroke-dasharray="3 2" fill="none"/>
-                                    <path d="M9 12h6M12 9v6" stroke="rgba(52,211,153,0.6)" stroke-width="1.3" stroke-linecap="round"/>
+                                        <rect x="4" y="6" width="16" height="12" rx="2" stroke="rgba(52,211,153,0.5)" stroke-width="1.3" stroke-dasharray="3 2" fill="none"/>
+                                        <path d="M9 12h6M12 9v6" stroke="rgba(52,211,153,0.6)" stroke-width="1.3" stroke-linecap="round"/>
                                     {% endif %}
                                 </svg>
                             </div>
                             {% endfor %}
                         </div>
-
                     </div>
-
-                    {% if not loop.last %}
-                    <div class="row-divider"></div>
-                    {% endif %}
-
+                    {% if not loop.last %}<div class="row-divider"></div>{% endif %}
                 {% endfor %}
 
             </div>
-
-            <!-- Entrance marker -->
             <div class="lot-entrance">
-                <div class="entrance-marker">
-                    <span class="entrance-arrow">↕</span>
-                    Entrance / Exit
-                </div>
+                <div class="entrance-marker"><span class="entrance-arrow">↕</span> Entrance / Exit</div>
             </div>
-
         </div>
     </div>
 
@@ -717,48 +316,188 @@
             <div class="footer-copy">© 2025 QuickSpot — Smart Urban Parking</div>
         </div>
     </footer>
-    
+
+
+    <!-- ══ MODAL ══ -->
+    <div class="modal-overlay" id="modal-overlay">
+        <div class="modal">
+            <div class="modal-icon">🅿</div>
+            <div class="modal-title" id="modal-title">Park here?</div>
+            <div class="modal-subtitle" id="modal-subtitle">Confirm your spot</div>
+            <div class="modal-actions">
+                <button class="modal-cancel"  id="modal-cancel">Cancel</button>
+                <button class="modal-confirm" id="modal-confirm">Confirm Park</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ══ TOAST ══ -->
+    <div class="toast" id="toast"></div>
+
+
     <script>
-    const LOT_ID = {{ lot.lot_id }};
+        const LOT_ID    = {{ lot.lot_id }};
+        const LOGGED_IN = {{ 'true' if logged_in else 'false' }};
+        const USERNAME  = "{{ username }}";
 
-    const SVG_AVAILABLE = `
-        <rect x="4" y="6" width="16" height="12" rx="2" stroke="rgba(52,211,153,0.5)" stroke-width="1.3" stroke-dasharray="3 2" fill="none"/>
-        <path d="M9 12h6M12 9v6" stroke="rgba(52,211,153,0.6)" stroke-width="1.3" stroke-linecap="round"/>`;
+        let pendingSpotId = null;
+        let mySpotId      = {{ user_spot_id or 'null' }};
 
-    const SVG_OCCUPIED = `
-        <path d="M5 11l1.5-4.5h11L19 11" stroke="#fca5a5" stroke-width="1.3" stroke-linecap="round"/>
-        <rect x="3" y="11" width="18" height="6" rx="2" fill="rgba(252,165,165,0.25)" stroke="#fca5a5" stroke-width="1.3"/>
-        <circle cx="7.5" cy="17.5" r="1.5" fill="#fca5a5"/>
-        <circle cx="16.5" cy="17.5" r="1.5" fill="#fca5a5"/>
-        <path d="M3 13h18" stroke="#fca5a5" stroke-width="0.8" opacity="0.4"/>`;
+        // ── SVG templates ──────────────────────────────────────────
+        const SVG_AVAILABLE = `
+            <rect x="4" y="6" width="16" height="12" rx="2" stroke="rgba(52,211,153,0.5)" stroke-width="1.3" stroke-dasharray="3 2" fill="none"/>
+            <path d="M9 12h6M12 9v6" stroke="rgba(52,211,153,0.6)" stroke-width="1.3" stroke-linecap="round"/>`;
 
-    async function refreshSpots() {
-        try {
-            const res  = await fetch(`/api/lots/${LOT_ID}/spots`);
-            const data = await res.json();
+        const SVG_OCCUPIED = `
+            <path d="M5 11l1.5-4.5h11L19 11" stroke="#fca5a5" stroke-width="1.3" stroke-linecap="round"/>
+            <rect x="3" y="11" width="18" height="6" rx="2" fill="rgba(252,165,165,0.25)" stroke="#fca5a5" stroke-width="1.3"/>
+            <circle cx="7.5" cy="17.5" r="1.5" fill="#fca5a5"/>
+            <circle cx="16.5" cy="17.5" r="1.5" fill="#fca5a5"/>`;
 
-            // Update summary pills
-            document.querySelector('.stat-pill.green .stat-num').textContent = data.available;
-            document.querySelector('.stat-pill.red   .stat-num').textContent = data.occupied;
+        const SVG_MINE = `
+            <circle cx="12" cy="8" r="4" stroke="#93c5fd" stroke-width="1.4"/>
+            <path d="M4 20c0-4 3.6-7 8-7s8 3 8 7" stroke="#93c5fd" stroke-width="1.4" stroke-linecap="round"/>`;
 
-            // Update each spot
-            data.spots.forEach(s => {
-                const el = document.querySelector(`[data-spot-id="${s.spot_id}"]`);
-                if (!el) return;
-
-                el.className = `spot ${s.occupied ? 'occupied' : 'available'}`;
-                el.querySelector('.spot-icon').innerHTML = s.occupied ? SVG_OCCUPIED : SVG_AVAILABLE;
-                el.querySelector('.spot-tooltip').textContent =
-                    `Spot ${s.spot_id} — ${s.occupied ? 'Occupied' : 'Available'}`;
-            });
-
-        } catch(e) {
-            console.warn('QuickSpot: could not refresh spots', e);
+        // ── Toast ──────────────────────────────────────────────────
+        function showToast(msg, type = '') {
+            const t = document.getElementById('toast');
+            t.textContent = msg;
+            t.className   = `toast ${type} show`;
+            setTimeout(() => t.className = `toast ${type}`, 2800);
         }
-    }
 
-    setInterval(refreshSpots, 5000);
-</script>
+        // ── Apply state to a spot element ──────────────────────────
+        function applySpotState(el, occupied, isMine) {
+            const spotId = parseInt(el.dataset.spotId);
+            el.className = `spot ${isMine ? 'mine' : (occupied ? 'occupied' : 'available')}`;
+            el.querySelector('.spot-icon').innerHTML   = isMine ? SVG_MINE : (occupied ? SVG_OCCUPIED : SVG_AVAILABLE);
+            const tip = el.querySelector('.spot-tooltip');
+            if (isMine)        tip.textContent = `Your spot — #${spotId}`;
+            else if (occupied) tip.textContent = `Spot ${spotId} — Occupied`;
+            else               tip.textContent = `Spot ${spotId} — Click to park`;
+        }
+
+        // ── My spot banner ─────────────────────────────────────────
+        function updateBanner(spotId) {
+            const banner = document.getElementById('my-spot-banner');
+            document.getElementById('my-spot-label').textContent = spotId ? `Spot #${spotId}` : '';
+            banner.classList.toggle('visible', !!spotId);
+        }
+
+        // ── Click to park ──────────────────────────────────────────
+        function attachClickHandler(el) {
+            if (el._hasClickHandler) return;
+            el._hasClickHandler = true;
+            el.addEventListener('click', () => {
+                if (!LOGGED_IN) { window.location.href = '/login'; return; }
+                if (!el.classList.contains('available')) return;
+                pendingSpotId = parseInt(el.dataset.spotId);
+                document.getElementById('modal-title').textContent   = `Park in Spot #${pendingSpotId}?`;
+                document.getElementById('modal-subtitle').textContent =
+                    `Hi ${USERNAME}! Confirm that you're parking in Spot #${pendingSpotId} at {{ lot.lot_name }}.`;
+                document.getElementById('modal-overlay').classList.add('visible');
+            });
+        }
+
+        document.querySelectorAll('.spot.available').forEach(attachClickHandler);
+
+        // ── Modal cancel ───────────────────────────────────────────
+        document.getElementById('modal-cancel').addEventListener('click', () => {
+            document.getElementById('modal-overlay').classList.remove('visible');
+            pendingSpotId = null;
+        });
+
+        // ── Modal confirm ──────────────────────────────────────────
+        document.getElementById('modal-confirm').addEventListener('click', async () => {
+            if (!pendingSpotId) return;
+            const btn = document.getElementById('modal-confirm');
+            btn.disabled = true; btn.textContent = 'Parking…';
+
+            try {
+                const res  = await fetch(`/lots/${LOT_ID}/park`, {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({ spot_id: pendingSpotId }),
+                });
+                const data = await res.json();
+
+                if (res.ok) {
+                    if (mySpotId) {
+                        const old = document.querySelector(`[data-spot-id="${mySpotId}"]`);
+                        if (old) applySpotState(old, true, false);
+                    }
+                    mySpotId = data.spot_id;
+                    const el = document.querySelector(`[data-spot-id="${mySpotId}"]`);
+                    if (el) applySpotState(el, false, true);
+                    updateBanner(mySpotId);
+                    showToast(`✓ Parked in Spot #${mySpotId}`, 'green');
+                } else {
+                    showToast(data.error || 'Could not park. Try another spot.', 'red');
+                }
+            } catch(e) {
+                showToast('Something went wrong. Please try again.', 'red');
+            }
+
+            btn.disabled = false; btn.textContent = 'Confirm Park';
+            document.getElementById('modal-overlay').classList.remove('visible');
+            pendingSpotId = null;
+        });
+
+        // ── Leave spot ─────────────────────────────────────────────
+        document.getElementById('leave-btn').addEventListener('click', async () => {
+            try {
+                const res  = await fetch(`/lots/${LOT_ID}/leave`, {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                });
+                const data = await res.json();
+
+                if (res.ok) {
+                    const el = document.querySelector(`[data-spot-id="${mySpotId}"]`);
+                    if (el) applySpotState(el, false, false);
+                    mySpotId = null;
+                    updateBanner(null);
+                    showToast('You have left the spot.', '');
+                } else {
+                    showToast(data.error || 'Could not leave spot.', 'red');
+                }
+            } catch(e) {
+                showToast('Something went wrong.', 'red');
+            }
+        });
+
+        // ── Live poller ────────────────────────────────────────────
+        async function refreshSpots() {
+            try {
+                const res  = await fetch(`/api/lots/${LOT_ID}/spots`);
+                const data = await res.json();
+
+                document.querySelector('.stat-pill.green .stat-num').textContent = data.available;
+                document.querySelector('.stat-pill.red   .stat-num').textContent = data.occupied;
+
+                // Sync user's spot from server
+                if (data.user_spot_id && data.user_spot_id !== mySpotId) {
+                    mySpotId = data.user_spot_id;
+                    updateBanner(mySpotId);
+                }
+
+                data.spots.forEach(s => {
+                    const el = document.querySelector(`[data-spot-id="${s.spot_id}"]`);
+                    if (!el) return;
+                    const isMine = (s.spot_id === mySpotId);
+                    if (!isMine) applySpotState(el, s.occupied, false);
+                });
+
+                // Attach handlers to any newly available spots
+                document.querySelectorAll('.spot.available').forEach(attachClickHandler);
+
+            } catch(e) {
+                console.warn('QuickSpot: could not refresh spots', e);
+            }
+        }
+
+        setInterval(refreshSpots, 5000);
+    </script>
 
 </body>
 </html>
