@@ -2,12 +2,13 @@
 from DataBase.database import add_lot
 
 add_lot(
-    lot_name    = "24 Hour Fitness",
-    total_spots = 45,
-    lat         = 33.8901,
-    lng         = -118.1100,
-    zip_code    = "90241",
-    address     = "1234 Main St, Downey, CA"
+    lot_name    = "CSUDH Parking Lot 2",
+    total_spots = 240,
+    lat         = 33.86642,
+    lng         = -118.2534,
+    zip_code    = "90746",
+    address     = "1000 E Victoria St, Carson, CA",
+    category    = "other"
 )
 
 print("Lot added!")

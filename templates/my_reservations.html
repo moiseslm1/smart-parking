@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>My Reservations — QuickSpot</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --blue:     #1a56db; --blue-d:  #1447c0; --blue-lt: #eff4ff;
+            --green:    #057a55; --green-lt:#f0fdf4;
+            --red:      #c81e1e; --red-lt:  #fef2f2;
+            --purple:   #7c3aed; --purple-lt:#f5f3ff;
+            --gray-50:  #f9fafb; --gray-100:#f3f4f6; --gray-200:#e5e7eb;
+            --gray-400: #9ca3af; --gray-500:#6b7280; --gray-700:#374151; --gray-900:#111827;
+            --white:    #ffffff;
+            --font:     'Plus Jakarta Sans', system-ui, sans-serif;
+            --shadow-sm: 0 1px 3px rgba(0,0,0,0.08);
+            --shadow-md: 0 4px 16px rgba(0,0,0,0.10);
+        }
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: var(--font); background: var(--gray-50); color: var(--gray-900); min-height: 100vh; display: flex; flex-direction: column; }
+
+        .header { background: var(--white); border-bottom: 1px solid var(--gray-200); position: sticky; top: 0; z-index: 50; }
+        .header-inner { max-width: 1200px; margin: 0 auto; padding: 0 32px; height: 64px; display: flex; align-items: center; justify-content: space-between; gap: 24px; }
+        .logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+        .logo-mark { width: 36px; height: 36px; background: var(--blue); border-radius: 9px; display: flex; align-items: center; justify-content: center; color: white; font-size: 17px; font-weight: 800; }
+        .logo-text { font-size: 18px; font-weight: 800; color: var(--gray-900); letter-spacing: -0.4px; }
+        .logo-text span { color: var(--blue); }
+        .nav-auth { display: flex; align-items: center; gap: 8px; }
+        .nav-auth a { font-size: 14px; font-weight: 500; color: var(--gray-500); text-decoration: none; padding: 7px 12px; border-radius: 8px; border: 1px solid var(--gray-200); transition: background 0.15s; }
+        .nav-auth a:hover { background: var(--gray-100); color: var(--gray-900); }
+        .btn-home { background: var(--blue-lt) !important; color: var(--blue) !important; border-color: #c7d9fb !important; font-weight: 600 !important; }
+        .btn-home:hover { background: var(--blue) !important; color: white !important; }
+
+        .page-hero { background: var(--white); border-bottom: 1px solid var(--gray-200); padding: 36px 32px; }
+        .page-hero-inner { max-width: 1200px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px; }
+        .page-title   { font-size: 28px; font-weight: 800; letter-spacing: -0.6px; }
+        .page-subtitle { font-size: 14px; color: var(--gray-500); margin-top: 4px; }
+        .reservation-count { background: var(--purple-lt); color: var(--purple); font-size: 13px; font-weight: 700; padding: 6px 14px; border-radius: 100px; border: 1px solid #ddd6fe; }
+
+        .main { flex: 1; max-width: 1200px; margin: 0 auto; width: 100%; padding: 40px 32px 80px; }
+
+        .empty-state { text-align: center; padding: 80px 20px; }
+        .empty-icon  { font-size: 56px; margin-bottom: 16px; }
+        .empty-title { font-size: 20px; font-weight: 700; margin-bottom: 8px; }
+        .empty-desc  { font-size: 14px; color: var(--gray-500); margin-bottom: 24px; }
+        .empty-btn   { display: inline-flex; align-items: center; gap: 8px; background: var(--blue); color: white; font-family: var(--font); font-size: 14px; font-weight: 700; padding: 12px 24px; border-radius: 10px; text-decoration: none; }
+        .empty-btn:hover { background: var(--blue-d); }
+
+        .reservations-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 16px; }
+
+        .res-card { background: var(--white); border: 1px solid var(--gray-200); border-radius: 14px; padding: 24px; box-shadow: var(--shadow-sm); display: flex; flex-direction: column; gap: 14px; transition: box-shadow 0.2s, transform 0.2s; position: relative; overflow: hidden; }
+        .res-card:hover { box-shadow: var(--shadow-md); transform: translateY(-2px); }
+        .res-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: linear-gradient(90deg, var(--purple), #a78bfa); }
+        .res-card.past::before { background: var(--gray-200); }
+
+        .res-card-head { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; }
+        .res-lot-name  { font-size: 17px; font-weight: 800; letter-spacing: -0.3px; line-height: 1.2; }
+        .res-address   { font-size: 12px; color: var(--gray-500); margin-top: 2px; }
+
+        .res-status { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; padding: 3px 10px; border-radius: 100px; white-space: nowrap; }
+        .res-status.upcoming { background: var(--purple-lt); color: var(--purple); border: 1px solid #ddd6fe; }
+        .res-status.past     { background: var(--gray-100);  color: var(--gray-500); border: 1px solid var(--gray-200); }
+
+        .res-category { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; padding: 3px 10px; border-radius: 100px; width: fit-content; }
+        .res-category.mall       { background: #fef3c7; color: #92400e; }
+        .res-category.gym        { background: #e0e7ff; color: #3730a3; }
+        .res-category.restaurant { background: #fce7f3; color: #9d174d; }
+        .res-category.other      { background: var(--gray-100); color: var(--gray-500); }
+
+        .res-details { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+        .res-detail { background: var(--gray-50); border: 1px solid var(--gray-200); border-radius: 8px; padding: 10px 12px; }
+        .res-detail-label { font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; color: var(--gray-400); margin-bottom: 3px; }
+        .res-detail-val   { font-size: 14px; font-weight: 700; color: var(--gray-900); }
+
+        /* Spot highlight */
+        .res-spot-highlight { display: flex; align-items: center; gap: 10px; background: var(--purple-lt); border: 1px solid #ddd6fe; border-radius: 10px; padding: 12px 14px; }
+        .res-spot-icon  { font-size: 22px; }
+        .res-spot-label { font-size: 12px; font-weight: 600; color: var(--purple); text-transform: uppercase; letter-spacing: 0.06em; }
+        .res-spot-num   { font-size: 20px; font-weight: 800; color: var(--purple); letter-spacing: -0.5px; line-height: 1; }
+
+        .res-actions { display: flex; gap: 8px; margin-top: auto; }
+        .res-view-btn { flex: 1; display: flex; align-items: center; justify-content: center; gap: 6px; padding: 10px 14px; background: var(--blue-lt); color: var(--blue); border: 1.5px solid #c7d9fb; border-radius: 9px; font-family: var(--font); font-size: 13px; font-weight: 700; text-decoration: none; transition: background 0.15s, color 0.15s; }
+        .res-view-btn:hover { background: var(--blue); color: white; border-color: var(--blue); }
+        .res-cancel-btn { display: flex; align-items: center; justify-content: center; padding: 10px 14px; background: var(--red-lt); color: var(--red); border: 1.5px solid #fecaca; border-radius: 9px; font-family: var(--font); font-size: 13px; font-weight: 700; cursor: pointer; transition: background 0.15s; }
+        .res-cancel-btn:hover { background: var(--red); color: white; border-color: var(--red); }
+        .res-cancel-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+        .res-id { font-size: 11px; color: var(--gray-400); text-align: center; }
+
+        .toast { position: fixed; bottom: 28px; left: 50%; transform: translateX(-50%) translateY(20px); background: var(--gray-900); color: white; font-size: 14px; font-weight: 600; padding: 12px 20px; border-radius: 10px; box-shadow: 0 8px 24px rgba(0,0,0,0.25); opacity: 0; pointer-events: none; transition: opacity 0.25s, transform 0.25s; z-index: 300; white-space: nowrap; }
+        .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+        .toast.red  { background: var(--red); }
+
+        .footer { background: var(--white); border-top: 1px solid var(--gray-200); padding: 24px 32px; margin-top: auto; }
+        .footer-inner { max-width: 1200px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; }
+        .footer-logo { font-size: 15px; font-weight: 800; color: var(--gray-900); }
+        .footer-logo span { color: var(--blue); }
+        .footer-copy { font-size: 12px; color: var(--gray-400); }
+
+        @media (max-width: 640px) {
+            .header-inner, .page-hero-inner, .main, .footer-inner { padding-left: 20px; padding-right: 20px; }
+            .reservations-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+    <header class="header">
+        <div class="header-inner">
+            <a href="/" class="logo"><div class="logo-mark">Q</div><span class="logo-text">Quick<span>Spot</span></span></a>
+            <div class="nav-auth">
+                <a href="/" class="btn-home">← Back to lots</a>
+                <a href="/logout">Log out</a>
+            </div>
+        </div>
+    </header>
+
+    <div class="page-hero">
+        <div class="page-hero-inner">
+            <div>
+                <div class="page-title">My Reservations</div>
+                <div class="page-subtitle">Manage your upcoming and past parking reservations</div>
+            </div>
+            <div class="reservation-count" id="res-count">
+                {{ reservations | length }} reservation{{ 's' if reservations | length != 1 else '' }}
+            </div>
+        </div>
+    </div>
+
+    <main class="main">
+        {% if not reservations %}
+        <div class="empty-state">
+            <div class="empty-icon">🗓</div>
+            <div class="empty-title">No reservations yet</div>
+            <div class="empty-desc">Browse a parking lot and reserve a specific spot in advance.</div>
+            <a href="/" class="empty-btn">Find Parking →</a>
+        </div>
+
+        {% else %}
+        <div class="reservations-grid">
+            {% for r in reservations %}
+            {% set is_upcoming = r.date >= today_str %}
+
+            <div class="res-card {{ '' if is_upcoming else 'past' }}" id="res-card-{{ r.reservation_id }}">
+
+                <div class="res-card-head">
+                    <div>
+                        <div class="res-lot-name">{{ r.lot_name }}</div>
+                        <div class="res-address">{{ r.address }}</div>
+                    </div>
+                    <span class="res-status {{ 'upcoming' if is_upcoming else 'past' }}">
+                        {{ 'Upcoming' if is_upcoming else 'Past' }}
+                    </span>
+                </div>
+
+                <span class="res-category {{ r.category }}">
+                    {% if r.category == 'mall' %}🏬 Mall
+                    {% elif r.category == 'gym' %}🏋️ Gym
+                    {% elif r.category == 'restaurant' %}🍽️ Restaurant
+                    {% else %}📍 Other{% endif %}
+                </span>
+
+                <!-- Spot highlight -->
+                <div class="res-spot-highlight">
+                    <div class="res-spot-icon">🟣</div>
+                    <div>
+                        <div class="res-spot-label">Reserved Spot</div>
+                        <div class="res-spot-num">#{{ r.spot_id }}</div>
+                    </div>
+                </div>
+
+                <div class="res-details">
+                    <div class="res-detail">
+                        <div class="res-detail-label">Date</div>
+                        <div class="res-detail-val">{{ r.date }}</div>
+                    </div>
+                    <div class="res-detail">
+                        <div class="res-detail-label">Arrival Time</div>
+                        <div class="res-detail-val">{{ r.time }}</div>
+                    </div>
+                    <div class="res-detail">
+                        <div class="res-detail-label">Duration</div>
+                        <div class="res-detail-val">{{ r.duration }} min</div>
+                    </div>
+                    <div class="res-detail">
+                        <div class="res-detail-label">Confirmation</div>
+                        <div class="res-detail-val">#{{ '%05d' % r.reservation_id }}</div>
+                    </div>
+                </div>
+
+                <div class="res-actions">
+                    <a class="res-view-btn" href="/lots/{{ r.lot_id }}/spots">View Lot →</a>
+                    {% if is_upcoming %}
+                    <button class="res-cancel-btn" onclick="cancelReservation({{ r.reservation_id }})">Cancel</button>
+                    {% endif %}
+                </div>
+
+                <div class="res-id">Confirmation #{{ '%05d' % r.reservation_id }} — Booked {{ r.created_at[:10] }}</div>
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+    </main>
+
+    <footer class="footer">
+        <div class="footer-inner">
+            <div class="footer-logo">Quick<span>Spot</span></div>
+            <div class="footer-copy">© 2025 QuickSpot — Smart Urban Parking</div>
+        </div>
+    </footer>
+
+    <div class="toast" id="toast"></div>
+
+    <script>
+        function showToast(msg, type = '') {
+            const t = document.getElementById('toast');
+            t.textContent = msg; t.className = `toast ${type} show`;
+            setTimeout(() => t.className = `toast ${type}`, 3000);
+        }
+
+        async function cancelReservation(id) {
+            const btn = document.querySelector(`#res-card-${id} .res-cancel-btn`);
+            if (!btn) return;
+            btn.disabled = true; btn.textContent = 'Cancelling…';
+            try {
+                const res = await fetch(`/api/reservations/${id}`, { method: 'DELETE' });
+                if (res.ok) {
+                    const card = document.getElementById(`res-card-${id}`);
+                    card.style.transition = 'opacity 0.3s, transform 0.3s';
+                    card.style.opacity = '0'; card.style.transform = 'scale(0.97)';
+                    setTimeout(() => {
+                        card.remove();
+                        const remaining = document.querySelectorAll('.res-card').length;
+                        document.getElementById('res-count').textContent = `${remaining} reservation${remaining !== 1 ? 's' : ''}`;
+                        if (remaining === 0) location.reload();
+                    }, 300);
+                    showToast('Reservation cancelled.');
+                } else {
+                    showToast('Could not cancel reservation.', 'red');
+                    btn.disabled = false; btn.textContent = 'Cancel';
+                }
+            } catch(e) {
+                showToast('Something went wrong.', 'red');
+                btn.disabled = false; btn.textContent = 'Cancel';
+            }
+        }
+    </script>
+</body>
+</html>

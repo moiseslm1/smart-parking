@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link href="https://api.mapbox.com/mapbox-gl-js/v3.3.0/mapbox-gl.css" rel="stylesheet">
+
     <style>
         :root {
             --blue:      #1a56db;
@@ -14,6 +15,8 @@
             --green-lt:  #f0fdf4;
             --red:       #c81e1e;
             --red-lt:    #fef2f2;
+            --amber:     #b45309;
+            --amber-lt:  #fffbeb;
             --gray-50:   #f9fafb;
             --gray-100:  #f3f4f6;
             --gray-200:  #e5e7eb;
@@ -24,270 +27,369 @@
             --white:     #ffffff;
             --font:      'Plus Jakarta Sans', system-ui, sans-serif;
             --radius:    12px;
-            --shadow-sm: 0 1px 3px rgba(0,0,0,0.08), 0 1px 2px rgba(0,0,0,0.04);
-            --shadow-md: 0 4px 16px rgba(0,0,0,0.10), 0 2px 6px rgba(0,0,0,0.06);
-            --shadow-lg: 0 10px 40px rgba(0,0,0,0.14), 0 4px 12px rgba(0,0,0,0.08);
+            --shadow-sm: 0 1px 3px rgba(0,0,0,0.08);
+            --shadow-md: 0 4px 16px rgba(0,0,0,0.10);
+            --shadow-lg: 0 10px 40px rgba(0,0,0,0.14);
         }
+
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
         body { font-family: var(--font); background: var(--gray-50); color: var(--gray-900); min-height: 100vh; display: flex; flex-direction: column; }
 
-        /* HEADER */
-        .header { background: var(--white); border-bottom: 1px solid var(--gray-200); position: sticky; top: 0; z-index: 50; animation: fadeDown 0.4s ease both; }
-        @keyframes fadeDown { from { opacity:0; transform:translateY(-8px); } to { opacity:1; transform:translateY(0); } }
-        .header-inner { max-width:1200px; margin:0 auto; padding:0 32px; height:64px; display:flex; align-items:center; justify-content:space-between; gap:24px; }
-        .logo { display:flex; align-items:center; gap:10px; text-decoration:none; flex-shrink:0; }
-        .logo-mark { width:36px; height:36px; background:var(--blue); border-radius:9px; display:flex; align-items:center; justify-content:center; color:white; font-size:17px; font-weight:800; }
-        .logo-text { font-size:18px; font-weight:800; color:var(--gray-900); letter-spacing:-0.4px; }
-        .logo-text span { color:var(--blue); }
-        .nav-links { display:flex; align-items:center; gap:4px; list-style:none; }
-        .nav-links a { text-decoration:none; font-size:14px; font-weight:500; color:var(--gray-500); padding:7px 14px; border-radius:8px; transition:background 0.15s,color 0.15s; }
-        .nav-links a:hover { background:var(--gray-100); color:var(--gray-900); }
-        .live-badge { display:flex; align-items:center; gap:6px; background:var(--green-lt); color:var(--green); font-size:12px; font-weight:600; padding:5px 11px; border-radius:100px; border:1px solid #bbf7d0; flex-shrink:0; }
-        .live-dot { width:6px; height:6px; border-radius:50%; background:var(--green); animation:pulse 2s infinite; }
-        @keyframes pulse { 0%,100%{opacity:1;transform:scale(1);} 50%{opacity:.85;transform:scale(1.1);} }
+        /* ════════════ HEADER ════════════ */
+        .header { background: var(--white); border-bottom: 1px solid var(--gray-200); position: sticky; top: 0; z-index: 100; }
+        .header-inner { max-width: 1200px; margin: 0 auto; padding: 0 32px; height: 64px; display: flex; align-items: center; justify-content: space-between; gap: 24px; }
+        .logo { display: flex; align-items: center; gap: 10px; text-decoration: none; flex-shrink: 0; }
+        .logo-mark { width: 36px; height: 36px; background: var(--blue); border-radius: 9px; display: flex; align-items: center; justify-content: center; color: white; font-size: 17px; font-weight: 800; }
+        .logo-text { font-size: 18px; font-weight: 800; color: var(--gray-900); letter-spacing: -0.4px; }
+        .logo-text span { color: var(--blue); }
 
-        /* HERO */
-        .hero { background:var(--white); border-bottom:1px solid var(--gray-200); padding:64px 32px 72px; text-align:center; animation:fadeUp 0.5s 0.05s ease both; }
-        @keyframes fadeUp { from{opacity:0;transform:translateY(14px);} to{opacity:1;transform:translateY(0);} }
-        .hero-eyebrow { display:inline-flex; align-items:center; gap:6px; font-size:12px; font-weight:600; color:var(--blue); background:var(--blue-lt); border:1px solid #c7d9fb; padding:4px 12px; border-radius:100px; margin-bottom:20px; letter-spacing:0.02em; text-transform:uppercase; }
-        .hero h1 { font-size:clamp(32px,5vw,52px); font-weight:800; line-height:1.1; letter-spacing:-1.5px; color:var(--gray-900); margin-bottom:14px; }
-        .hero p { font-size:17px; font-weight:400; color:var(--gray-500); margin-bottom:36px; line-height:1.6; }
-        .search-card { background:var(--white); border:1.5px solid var(--gray-200); border-radius:16px; box-shadow:var(--shadow-lg); display:inline-flex; align-items:stretch; max-width:680px; width:100%; overflow:hidden; transition:border-color 0.2s,box-shadow 0.2s; }
-        .search-card:focus-within { border-color:var(--blue); box-shadow:0 0 0 4px rgba(26,86,219,0.1),var(--shadow-lg); }
-        .search-field { display:flex; align-items:center; gap:10px; flex:1; padding:0 20px; }
-        .search-icon { color:var(--gray-400); flex-shrink:0; width:18px; height:18px; }
-        .search-field input { background:transparent; border:none; outline:none; font-family:var(--font); font-size:15px; font-weight:500; color:var(--gray-900); width:100%; padding:20px 0; }
-        .search-field input::placeholder { color:var(--gray-400); font-weight:400; }
-        .search-divider { width:1px; background:var(--gray-200); margin:14px 0; }
-        .search-btn { background:var(--blue); border:none; color:white; font-family:var(--font); font-size:15px; font-weight:700; padding:0 28px; cursor:pointer; transition:background 0.15s; display:flex; align-items:center; gap:8px; white-space:nowrap; }
-        .search-btn:hover { background:var(--blue-d); }
-        .search-btn svg { width:16px; height:16px; }
-        .hero-trust { display:flex; justify-content:center; align-items:center; gap:28px; margin-top:24px; flex-wrap:wrap; }
-        .trust-item { font-size:13px; font-weight:500; color:var(--gray-400); display:flex; align-items:center; gap:6px; }
-        .trust-item strong { color:var(--gray-700); font-weight:700; }
+        .nav-links { display: flex; align-items: center; gap: 4px; list-style: none; }
+        .nav-item { position: relative; }
 
-        /* MAP PANEL */
-        .map-panel { display:none; width:100%; background:var(--white); border-bottom:1px solid var(--gray-200); animation:fadeUp 0.4s ease both; }
-        .map-panel.visible { display:flex; }
-        .map-panel-inner { display:flex; width:100%; height:480px; }
-        .map-results { width:320px; flex-shrink:0; overflow-y:auto; border-right:1px solid var(--gray-200); display:flex; flex-direction:column; }
-        .map-results-header { padding:16px 20px; border-bottom:1px solid var(--gray-200); font-size:13px; font-weight:700; color:var(--gray-500); letter-spacing:0.02em; background:var(--gray-50); flex-shrink:0; }
-        .map-result-item { padding:16px 20px; border-bottom:1px solid var(--gray-100); cursor:pointer; transition:background 0.15s; }
-        .map-result-item:hover, .map-result-item.active { background:var(--blue-lt); }
-        .map-result-name { font-size:14px; font-weight:700; color:var(--gray-900); margin-bottom:3px; }
-        .map-result-address { font-size:12px; color:var(--gray-500); margin-bottom:8px; }
-        .map-result-pills { display:flex; gap:6px; }
-        .map-result-pill { font-size:11px; font-weight:600; padding:2px 8px; border-radius:100px; }
-        .map-result-pill.green { background:var(--green-lt); color:var(--green); border:1px solid #bbf7d0; }
-        .map-result-pill.red   { background:var(--red-lt);   color:var(--red);   border:1px solid #fecaca; }
-        .map-no-results { padding:40px 20px; text-align:center; color:var(--gray-400); font-size:14px; line-height:1.6; }
-        #map { flex:1; }
+        .nav-btn { display: flex; align-items: center; gap: 5px; font-family: var(--font); font-size: 14px; font-weight: 500; color: var(--gray-500); padding: 7px 14px; border-radius: 8px; background: none; border: none; cursor: pointer; transition: background 0.15s, color 0.15s; }
+        .nav-btn:hover { background: var(--gray-100); color: var(--gray-900); }
+        .nav-btn svg { width: 12px; height: 12px; transition: transform 0.2s; }
+        .nav-item.open .nav-btn svg { transform: rotate(180deg); }
 
-        /* Mapbox popup overrides */
-        .mapboxgl-popup-content { font-family:var(--font); border-radius:10px; padding:14px 16px; box-shadow:var(--shadow-md); min-width:190px; }
-        .popup-name    { font-size:14px; font-weight:700; color:var(--gray-900); margin-bottom:4px; }
-        .popup-address { font-size:11px; color:var(--gray-500); margin-bottom:10px; }
-        .popup-pills   { display:flex; gap:6px; margin-bottom:10px; }
-        .popup-pill    { font-size:11px; font-weight:600; padding:3px 8px; border-radius:100px; }
-        .popup-pill.green { background:var(--green-lt); color:var(--green); }
-        .popup-pill.red   { background:var(--red-lt);   color:var(--red); }
-        .popup-btn { display:block; text-align:center; background:var(--blue); color:white; font-size:12px; font-weight:700; padding:7px 12px; border-radius:7px; text-decoration:none; transition:background 0.15s; }
-        .popup-btn:hover { background:var(--blue-d); }
+        .dropdown { position: absolute; top: calc(100% + 6px); left: 0; background: var(--white); border: 1px solid var(--gray-200); border-radius: 12px; box-shadow: var(--shadow-md); padding: 6px; min-width: 200px; opacity: 0; pointer-events: none; transform: translateY(-6px); transition: opacity 0.18s, transform 0.18s; z-index: 200; }
+        .nav-item.open .dropdown { opacity: 1; pointer-events: all; transform: translateY(0); }
 
-        /* Pin marker */
-        .map-marker { width:30px; height:30px; background:var(--blue); border:3px solid white; border-radius:50% 50% 50% 0; transform:rotate(-45deg); box-shadow:0 2px 8px rgba(0,0,0,0.3); cursor:pointer; transition:background 0.15s,transform 0.15s; }
-        .map-marker:hover  { background:var(--blue-d); }
-        .map-marker.active { background:var(--green); transform:rotate(-45deg) scale(1.2); }
+        .dropdown-item { display: flex; align-items: center; gap: 10px; padding: 10px 14px; border-radius: 8px; font-size: 14px; font-weight: 500; color: var(--gray-700); cursor: pointer; transition: background 0.15s; border: none; background: none; width: 100%; text-align: left; font-family: var(--font); }
+        .dropdown-item:hover { background: var(--gray-100); color: var(--gray-900); }
+        .dropdown-item .di-icon { font-size: 16px; width: 24px; text-align: center; }
+        .dropdown-divider { height: 1px; background: var(--gray-200); margin: 4px 0; }
 
-        /* SECTION + CARDS */
-        .section { width:100%; padding:48px 32px 80px; animation:fadeUp 0.5s 0.15s ease both; flex:1; }
-        .section-top { max-width:1200px; margin:0 auto 24px; display:flex; justify-content:space-between; align-items:center; }
-        .section-title    { font-size:20px; font-weight:800; letter-spacing:-0.4px; color:var(--gray-900); }
-        .section-subtitle { font-size:13px; font-weight:500; color:var(--gray-400); }
-        .lots-grid { max-width:1200px; margin:0 auto; display:grid; grid-template-columns:repeat(auto-fill,minmax(280px,1fr)); gap:16px; }
-        .lot-card { background:var(--white); border:1px solid var(--gray-200); border-radius:var(--radius); padding:24px; box-shadow:var(--shadow-sm); transition:box-shadow 0.2s,transform 0.2s,border-color 0.2s; display:flex; flex-direction:column; gap:18px; }
-        .lot-card:hover { box-shadow:var(--shadow-md); transform:translateY(-2px); border-color:#d1d5db; }
-        .card-head { display:flex; justify-content:space-between; align-items:flex-start; gap:12px; }
-        .lot-name  { font-size:16px; font-weight:700; color:var(--gray-900); letter-spacing:-0.2px; line-height:1.3; }
-        .lot-total { background:var(--gray-100); color:var(--gray-500); font-size:11px; font-weight:600; padding:3px 9px; border-radius:100px; white-space:nowrap; flex-shrink:0; }
-        .avail-row { display:flex; gap:10px; }
-        .avail-pill { flex:1; border-radius:10px; padding:12px 14px; display:flex; flex-direction:column; gap:2px; }
-        .avail-pill.green { background:var(--green-lt); border:1px solid #bbf7d0; }
-        .avail-pill.red   { background:var(--red-lt);   border:1px solid #fecaca; }
-        .pill-label { font-size:10px; font-weight:600; text-transform:uppercase; letter-spacing:0.06em; color:var(--gray-500); }
-        .pill-num   { font-size:26px; font-weight:800; line-height:1; letter-spacing:-1px; }
-        .avail-pill.green .pill-num { color:var(--green); }
-        .avail-pill.red   .pill-num { color:var(--red); }
-        .prog-meta  { display:flex; justify-content:space-between; align-items:center; margin-bottom:6px; }
-        .prog-label { font-size:12px; font-weight:600; color:var(--gray-500); }
-        .prog-pct   { font-size:12px; font-weight:700; color:var(--gray-700); }
-        .prog-track { height:6px; background:var(--gray-100); border-radius:100px; overflow:hidden; }
-        .prog-fill  { height:100%; border-radius:100px; background:var(--blue); transition:width 0.6s ease; }
-        .prog-fill.warn { background:#f59e0b; }
-        .prog-fill.full { background:var(--red); }
-        .view-btn { display:flex; align-items:center; justify-content:center; gap:8px; padding:12px 18px; background:var(--blue-lt); color:var(--blue); border:1.5px solid #c7d9fb; border-radius:10px; font-family:var(--font); font-size:13px; font-weight:700; text-decoration:none; transition:background 0.15s,color 0.15s,border-color 0.15s; margin-top:auto; }
-        .view-btn:hover { background:var(--blue); color:var(--white); border-color:var(--blue); }
-        .view-btn svg { width:14px; height:14px; transition:transform 0.2s; }
-        .view-btn:hover svg { transform:translateX(3px); }
+        /* ── User's custom nav button styles ── */
+        .reserve-nav-btn { display: flex; align-items: center; gap: 5px; font-family: var(--font); font-size: 14px; font-weight: 500; color: var(--gray-500); padding: 7px 14px; border-radius: 8px; background: none; border: none; cursor: pointer; transition: background 0.15s, color 0.15s; }
+        .reserve-nav-btn:hover { background: var(--gray-100); color: var(--gray-900); }
 
-        /* FOOTER */
-        .footer { background:var(--white); border-top:1px solid var(--gray-200); padding:24px 32px; }
-        .footer-inner { max-width:1200px; margin:0 auto; display:flex; justify-content:space-between; align-items:center; }
-        .footer-logo { font-size:15px; font-weight:800; color:var(--gray-900); letter-spacing:-0.3px; }
-        .footer-logo span { color:var(--blue); }
-        .footer-copy { font-size:12px; color:var(--gray-400); font-weight:500; }
+        .my-res-btn { display: flex; align-items: center; gap: 5px; font-family: var(--font); font-size: 14px; font-weight: 500; color: var(--gray-500); padding: 7px 14px; border-radius: 8px; background: none; border: none; cursor: pointer; transition: background 0.15s, color 0.15s; text-decoration: none; }
+        .my-res-btn:hover { background: var(--gray-100); color: var(--gray-900); }
 
-        /* RESPONSIVE */
-        @media (max-width:640px) {
-            .header-inner { padding:0 20px; }
-            .nav-links    { display:none; }
-            .hero         { padding:40px 20px 48px; }
-            .search-card  { border-radius:12px; flex-direction:column; }
-            .search-btn   { padding:16px; justify-content:center; border-radius:0 0 10px 10px; }
-            .search-divider { display:none; }
-            .section      { padding:32px 20px 60px; }
-            .footer-inner { flex-direction:column; gap:8px; text-align:center; }
-            .map-panel-inner { flex-direction:column; height:auto; }
-            .map-results  { width:100%; height:220px; border-right:none; border-bottom:1px solid var(--gray-200); }
-            #map          { height:300px; }
+        .nav-auth { display: flex; align-items: center; gap: 8px; }
+        .nav-auth a, .nav-auth span { font-size: 14px; font-weight: 500; color: var(--gray-500); text-decoration: none; padding: 7px 12px; border-radius: 8px; transition: background 0.15s, color 0.15s; }
+        .nav-auth a:hover { background: var(--gray-100); color: var(--gray-900); }
+        .nav-auth .btn-login  { border: 1px solid var(--gray-200); }
+        .nav-auth .btn-signup { background: var(--blue); color: white; font-weight: 700; }
+        .nav-auth .btn-signup:hover { background: var(--blue-d); }
+        .nav-auth .btn-logout { border: 1px solid var(--gray-200); }
+
+        .live-badge { display: flex; align-items: center; gap: 6px; background: var(--green-lt); color: var(--green); font-size: 12px; font-weight: 600; padding: 5px 11px; border-radius: 100px; border: 1px solid #bbf7d0; flex-shrink: 0; }
+        .live-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--green); animation: pulse 2s infinite; }
+        @keyframes pulse { 0%,100%{opacity:1;transform:scale(1);box-shadow:0 0 0 0 rgba(5,122,85,0.4);} 50%{opacity:.85;transform:scale(1.1);box-shadow:0 0 0 4px rgba(5,122,85,0);} }
+
+        /* ════════════ HERO ════════════ */
+        .hero { background: var(--white); border-bottom: 1px solid var(--gray-200); padding: 64px 32px 72px; text-align: center; }
+        .hero-eyebrow { display: inline-flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 600; color: var(--blue); background: var(--blue-lt); border: 1px solid #c7d9fb; padding: 4px 12px; border-radius: 100px; margin-bottom: 20px; letter-spacing: 0.02em; text-transform: uppercase; }
+        .hero h1 { font-size: clamp(32px, 5vw, 52px); font-weight: 800; line-height: 1.1; letter-spacing: -1.5px; color: var(--gray-900); margin-bottom: 14px; }
+        .hero p { font-size: 17px; color: var(--gray-500); margin-bottom: 36px; line-height: 1.6; }
+
+        .search-card { background: var(--white); border: 1.5px solid var(--gray-200); border-radius: 16px; box-shadow: var(--shadow-lg); display: inline-flex; align-items: stretch; max-width: 680px; width: 100%; overflow: hidden; transition: border-color 0.2s, box-shadow 0.2s; }
+        .search-card:focus-within { border-color: var(--blue); box-shadow: 0 0 0 4px rgba(26,86,219,0.1), var(--shadow-lg); }
+        .search-field { display: flex; align-items: center; gap: 10px; flex: 1; padding: 0 20px; }
+        .search-icon { color: var(--gray-400); flex-shrink: 0; width: 18px; height: 18px; }
+        .search-field input { background: transparent; border: none; outline: none; font-family: var(--font); font-size: 15px; font-weight: 500; color: var(--gray-900); width: 100%; padding: 20px 0; }
+        .search-field input::placeholder { color: var(--gray-400); font-weight: 400; }
+        .search-divider { width: 1px; background: var(--gray-200); margin: 14px 0; }
+        .search-btn { background: var(--blue); border: none; color: white; font-family: var(--font); font-size: 15px; font-weight: 700; padding: 0 28px; cursor: pointer; transition: background 0.15s; display: flex; align-items: center; gap: 8px; white-space: nowrap; }
+        .search-btn:hover { background: var(--blue-d); }
+
+        .hero-trust { display: flex; justify-content: center; align-items: center; gap: 28px; margin-top: 24px; flex-wrap: wrap; }
+        .trust-item { font-size: 13px; font-weight: 500; color: var(--gray-400); display: flex; align-items: center; gap: 6px; }
+        .trust-item strong { color: var(--gray-700); font-weight: 700; }
+
+        /* ════════════ MAP PANEL ════════════ */
+        .map-panel { display: none; border-bottom: 1px solid var(--gray-200); }
+        .map-panel.visible { display: block; }
+        .map-panel-inner { display: flex; height: 480px; align-items: stretch; }
+        .map-results { width: 340px; flex-shrink: 0; overflow-y: auto; border-right: 1px solid var(--gray-200); background: var(--white); }
+        .map-results-header { padding: 14px 20px; border-bottom: 1px solid var(--gray-200); font-size: 12px; font-weight: 600; color: var(--gray-500); text-transform: uppercase; letter-spacing: 0.06em; position: sticky; top: 0; background: var(--white); z-index: 1; display: flex; justify-content: space-between; align-items: center; }
+        .results-count { background: var(--blue-lt); color: var(--blue); font-size: 11px; font-weight: 700; padding: 2px 8px; border-radius: 100px; }
+        .result-item { padding: 14px 20px; border-bottom: 1px solid var(--gray-100); cursor: pointer; transition: background 0.15s; }
+        .result-item:hover { background: var(--gray-50); }
+        .result-item.active { background: var(--blue-lt); border-left: 3px solid var(--blue); }
+        .result-name { font-size: 14px; font-weight: 700; color: var(--gray-900); margin-bottom: 2px; }
+        .result-address { font-size: 12px; color: var(--gray-500); margin-bottom: 8px; }
+        .result-pills { display: flex; gap: 6px; margin-bottom: 10px; flex-wrap: wrap; }
+        .result-pill { font-size: 11px; font-weight: 600; padding: 3px 9px; border-radius: 100px; }
+        .result-pill.green { background: var(--green-lt); color: var(--green); border: 1px solid #bbf7d0; }
+        .result-pill.red   { background: var(--red-lt);   color: var(--red);   border: 1px solid #fecaca; }
+        .result-actions { display: flex; gap: 8px; }
+        .result-view-btn, .result-reserve-btn { flex: 1; display: inline-flex; align-items: center; justify-content: center; gap: 5px; font-size: 12px; font-weight: 700; padding: 7px 10px; text-decoration: none; border-radius: 7px; transition: background 0.15s, color 0.15s; border: none; cursor: pointer; font-family: var(--font); }
+        .result-view-btn { color: var(--blue); background: var(--blue-lt); border: 1px solid #c7d9fb; }
+        .result-view-btn:hover { background: var(--blue); color: white; }
+        .result-reserve-btn { color: var(--green); background: var(--green-lt); border: 1px solid #bbf7d0; }
+        .result-reserve-btn:hover { background: var(--green); color: white; }
+        .no-results { padding: 40px 20px; text-align: center; color: var(--gray-400); font-size: 14px; }
+        #map { flex: 1; min-width: 0; height: 100%; }
+
+        .mapboxgl-popup-content { padding: 0 !important; border-radius: 12px !important; overflow: hidden; box-shadow: var(--shadow-md) !important; font-family: var(--font) !important; min-width: 210px; }
+        .popup-inner { padding: 14px 16px; }
+        .popup-name { font-size: 14px; font-weight: 700; color: var(--gray-900); margin-bottom: 3px; }
+        .popup-address { font-size: 11px; color: var(--gray-500); margin-bottom: 10px; }
+        .popup-pills { display: flex; gap: 6px; margin-bottom: 10px; flex-wrap: wrap; }
+        .popup-pill { font-size: 11px; font-weight: 600; padding: 3px 8px; border-radius: 100px; }
+        .popup-pill.green { background: var(--green-lt); color: var(--green); }
+        .popup-pill.red   { background: var(--red-lt);   color: var(--red); }
+        .popup-actions { display: flex; gap: 7px; }
+        .popup-btn { flex: 1; display: block; text-align: center; font-size: 12px; font-weight: 700; padding: 7px 10px; border-radius: 7px; text-decoration: none; transition: background 0.15s; border: none; cursor: pointer; font-family: var(--font); }
+        .popup-btn.blue  { background: var(--blue); color: white; }
+        .popup-btn.blue:hover { background: var(--blue-d); }
+        .popup-btn.green { background: var(--green-lt); color: var(--green); border: 1px solid #bbf7d0; }
+        .popup-btn.green:hover { background: var(--green); color: white; }
+
+        .map-marker { width: 32px; height: 32px; background: var(--blue); border: 3px solid white; border-radius: 50% 50% 50% 0; transform: rotate(-45deg); box-shadow: 0 2px 8px rgba(0,0,0,0.3); cursor: pointer; }
+        .map-marker.active { background: var(--green); transform: rotate(-45deg) scale(1.2); }
+
+        /* ════════════ SECTION ════════════ */
+        .section { width: 100%; padding: 48px 32px 80px; }
+        .section-top { max-width: 1200px; margin: 0 auto 24px; display: flex; justify-content: space-between; align-items: flex-start; }
+        .section-title { font-size: 20px; font-weight: 800; letter-spacing: -0.4px; }
+        .section-sub   { font-size: 13px; color: var(--gray-400); margin-top: 4px; font-weight: 400; }
+        .section-subtitle { font-size: 13px; font-weight: 500; color: var(--gray-400); }
+
+        .category-tabs { max-width: 1200px; margin: 0 auto 20px; display: flex; gap: 8px; flex-wrap: wrap; }
+        .cat-tab { display: flex; align-items: center; gap: 6px; padding: 8px 16px; border-radius: 100px; font-size: 13px; font-weight: 600; border: 1.5px solid var(--gray-200); background: var(--white); color: var(--gray-500); cursor: pointer; transition: all 0.15s; font-family: var(--font); }
+        .cat-tab:hover { border-color: var(--blue); color: var(--blue); }
+        .cat-tab.active { background: var(--blue); border-color: var(--blue); color: white; }
+
+        .lots-grid { max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px; }
+
+        .lot-card { background: var(--white); border: 1px solid var(--gray-200); border-radius: var(--radius); padding: 24px; box-shadow: var(--shadow-sm); transition: box-shadow 0.2s, transform 0.2s, border-color 0.2s; display: flex; flex-direction: column; gap: 16px; position: relative; }
+        .lot-card:hover { box-shadow: var(--shadow-md); transform: translateY(-2px); border-color: #d1d5db; }
+        .lot-card.has-reservation { border-color: #fde68a; box-shadow: 0 0 0 2px rgba(245,158,11,0.15), var(--shadow-sm); }
+        .reserved-badge { position: absolute; top: 14px; right: 14px; display: flex; align-items: center; gap: 5px; background: var(--amber-lt); color: var(--amber); border: 1px solid #fde68a; border-radius: 100px; font-size: 11px; font-weight: 700; padding: 3px 10px; }
+        .card-head { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; }
+        .card-head-left { display: flex; flex-direction: column; gap: 4px; }
+        .lot-name { font-size: 16px; font-weight: 700; color: var(--gray-900); letter-spacing: -0.2px; line-height: 1.3; }
+        .lot-total { background: var(--gray-100); color: var(--gray-500); font-size: 11px; font-weight: 600; padding: 3px 9px; border-radius: 100px; white-space: nowrap; flex-shrink: 0; }
+        .avail-row { display: flex; gap: 10px; }
+        .avail-pill { flex: 1; border-radius: 10px; padding: 12px 14px; display: flex; flex-direction: column; gap: 2px; }
+        .avail-pill.green { background: var(--green-lt); border: 1px solid #bbf7d0; }
+        .avail-pill.red   { background: var(--red-lt);   border: 1px solid #fecaca; }
+        .pill-label { font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; color: var(--gray-500); }
+        .pill-num   { font-size: 26px; font-weight: 800; line-height: 1; letter-spacing: -1px; }
+        .avail-pill.green .pill-num { color: var(--green); }
+        .avail-pill.red   .pill-num { color: var(--red); }
+        .prog-meta { display: flex; justify-content: space-between; margin-bottom: 6px; }
+        .prog-label { font-size: 12px; font-weight: 600; color: var(--gray-500); }
+        .prog-pct   { font-size: 12px; font-weight: 700; color: var(--gray-700); }
+        .prog-track { height: 6px; background: var(--gray-100); border-radius: 100px; overflow: hidden; }
+        .prog-fill  { height: 100%; border-radius: 100px; background: var(--blue); transition: width 0.6s ease; }
+        .prog-fill.warn { background: #f59e0b; }
+        .prog-fill.full { background: var(--red); }
+        .card-actions { display: flex; gap: 8px; margin-top: auto; }
+        .view-btn { flex: 1; display: flex; align-items: center; justify-content: center; gap: 8px; padding: 11px 14px; background: var(--blue-lt); color: var(--blue); border: 1.5px solid #c7d9fb; border-radius: 10px; font-family: var(--font); font-size: 13px; font-weight: 700; text-decoration: none; transition: background 0.15s, color 0.15s; }
+        .view-btn:hover { background: var(--blue); color: white; border-color: var(--blue); }
+        .view-btn svg { width: 13px; height: 13px; transition: transform 0.2s; }
+        .view-btn:hover svg { transform: translateX(3px); }
+
+        /* ════════════ RESERVE SEARCH MODAL ════════════ */
+        .rsv-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.45); backdrop-filter: blur(4px); z-index: 300; display: flex; align-items: flex-start; justify-content: center; padding-top: 80px; opacity: 0; pointer-events: none; transition: opacity 0.2s; }
+        .rsv-overlay.visible { opacity: 1; pointer-events: all; }
+        .rsv-modal { background: var(--white); border-radius: 16px; width: 100%; max-width: 520px; box-shadow: 0 20px 60px rgba(0,0,0,0.25); transform: translateY(-8px); transition: transform 0.2s; overflow: hidden; }
+        .rsv-overlay.visible .rsv-modal { transform: translateY(0); }
+        .rsv-header { padding: 20px 24px 16px; border-bottom: 1px solid var(--gray-200); }
+        .rsv-title { font-size: 16px; font-weight: 800; color: var(--gray-900); margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
+        .rsv-hint { font-size: 12px; color: var(--gray-400); font-weight: 400; }
+        .rsv-search { display: flex; align-items: center; gap: 10px; border: 1.5px solid var(--gray-200); border-radius: 10px; padding: 0 14px; transition: border-color 0.2s, box-shadow 0.2s; }
+        .rsv-search:focus-within { border-color: var(--blue); box-shadow: 0 0 0 3px rgba(26,86,219,0.1); }
+        .rsv-search svg { color: var(--gray-400); flex-shrink: 0; width: 16px; height: 16px; }
+        .rsv-search input { flex: 1; border: none; outline: none; font-family: var(--font); font-size: 14px; font-weight: 500; color: var(--gray-900); padding: 12px 0; background: transparent; }
+        .rsv-search input::placeholder { color: var(--gray-400); font-weight: 400; }
+        .rsv-search-clear { background: none; border: none; color: var(--gray-400); cursor: pointer; font-size: 18px; line-height: 1; padding: 0; display: none; }
+        .rsv-search-clear.visible { display: block; }
+        .rsv-results { max-height: 340px; overflow-y: auto; }
+        .rsv-result { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 14px 24px; border-bottom: 1px solid var(--gray-100); cursor: pointer; transition: background 0.15s; text-decoration: none; }
+        .rsv-result:hover { background: var(--gray-50); }
+        .rsv-result-left { flex: 1; min-width: 0; }
+        .rsv-result-name { font-size: 14px; font-weight: 700; color: var(--gray-900); margin-bottom: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .rsv-result-address { font-size: 12px; color: var(--gray-500); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .rsv-result-right { display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
+        .rsv-avail { font-size: 12px; font-weight: 600; color: var(--green); background: var(--green-lt); border: 1px solid #bbf7d0; padding: 3px 9px; border-radius: 100px; }
+        .rsv-arrow { color: var(--gray-400); font-size: 16px; }
+        .rsv-empty { padding: 32px 24px; text-align: center; color: var(--gray-400); font-size: 14px; }
+        .rsv-loading { padding: 32px 24px; text-align: center; color: var(--gray-400); font-size: 14px; }
+        .rsv-footer { padding: 12px 24px; border-top: 1px solid var(--gray-100); display: flex; justify-content: center; }
+        .rsv-close { font-family: var(--font); font-size: 13px; font-weight: 600; color: var(--gray-400); background: none; border: none; cursor: pointer; padding: 4px 8px; border-radius: 6px; transition: color 0.15s, background 0.15s; }
+        .rsv-close:hover { color: var(--gray-700); background: var(--gray-100); }
+
+        /* ════════════ TOAST ════════════ */
+        .toast { position: fixed; bottom: 28px; left: 50%; transform: translateX(-50%) translateY(20px); background: var(--gray-900); color: white; font-size: 14px; font-weight: 600; padding: 12px 20px; border-radius: 10px; box-shadow: 0 8px 24px rgba(0,0,0,0.25); opacity: 0; pointer-events: none; transition: opacity 0.25s, transform 0.25s; z-index: 400; white-space: nowrap; }
+        .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+        .toast.green { background: var(--green); }
+        .toast.red   { background: var(--red); }
+
+        /* ════════════ FOOTER ════════════ */
+        .footer { background: var(--white); border-top: 1px solid var(--gray-200); padding: 24px 32px; margin-top: auto; }
+        .footer-inner { max-width: 1200px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; }
+        .footer-logo { font-size: 15px; font-weight: 800; color: var(--gray-900); }
+        .footer-logo span { color: var(--blue); }
+        .footer-copy { font-size: 12px; color: var(--gray-400); }
+
+        @media (max-width: 640px) {
+            .header-inner, .hero, .section, .footer { padding-left: 20px; padding-right: 20px; }
+            .map-panel-inner { flex-direction: column; height: auto; }
+            .map-results { width: 100%; height: 240px; border-right: none; border-bottom: 1px solid var(--gray-200); }
+            #map { height: 300px; }
+            .rsv-overlay { padding-top: 20px; align-items: flex-end; }
+            .rsv-modal { border-radius: 16px 16px 0 0; max-width: 100%; }
         }
     </style>
 </head>
 <body>
 
-    <!-- HEADER -->
+    <!-- ══ HEADER ══ -->
     <header class="header">
         <div class="header-inner">
             <a href="/" class="logo">
                 <div class="logo-mark">Q</div>
                 <span class="logo-text">Quick<span>Spot</span></span>
             </a>
+
             <nav>
                 <ul class="nav-links">
-                    <li><a href="#">Find Parking</a></li>
-                    <li><a href="#">Monthly</a></li>
-                    <li><a href="#">Airport</a></li>
-                    <li><a href="#">Event Parking</a></li>
+                    <!-- Find Parking dropdown -->
+                    <li class="nav-item" id="nav-find">
+                        <button class="nav-btn" onclick="toggleDropdown('nav-find')">
+                            Find Parking
+                            <svg viewBox="0 0 12 12" fill="none"><path d="M2 4l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                        </button>
+                        <div class="dropdown">
+                            <button class="dropdown-item" onclick="filterByCategory('mall');       closeDropdowns();"><span class="di-icon">🏬</span> Malls</button>
+                            <button class="dropdown-item" onclick="filterByCategory('gym');        closeDropdowns();"><span class="di-icon">🏋️</span> Gyms</button>
+                            <button class="dropdown-item" onclick="filterByCategory('restaurant'); closeDropdowns();"><span class="di-icon">🍽️</span> Restaurants</button>
+                            <div class="dropdown-divider"></div>
+                            <button class="dropdown-item" onclick="filterByCategory('other');      closeDropdowns();"><span class="di-icon">📍</span> Others</button>
+                            <button class="dropdown-item" onclick="filterByCategory('all');        closeDropdowns();"><span class="di-icon">🗺️</span> Show All</button>
+                        </div>
+                    </li>
+
+                    <!-- Reserve — opens search modal -->
+                    <li>
+                        <button class="reserve-nav-btn" onclick="openReserveSearch()">🗓 Reserve</button>
+                    </li>
+
+                    <!-- My Reservations (only when logged in) -->
+                    {% if session.get('user_id') %}
+                    <li><a href="/my-reservations" class="my-res-btn">🎫 My Reservations</a></li>
+                    {% endif %}
                 </ul>
             </nav>
-            {% if session.get('username') %}
-                <span style="font-size:14px; font-weight:500; color:var(--gray-500)">
-                    Hi, {{ session['username'] }}
-                </span>
-                <a href="/logout" style="font-size:14px; font-weight:600; color:var(--gray-500); text-decoration:none; padding:7px 14px; border-radius:8px; border:1px solid var(--gray-200);">Log out</a>
-            {% else %}
-                <a href="/login" style="font-size:14px; font-weight:600; color:var(--gray-500); text-decoration:none; padding:7px 14px; border-radius:8px; border:1px solid var(--gray-200);">Log in</a>
-                <a href="/register" style="font-size:14px; font-weight:700; color:white; background:var(--blue); text-decoration:none; padding:7px 14px; border-radius:8px;">Sign up</a>
-            {% endif %}
-            <div class="live-badge">
-                <div class="live-dot"></div>
-                Live
+
+            <div style="display:flex;align-items:center;gap:12px;">
+                <div class="live-badge"><div class="live-dot"></div> Live</div>
+                <div class="nav-auth">
+                    {% if session.get('username') %}
+                        <span>Hi, <strong>{{ session['username'] }}</strong></span>
+                        <a href="/logout" class="btn-logout">Log out</a>
+                    {% else %}
+                        <a href="/login"    class="btn-login">Log in</a>
+                        <a href="/register" class="btn-signup">Sign up</a>
+                    {% endif %}
+                </div>
             </div>
         </div>
     </header>
 
-    <!-- HERO -->
+
+    <!-- ══ HERO ══ -->
     <section class="hero">
         <div class="hero-eyebrow">Real-time availability</div>
         <h1>Find parking, instantly.</h1>
         <p>Live spot availability across the city — updated every 5 seconds.</p>
-
         <div class="search-card">
             <div class="search-field">
-                <svg class="search-icon" viewBox="0 0 20 20" fill="none">
-                    <circle cx="9" cy="9" r="5.5" stroke="currentColor" stroke-width="1.6"/>
-                    <path d="M13.5 13.5L17 17" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
-                </svg>
-                <input id="searchInput" type="text" placeholder="Search by name, city, or ZIP code…">
+                <svg class="search-icon" viewBox="0 0 20 20" fill="none"><circle cx="9" cy="9" r="5.5" stroke="currentColor" stroke-width="1.6"/><path d="M13.5 13.5L17 17" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+                <input id="search-input" type="text" placeholder="Search by name, city, or ZIP code…" autocomplete="off">
             </div>
             <div class="search-divider"></div>
-            <button class="search-btn">
-                <svg viewBox="0 0 16 16" fill="none">
-                    <circle cx="7" cy="7" r="4.5" stroke="white" stroke-width="1.5"/>
-                    <path d="M10.5 10.5L14 14" stroke="white" stroke-width="1.5" stroke-linecap="round"/>
-                </svg>
+            <button class="search-btn" id="search-btn">
+                <svg viewBox="0 0 16 16" fill="none"><circle cx="7" cy="7" r="4.5" stroke="white" stroke-width="1.5"/><path d="M10.5 10.5L14 14" stroke="white" stroke-width="1.5" stroke-linecap="round"/></svg>
                 Search
             </button>
         </div>
-
         <div class="hero-trust">
-            <div class="trust-item">
-                <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><circle cx="7" cy="7" r="6" stroke="currentColor" stroke-width="1.3"/><path d="M4.5 7l2 2 3-3" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                <strong>{{ lots | length }}</strong> lots monitored
-            </div>
+            <div class="trust-item"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><circle cx="7" cy="7" r="6" stroke="currentColor" stroke-width="1.3"/><path d="M4.5 7l2 2 3-3" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg><strong>{{ total_lots }}</strong> lots monitored</div>
             <div class="trust-item">·</div>
-            <div class="trust-item">
-                <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><circle cx="7" cy="7" r="6" stroke="currentColor" stroke-width="1.3"/><path d="M7 4v3.5l2 1.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
-                Updates every <strong>5 sec</strong>
-            </div>
+            <div class="trust-item"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><circle cx="7" cy="7" r="6" stroke="currentColor" stroke-width="1.3"/><path d="M7 4v3.5l2 1.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>Updates every <strong>5 sec</strong></div>
             <div class="trust-item">·</div>
-            <div class="trust-item">
-                <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M7 1.5C4.5 4 2 5.5 2 8a5 5 0 0010 0c0-2.5-2.5-4-5-6.5z" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/></svg>
-                Available <strong>24/7</strong>
-            </div>
+            <div class="trust-item"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M7 1.5C4.5 4 2 5.5 2 8a5 5 0 0010 0c0-2.5-2.5-4-5-6.5z" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/></svg>Available <strong>24/7</strong></div>
         </div>
     </section>
 
-    <!-- MAP PANEL -->
-    <div class="map-panel" id="mapPanel">
+
+    <!-- ══ MAP PANEL ══ -->
+    <div class="map-panel" id="map-panel">
         <div class="map-panel-inner">
-            <div class="map-results">
-                <div class="map-results-header" id="mapResultsHeader">Results</div>
-                <div id="mapResultsList"></div>
+            <div class="map-results" id="map-results">
+                <div class="map-results-header">
+                    <span id="map-panel-title">Results</span>
+                    <span class="results-count" id="results-count">0</span>
+                </div>
+                <div id="results-list"></div>
             </div>
             <div id="map"></div>
         </div>
     </div>
 
-    <!-- LOTS -->
+
+    <!-- ══ LOTS SECTION ══ -->
     <div class="section">
         <div class="section-top">
-            <h2 class="section-title">Nearby Parking Lots</h2>
+            <div>
+                <h2 class="section-title" id="section-title">Most Popular Lots</h2>
+                <p class="section-sub" id="section-sub">Top 6 by live occupancy — use Search or Find Parking to browse all lots</p>
+            </div>
             <span class="section-subtitle">Auto-refreshing every 5 s</span>
         </div>
 
-        <div class="lots-grid">
+        <div class="category-tabs">
+            <button class="cat-tab active" data-cat="all"        onclick="filterByCategory('all')">🗺️ All</button>
+            <button class="cat-tab"        data-cat="mall"       onclick="filterByCategory('mall')">🏬 Malls</button>
+            <button class="cat-tab"        data-cat="gym"        onclick="filterByCategory('gym')">🏋️ Gyms</button>
+            <button class="cat-tab"        data-cat="restaurant" onclick="filterByCategory('restaurant')">🍽️ Restaurants</button>
+            <button class="cat-tab"        data-cat="other"      onclick="filterByCategory('other')">📍 Others</button>
+        </div>
+
+        <div class="lots-grid" id="lots-grid">
             {% for lot in lots %}
             {% set avail    = lot.get_available_spots() | length %}
             {% set occupied = lot.get_occupied_spots()  | length %}
             {% set pct      = (occupied / lot.total_spots * 100) | round | int %}
+            {% set reserved = lot.lot_id in reserved_lot_ids %}
 
-            <div class="lot-card" data-lot-id="{{ lot.lot_id }}">
+            <div class="lot-card {% if reserved %}has-reservation{% endif %}" data-lot-id="{{ lot.lot_id }}">
+                {% if reserved %}
+                <div class="reserved-badge">🎫 Reserved</div>
+                {% endif %}
                 <div class="card-head">
-                    <div class="lot-name">{{ lot.lot_name }}</div>
+                    <div class="card-head-left">
+                        <div class="lot-name">{{ lot.lot_name }}</div>
+                    </div>
                     <div class="lot-total">{{ lot.total_spots }} spots</div>
                 </div>
                 <div class="avail-row">
-                    <div class="avail-pill green">
-                        <span class="pill-label">Available</span>
-                        <span class="pill-num num-available">{{ avail }}</span>
-                    </div>
-                    <div class="avail-pill red">
-                        <span class="pill-label">Occupied</span>
-                        <span class="pill-num num-occupied">{{ occupied }}</span>
-                    </div>
+                    <div class="avail-pill green"><span class="pill-label">Available</span><span class="pill-num num-available">{{ avail }}</span></div>
+                    <div class="avail-pill red"><span class="pill-label">Occupied</span><span class="pill-num num-occupied">{{ occupied }}</span></div>
                 </div>
                 <div class="prog-wrap">
-                    <div class="prog-meta">
-                        <span class="prog-label">Occupancy</span>
-                        <span class="prog-pct">{{ pct }}%</span>
-                    </div>
-                    <div class="prog-track">
-                        <div class="prog-fill {% if pct >= 90 %}full{% elif pct >= 65 %}warn{% endif %}" style="width: {{ pct }}%"></div>
-                    </div>
+                    <div class="prog-meta"><span class="prog-label">Occupancy</span><span class="prog-pct">{{ pct }}%</span></div>
+                    <div class="prog-track"><div class="prog-fill {% if pct >= 90 %}full{% elif pct >= 65 %}warn{% endif %}" style="width: {{ pct }}%"></div></div>
                 </div>
-                <a class="view-btn" href="/lots/{{ lot.lot_id }}/spots">
-                    View Spots
-                    <svg viewBox="0 0 14 14" fill="none">
-                        <path d="M2 7h10M8 3l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                    </svg>
-                </a>
+                <div class="card-actions">
+                    <a class="view-btn" href="/lots/{{ lot.lot_id }}/spots">
+                        View Spots
+                        <svg viewBox="0 0 14 14" fill="none"><path d="M2 7h10M8 3l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                    </a>
+                </div>
             </div>
             {% endfor %}
         </div>
     </div>
 
-    <!-- FOOTER -->
+
+    <!-- ══ FOOTER ══ -->
     <footer class="footer">
         <div class="footer-inner">
             <div class="footer-logo">Quick<span>Spot</span></div>
@@ -295,125 +397,280 @@
         </div>
     </footer>
 
+
+    <!-- ══ RESERVE SEARCH MODAL ══ -->
+    <div class="rsv-overlay" id="rsv-overlay" onclick="handleOverlayClick(event)">
+        <div class="rsv-modal">
+            <div class="rsv-header">
+                <div class="rsv-title">
+                    🗓 Reserve a Spot
+                    <span class="rsv-hint">— Search for a lot, then pick your spot</span>
+                </div>
+                <div class="rsv-search">
+                    <svg viewBox="0 0 20 20" fill="none"><circle cx="9" cy="9" r="5.5" stroke="currentColor" stroke-width="1.6"/><path d="M13.5 13.5L17 17" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+                    <input id="rsv-input" type="text" placeholder="Search by name or ZIP code…" autocomplete="off" oninput="onReserveSearch()">
+                    <button class="rsv-search-clear" id="rsv-clear" onclick="clearReserveSearch()">×</button>
+                </div>
+            </div>
+
+            <div class="rsv-results" id="rsv-results">
+                <div class="rsv-loading" id="rsv-placeholder">Start typing to find a parking lot.</div>
+            </div>
+
+            <div class="rsv-footer">
+                <button class="rsv-close" onclick="closeReserveSearch()">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="toast" id="toast"></div>
+
+    <!-- ══ SCRIPTS ══ -->
     <script src="https://api.mapbox.com/mapbox-gl-js/v3.3.0/mapbox-gl.js"></script>
     <script>
-        mapboxgl.accessToken = 'pk.eyJ1IjoibW9pc2VzbG0xIiwiYSI6ImNtbWZ0cGVpODBjNnQyb25kMzR4ZTJ3MjAifQ.gEBfxdCjJmgC4meVLUh7Kg';
+        const LOGGED_IN = {{ 'true' if session.get('user_id') else 'false' }};
 
+        // ── Dropdown ────────────────────────────────────────
+        function toggleDropdown(id) {
+            const item = document.getElementById(id);
+            const isOpen = item.classList.contains('open');
+            closeDropdowns();
+            if (!isOpen) item.classList.add('open');
+        }
+        function closeDropdowns() {
+            document.querySelectorAll('.nav-item.open').forEach(el => el.classList.remove('open'));
+        }
+        document.addEventListener('click', e => { if (!e.target.closest('.nav-item')) closeDropdowns(); });
+
+        // ── Toast ───────────────────────────────────────────
+        function showToast(msg, type = '') {
+            const t = document.getElementById('toast');
+            t.textContent = msg; t.className = `toast ${type} show`;
+            setTimeout(() => t.className = `toast ${type}`, 3000);
+        }
+
+        // ── Reserve search modal ────────────────────────────
+        function openReserveSearch() {
+            document.getElementById('rsv-overlay').classList.add('visible');
+            setTimeout(() => document.getElementById('rsv-input').focus(), 150);
+            fetchReserveResults('');
+        }
+
+        function closeReserveSearch() {
+            document.getElementById('rsv-overlay').classList.remove('visible');
+            document.getElementById('rsv-input').value = '';
+            document.getElementById('rsv-clear').classList.remove('visible');
+            document.getElementById('rsv-results').innerHTML = '<div class="rsv-loading" id="rsv-placeholder">Start typing to find a parking lot.</div>';
+        }
+
+        function handleOverlayClick(e) {
+            if (e.target === document.getElementById('rsv-overlay')) closeReserveSearch();
+        }
+
+        function clearReserveSearch() {
+            document.getElementById('rsv-input').value = '';
+            document.getElementById('rsv-clear').classList.remove('visible');
+            document.getElementById('rsv-input').focus();
+            fetchReserveResults('');
+        }
+
+        let rsv_debounce = null;
+        function onReserveSearch() {
+            const q = document.getElementById('rsv-input').value;
+            document.getElementById('rsv-clear').classList.toggle('visible', q.length > 0);
+            clearTimeout(rsv_debounce);
+            rsv_debounce = setTimeout(() => fetchReserveResults(q), 220);
+        }
+
+        async function fetchReserveResults(q) {
+            const container = document.getElementById('rsv-results');
+            try {
+                const res  = await fetch(`/api/search?q=${encodeURIComponent(q.trim())}`);
+                const lots = await res.json();
+                if (!lots.length) {
+                    container.innerHTML = '<div class="rsv-empty">No lots found. Try a different name or ZIP.</div>';
+                    return;
+                }
+                container.innerHTML = lots.map(lot => `
+                    <a class="rsv-result" href="/lots/${lot.lot_id}/spots">
+                        <div class="rsv-result-left">
+                            <div class="rsv-result-name">${lot.lot_name}</div>
+                            <div class="rsv-result-address">${lot.address || ''}</div>
+                        </div>
+                        <div class="rsv-result-right">
+                            <span class="rsv-avail">✓ ${lot.available} open</span>
+                            <span class="rsv-arrow">→</span>
+                        </div>
+                    </a>`
+                ).join('');
+            } catch(e) {
+                container.innerHTML = '<div class="rsv-empty">Could not load lots. Please try again.</div>';
+            }
+        }
+
+        document.addEventListener('keydown', e => { if (e.key === 'Escape') closeReserveSearch(); });
+
+        // ── Category filter ─────────────────────────────────
+        let currentCategory = 'all';
+
+        async function filterByCategory(cat) {
+            currentCategory = cat;
+            document.querySelectorAll('.cat-tab').forEach(tab => tab.classList.toggle('active', tab.dataset.cat === cat));
+            const labels = { all: 'All Parking Lots', mall: 'Malls', gym: 'Gyms', restaurant: 'Restaurants', other: 'Others' };
+            document.getElementById('section-title').textContent = labels[cat] || 'Parking Lots';
+            const sub = document.getElementById('section-sub');
+            if (sub) sub.textContent = cat === 'all'
+                ? 'All lots — use Search to filter further'
+                : `Showing all ${labels[cat] || cat} — use Search to filter further`;
+
+            const url = cat === 'all' ? '/api/lots' : `/api/lots/category/${cat}`;
+            try {
+                const res  = await fetch(url);
+                const lots = await res.json();
+                renderLotsGrid(lots);
+                initMap();
+                showResults(lots, labels[cat] || cat);
+                document.getElementById('map-panel').classList.add('visible');
+                setTimeout(() => { if (map) map.resize(); }, 50);
+                document.getElementById('map-panel').scrollIntoView({ behavior: 'smooth', block: 'start' });
+            } catch(e) { console.warn('Filter failed', e); }
+        }
+
+        function renderLotsGrid(lots) {
+            const grid = document.getElementById('lots-grid');
+            if (!lots.length) { grid.innerHTML = '<p style="color:var(--gray-400);padding:20px;">No lots found in this category.</p>'; return; }
+            grid.innerHTML = lots.map(lot => {
+                const pct = lot.pct || 0;
+                const fillClass = pct >= 90 ? 'full' : pct >= 65 ? 'warn' : '';
+                return `
+                <div class="lot-card" data-lot-id="${lot.lot_id}">
+                    <div class="card-head">
+                        <div class="lot-name">${lot.lot_name}</div>
+                        <div class="lot-total">${lot.total} spots</div>
+                    </div>
+                    <div class="avail-row">
+                        <div class="avail-pill green"><span class="pill-label">Available</span><span class="pill-num num-available">${lot.available}</span></div>
+                        <div class="avail-pill red"><span class="pill-label">Occupied</span><span class="pill-num num-occupied">${lot.occupied}</span></div>
+                    </div>
+                    <div class="prog-wrap">
+                        <div class="prog-meta"><span class="prog-label">Occupancy</span><span class="prog-pct">${pct}%</span></div>
+                        <div class="prog-track"><div class="prog-fill ${fillClass}" style="width:${pct}%"></div></div>
+                    </div>
+                    <div class="card-actions">
+                        <a class="view-btn" href="/lots/${lot.lot_id}/spots">View Spots <svg viewBox="0 0 14 14" fill="none"><path d="M2 7h10M8 3l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+                    </div>
+                </div>`;
+            }).join('');
+        }
+
+        // ── Mapbox ──────────────────────────────────────────
+        mapboxgl.accessToken = 'pk.eyJ1IjoibW9pc2VzbG0xIiwiYSI6ImNtbWZ0cGVpODBjNnQyb25kMzR4ZTJ3MjAifQ.gEBfxdCjJmgC4meVLUh7Kg';
         let map = null, markers = [], activePopup = null;
 
-        function initMap(center) {
+        function initMap() {
             if (map) return;
-            map = new mapboxgl.Map({ container: 'map', style: 'mapbox://styles/mapbox/light-v11', center, zoom: 12 });
-            map.addControl(new mapboxgl.NavigationControl(), 'top-right');
+            map = new mapboxgl.Map({ container: 'map', style: 'mapbox://styles/mapbox/light-v11', center: [-118.0751, 33.8742], zoom: 12 });
+            map.addControl(new mapboxgl.NavigationControl(), 'bottom-right');
+            map.on('load', () => map.resize());
         }
 
         function clearMarkers() {
-            markers.forEach(m => m.remove());
-            markers = [];
+            markers.forEach(m => m.remove()); markers = [];
             if (activePopup) { activePopup.remove(); activePopup = null; }
         }
 
         function buildPopupHTML(lot) {
-            return `<div class="popup-name">${lot.lot_name}</div>
-                    <div class="popup-address">${lot.address}</div>
-                    <div class="popup-pills">
-                        <span class="popup-pill green">✓ ${lot.available} available</span>
-                        <span class="popup-pill red">${lot.occupied} occupied</span>
-                    </div>
-                    <a class="popup-btn" href="/lots/${lot.lot_id}/spots">View Spots →</a>`;
+            return `<div class="popup-inner">
+                <div class="popup-name">${lot.lot_name}</div>
+                <div class="popup-address">${lot.address}</div>
+                <div class="popup-pills">
+                    <span class="popup-pill green">✓ ${lot.available} available</span>
+                    <span class="popup-pill red">✗ ${lot.occupied} occupied</span>
+                </div>
+                <div class="popup-actions">
+                    <a class="popup-btn blue" href="/lots/${lot.lot_id}/spots">View Spots</a>
+                    <a class="popup-btn green" href="/lots/${lot.lot_id}/spots">Reserve a Spot</a>
+                </div>
+            </div>`;
         }
 
-        function plotResults(lots) {
-            clearMarkers();
-            const list   = document.getElementById('mapResultsList');
-            const header = document.getElementById('mapResultsHeader');
+        function showResults(lots, title = 'Results') {
+            const list    = document.getElementById('results-list');
+            const countEl = document.getElementById('results-count');
+            document.getElementById('map-panel-title').textContent = title;
+            countEl.textContent = lots.length;
             list.innerHTML = '';
-            header.textContent = `${lots.length} result${lots.length !== 1 ? 's' : ''}`;
+            clearMarkers();
 
-            if (lots.length === 0) {
-                list.innerHTML = '<div class="map-no-results">No lots found.<br>Try a different name or ZIP code.</div>';
-                return;
-            }
+            if (!lots.length) { list.innerHTML = '<div class="no-results">No lots found.</div>'; return; }
 
             const bounds = new mapboxgl.LngLatBounds();
-
             lots.forEach(lot => {
-                const lngLat = [lot.lng, lot.lat];
-                bounds.extend(lngLat);
-
+                if (!lot.lat || !lot.lng) return;
                 const el = document.createElement('div');
                 el.className = 'map-marker';
-                el.id = `marker-${lot.lot_id}`;
-
-                const popup = new mapboxgl.Popup({ offset: 25, closeButton: false })
-                    .setHTML(buildPopupHTML(lot));
-
-                const marker = new mapboxgl.Marker(el).setLngLat(lngLat).setPopup(popup).addTo(map);
-
-                el.addEventListener('click', () => {
-                    document.querySelectorAll('.map-marker').forEach(m => m.classList.remove('active'));
-                    document.querySelectorAll('.map-result-item').forEach(m => m.classList.remove('active'));
-                    el.classList.add('active');
-                    document.getElementById(`result-${lot.lot_id}`)?.classList.add('active');
-                });
-
+                const popup = new mapboxgl.Popup({ offset: 20, closeButton: true, maxWidth: '250px' }).setHTML(buildPopupHTML(lot));
+                const marker = new mapboxgl.Marker(el).setLngLat([lot.lng, lot.lat]).setPopup(popup).addTo(map);
                 markers.push(marker);
+                bounds.extend([lot.lng, lot.lat]);
 
                 const item = document.createElement('div');
-                item.className = 'map-result-item';
-                item.id = `result-${lot.lot_id}`;
+                item.className = 'result-item';
                 item.innerHTML = `
-                    <div class="map-result-name">${lot.lot_name}</div>
-                    <div class="map-result-address">${lot.address}</div>
-                    <div class="map-result-pills">
-                        <span class="map-result-pill green">✓ ${lot.available} open</span>
-                        <span class="map-result-pill red">${lot.occupied} taken</span>
+                    <div class="result-name">${lot.lot_name}</div>
+                    <div class="result-address">${lot.address || ''}</div>
+                    <div class="result-pills">
+                        <span class="result-pill green">✓ ${lot.available} available</span>
+                        <span class="result-pill red">✗ ${lot.occupied} occupied</span>
+                    </div>
+                    <div class="result-actions">
+                        <a class="result-view-btn" href="/lots/${lot.lot_id}/spots">View Spots →</a>
+                        <a class="result-reserve-btn" href="/lots/${lot.lot_id}/spots">🗓 Reserve a Spot</a>
                     </div>`;
 
-                item.addEventListener('click', () => {
-                    document.querySelectorAll('.map-result-item').forEach(m => m.classList.remove('active'));
-                    document.querySelectorAll('.map-marker').forEach(m => m.classList.remove('active'));
+                item.addEventListener('click', e => {
+                    if (e.target.tagName === 'A') return;
+                    document.querySelectorAll('.result-item').forEach(r => r.classList.remove('active'));
                     item.classList.add('active');
-                    document.getElementById(`marker-${lot.lot_id}`)?.classList.add('active');
-                    map.flyTo({ center: lngLat, zoom: 18, duration: 800 });
+                    document.querySelectorAll('.map-marker').forEach(m => m.classList.remove('active'));
+                    el.classList.add('active');
+                    map.flyTo({ center: [lot.lng, lot.lat], zoom: 18, duration: 600 });
                     if (activePopup) activePopup.remove();
-                    activePopup = popup;
-                    marker.togglePopup();
+                    marker.togglePopup(); activePopup = popup;
                 });
-
+                el.addEventListener('click', () => {
+                document.querySelectorAll('.result-item').forEach(r => r.classList.remove('active'));
+                item.classList.add('active');
+                item.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                map.flyTo({ center: [lot.lng, lot.lat], zoom: 18, duration: 600 });
+                });
                 list.appendChild(item);
             });
 
-            if (lots.length === 1) {
-                map.flyTo({ center: [lots[0].lng, lots[0].lat], zoom: 15, duration: 800 });
-            } else {
-                map.fitBounds(bounds, { padding: 60, duration: 800 });
-            }
+            if (!bounds.isEmpty()) map.fitBounds(bounds, { padding: 60, maxZoom: 15, duration: 800 });
         }
 
+        // ── Search ──────────────────────────────────────────
         async function doSearch() {
-            const q     = document.getElementById('searchInput').value.trim();
-            const panel = document.getElementById('mapPanel');
-            panel.classList.add('visible');
-            initMap([-118.09, 33.88]);
-
-            const run = async () => {
+            const q = document.getElementById('search-input').value.trim();
+            initMap();
+            try {
                 const res  = await fetch(`/api/search?q=${encodeURIComponent(q)}`);
                 const lots = await res.json();
-                plotResults(lots);
-            };
-
-            map.loaded() ? await run() : map.once('load', run);
-            panel.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                showResults(lots, q ? `Results for "${q}"` : 'All Lots');
+                document.getElementById('map-panel').classList.add('visible');
+                setTimeout(() => { if (map) map.resize(); }, 50);
+                document.getElementById('map-panel').scrollIntoView({ behavior: 'smooth', block: 'start' });
+            } catch(e) { console.warn('Search failed', e); }
         }
+        document.getElementById('search-btn').addEventListener('click', doSearch);
+        document.getElementById('search-input').addEventListener('keydown', e => { if (e.key === 'Enter') doSearch(); });
 
-        document.querySelector('.search-btn').addEventListener('click', doSearch);
-        document.getElementById('searchInput').addEventListener('keydown', e => { if (e.key === 'Enter') doSearch(); });
-
-        // Live polling
+        // ── Live poller ─────────────────────────────────────
         async function refreshLots() {
             try {
-                const res  = await fetch('/api/lots');
+                const url  = currentCategory === 'all' ? '/api/lots' : `/api/lots/category/${currentCategory}`;
+                const res  = await fetch(url);
                 const lots = await res.json();
                 lots.forEach(lot => {
                     const card = document.querySelector(`[data-lot-id="${lot.lot_id}"]`);
@@ -427,9 +684,8 @@
                     if      (lot.pct >= 90) fill.classList.add('full');
                     else if (lot.pct >= 65) fill.classList.add('warn');
                 });
-            } catch(e) { console.warn('QuickSpot poll error', e); }
+            } catch(e) { console.warn('Refresh failed', e); }
         }
-
         setInterval(refreshLots, 5000);
     </script>
 </body>

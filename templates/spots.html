@@ -4,39 +4,19 @@
     <title>{{ lot.lot_name }} — QuickSpot</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-
     <style>
         :root {
-            --blue:     #1a56db;
-            --blue-d:   #1447c0;
-            --blue-lt:  #eff4ff;
-            --green:    #057a55;
-            --green-lt: #f0fdf4;
-            --red:      #c81e1e;
-            --red-lt:   #fef2f2;
-            --gray-50:  #f9fafb;
-            --gray-100: #f3f4f6;
-            --gray-200: #e5e7eb;
-            --gray-400: #9ca3af;
-            --gray-500: #6b7280;
-            --gray-700: #374151;
-            --gray-900: #111827;
-            --white:    #ffffff;
-            --asphalt:  #1e2128;
-            --stripe:   rgba(255,255,255,0.55);
+            --blue:     #1a56db; --blue-d:   #1447c0; --blue-lt:  #eff4ff;
+            --green:    #057a55; --green-lt: #f0fdf4;
+            --red:      #c81e1e; --red-lt:   #fef2f2;
+            --purple:   #7c3aed; --purple-lt:#f5f3ff;
+            --gray-50:  #f9fafb; --gray-100: #f3f4f6; --gray-200: #e5e7eb;
+            --gray-400: #9ca3af; --gray-500: #6b7280; --gray-700: #374151; --gray-900: #111827;
+            --white:    #ffffff; --asphalt:  #1e2128; --stripe: rgba(255,255,255,0.55);
             --font:     'Plus Jakarta Sans', system-ui, sans-serif;
         }
-
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-        body {
-            font-family: var(--font);
-            background: var(--gray-50);
-            color: var(--gray-900);
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-        }
+        body { font-family: var(--font); background: var(--gray-50); color: var(--gray-900); min-height: 100vh; display: flex; flex-direction: column; }
 
         /* ══ HEADER ══ */
         .header { background: var(--white); border-bottom: 1px solid var(--gray-200); position: sticky; top: 0; z-index: 50; }
@@ -51,39 +31,51 @@
         .live-badge { display: flex; align-items: center; gap: 6px; background: var(--green-lt); color: var(--green); font-size: 12px; font-weight: 600; padding: 5px 11px; border-radius: 100px; border: 1px solid #bbf7d0; }
         .live-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--green); animation: pulse 2s infinite; }
         @keyframes pulse { 0%,100%{opacity:1;transform:scale(1);} 50%{opacity:.7;transform:scale(1.2);} }
+        @keyframes fadeUp { from{opacity:0;transform:translateY(10px);} to{opacity:1;transform:translateY(0);} }
 
         /* ══ PAGE HERO ══ */
         .page-hero { background: var(--white); border-bottom: 1px solid var(--gray-200); padding: 28px 32px; animation: fadeUp 0.4s ease both; }
-        @keyframes fadeUp { from{opacity:0;transform:translateY(10px);} to{opacity:1;transform:translateY(0);} }
         .page-hero-inner { max-width: 1200px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; gap: 24px; flex-wrap: wrap; }
         .back-btn { display: inline-flex; align-items: center; gap: 6px; font-size: 13px; font-weight: 600; color: var(--gray-500); text-decoration: none; padding: 6px 12px; border-radius: 8px; border: 1px solid var(--gray-200); background: var(--white); transition: all 0.15s; margin-bottom: 12px; }
         .back-btn:hover { background: var(--gray-100); color: var(--gray-900); }
         .lot-title { font-size: 26px; font-weight: 800; letter-spacing: -0.6px; }
         .lot-subtitle { font-size: 14px; color: var(--gray-500); margin-top: 3px; }
         .stat-pills { display: flex; gap: 10px; flex-wrap: wrap; }
-        .stat-pill { display: flex; align-items: center; gap: 8px; padding: 10px 16px; border-radius: 10px; border: 1px solid; font-size: 13px; font-weight: 600; }
-        .stat-pill.total { background: var(--gray-100); border-color: var(--gray-200); color: var(--gray-700); }
-        .stat-pill.green { background: var(--green-lt); border-color: #bbf7d0; color: var(--green); }
-        .stat-pill.red   { background: var(--red-lt);   border-color: #fecaca; color: var(--red); }
+        .stat-pill { display: flex; align-items: center; gap: 8px; padding: 10px 16px; border-radius: 10px; border: 1px solid; }
+        .stat-pill.total  { background: var(--gray-100); border-color: var(--gray-200); color: var(--gray-700); }
+        .stat-pill.green  { background: var(--green-lt); border-color: #bbf7d0; color: var(--green); }
+        .stat-pill.red    { background: var(--red-lt);   border-color: #fecaca; color: var(--red); }
         .stat-num   { font-size: 20px; font-weight: 800; letter-spacing: -0.5px; line-height: 1; }
         .stat-label { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; opacity: 0.75; }
 
-        /* ══ MY SPOT BANNER ══ */
+        /* ══ BANNERS ══ */
+        /* Blue — currently parked */
         .my-spot-banner { background: var(--blue-lt); border-bottom: 1px solid #c7d9fb; padding: 12px 32px; display: none; }
         .my-spot-banner.visible { display: block; }
         .my-spot-banner-inner { max-width: 1200px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; gap: 16px; }
-        .my-spot-text { font-size: 14px; font-weight: 600; color: var(--blue); display: flex; align-items: center; gap: 8px; }
+        .my-spot-text { font-size: 14px; font-weight: 600; color: var(--blue); }
         .leave-btn { background: var(--red-lt); color: var(--red); border: 1px solid #fecaca; border-radius: 8px; padding: 7px 14px; font-family: var(--font); font-size: 13px; font-weight: 700; cursor: pointer; transition: background 0.15s; }
         .leave-btn:hover { background: #fecaca; }
 
+        /* Purple — has reservation but not parked */
+        .rsv-banner { background: var(--purple-lt); border-bottom: 1px solid #ddd6fe; padding: 12px 32px; display: none; }
+        .rsv-banner.visible { display: block; }
+        .rsv-banner-inner { max-width: 1200px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+        .rsv-banner-text { font-size: 14px; font-weight: 600; color: var(--purple); display: flex; align-items: center; gap: 8px; }
+        .rsv-banner-detail { font-size: 12px; font-weight: 500; color: #6d28d9; opacity: 0.8; }
+        .rsv-cancel-btn { background: var(--red-lt); color: var(--red); border: 1px solid #fecaca; border-radius: 8px; padding: 7px 14px; font-family: var(--font); font-size: 13px; font-weight: 700; cursor: pointer; transition: background 0.15s; white-space: nowrap; }
+        .rsv-cancel-btn:hover { background: #fecaca; }
+        .rsv-cancel-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
         /* ══ LEGEND ══ */
         .legend-bar { background: var(--white); border-bottom: 1px solid var(--gray-200); padding: 12px 32px; }
-        .legend-inner { max-width: 1200px; margin: 0 auto; display: flex; align-items: center; gap: 20px; }
+        .legend-inner { max-width: 1200px; margin: 0 auto; display: flex; align-items: center; gap: 20px; flex-wrap: wrap; }
         .legend-item { display: flex; align-items: center; gap: 7px; font-size: 12px; font-weight: 500; color: #4b5563; }
         .legend-swatch { width: 22px; height: 14px; border-radius: 4px; border: 1px solid rgba(0,0,0,0.1); }
-        .legend-swatch.avail { background: #d1fae5; }
-        .legend-swatch.occ   { background: #fee2e2; }
-        .legend-swatch.mine  { background: #bfdbfe; }
+        .legend-swatch.avail    { background: #d1fae5; }
+        .legend-swatch.occ      { background: #fee2e2; }
+        .legend-swatch.mine     { background: #bfdbfe; }
+        .legend-swatch.reserved { background: #ddd6fe; }
 
         /* ══ LOT CANVAS ══ */
         .lot-canvas-wrap { flex: 1; padding: 32px; display: flex; justify-content: center; animation: fadeUp 0.5s 0.1s ease both; }
@@ -95,52 +87,66 @@
         .spots-bank { display: flex; flex: 1; gap: 4px; flex-wrap: wrap; }
         .spots-bank.left  { justify-content: flex-end; }
         .spots-bank.right { justify-content: flex-start; }
-        .drive-lane { width: 64px; flex-shrink: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; position: relative; padding: 4px 0; }
+        .drive-lane { width: 64px; flex-shrink: 0; position: relative; padding: 4px 0; }
         .drive-lane::before { content: ''; position: absolute; top: 0; bottom: 0; left: 50%; transform: translateX(-50%); width: 3px; background: repeating-linear-gradient(to bottom,#f0b429 0px,#f0b429 14px,transparent 14px,transparent 26px); opacity: 0.7; }
         .row-divider { height: 3px; background: var(--stripe); margin: 3px 0; border-radius: 2px; opacity: 0.3; }
 
         /* ── SPOT ── */
-        .spot { width: 68px; height: 100px; border: 2px solid rgba(255,255,255,0.18); border-radius: 4px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px; position: relative; transition: transform 0.15s, box-shadow 0.15s; flex-shrink: 0; cursor: default; }
-        .spot.available { background: rgba(5,150,105,0.18); border-color: rgba(52,211,153,0.4); cursor: pointer; }
+        .spot { width: 68px; height: 100px; border: 2px solid rgba(255,255,255,0.18); border-radius: 4px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; position: relative; transition: transform 0.15s, box-shadow 0.15s; flex-shrink: 0; cursor: default; }
+        .spot.available  { background: rgba(5,150,105,0.18); border-color: rgba(52,211,153,0.4); cursor: pointer; }
         .spot.available:hover { transform: scale(1.06); z-index: 10; box-shadow: 0 4px 20px rgba(52,211,153,0.3); background: rgba(5,150,105,0.3); }
-        .spot.occupied  { background: rgba(200,30,30,0.18); border-color: rgba(252,165,165,0.3); }
-        .spot.occupied:hover, .spot.mine:hover { transform: scale(1.06); z-index: 10; box-shadow: 0 4px 20px rgba(0,0,0,0.4); }
-        .spot.mine { background: rgba(26,86,219,0.3); border-color: rgba(147,197,253,0.7); box-shadow: 0 0 16px rgba(26,86,219,0.4); }
-        .spot-num { font-size: 11px; font-weight: 700; color: rgba(255,255,255,0.6); letter-spacing: 0.03em; line-height: 1; }
-        .spot-icon { width: 32px; height: 32px; opacity: 0.85; }
-        .spot.available .spot-icon { filter: drop-shadow(0 0 4px rgba(52,211,153,0.5)); }
-        .spot.occupied  .spot-icon { filter: drop-shadow(0 0 4px rgba(252,165,165,0.4)); }
-        .spot.mine      .spot-icon { filter: drop-shadow(0 0 6px rgba(96,165,250,0.8)); }
-
-        /* Tooltip */
+        .spot.occupied   { background: rgba(200,30,30,0.18); border-color: rgba(252,165,165,0.3); }
+        .spot.occupied:hover, .spot.mine:hover, .spot.reserved:hover, .spot.my-reserved:hover { transform: scale(1.06); z-index: 10; box-shadow: 0 4px 20px rgba(0,0,0,0.4); }
+        .spot.mine        { background: rgba(26,86,219,0.3);   border-color: rgba(147,197,253,0.7); box-shadow: 0 0 16px rgba(26,86,219,0.4); }
+        .spot.reserved    { background: rgba(124,58,237,0.2);  border-color: rgba(196,181,253,0.5); }
+        .spot.my-reserved { background: rgba(124,58,237,0.35); border-color: rgba(196,181,253,0.8); box-shadow: 0 0 16px rgba(124,58,237,0.5); }
+        .spot-num   { font-size: 11px; font-weight: 700; color: rgba(255,255,255,0.6); letter-spacing: 0.03em; line-height: 1; }
+        .spot-icon  { width: 28px; height: 28px; opacity: 0.85; }
+        .spot.available  .spot-icon { filter: drop-shadow(0 0 4px rgba(52,211,153,0.5)); }
+        .spot.occupied   .spot-icon { filter: drop-shadow(0 0 4px rgba(252,165,165,0.4)); }
+        .spot.mine       .spot-icon { filter: drop-shadow(0 0 6px rgba(96,165,250,0.8)); }
+        .spot.reserved   .spot-icon, .spot.my-reserved .spot-icon { filter: drop-shadow(0 0 6px rgba(196,181,253,0.8)); }
+        .spot-reserved-label { font-size: 9px; font-weight: 700; color: rgba(196,181,253,0.9); letter-spacing: 0.05em; text-transform: uppercase; line-height: 1; }
         .spot-tooltip { position: absolute; bottom: calc(100% + 8px); left: 50%; transform: translateX(-50%); background: var(--gray-900); color: white; font-size: 11px; font-weight: 600; padding: 4px 8px; border-radius: 6px; white-space: nowrap; opacity: 0; pointer-events: none; transition: opacity 0.15s; z-index: 20; }
         .spot-tooltip::after { content: ''; position: absolute; top: 100%; left: 50%; transform: translateX(-50%); border: 4px solid transparent; border-top-color: var(--gray-900); }
         .spot:hover .spot-tooltip { opacity: 1; }
-
-        .lot-entrance { display: flex; justify-content: center; gap: 40px; margin-top: 16px; }
+        .lot-entrance { display: flex; justify-content: center; margin-top: 16px; }
         .entrance-marker { display: flex; align-items: center; gap: 8px; font-size: 11px; font-weight: 700; color: rgba(255,255,255,0.5); letter-spacing: 0.08em; text-transform: uppercase; }
         .entrance-arrow { font-size: 16px; color: #f0b429; }
 
-        /* ══ MODAL ══ */
+        /* ══ ACTION MODAL ══ */
         .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); backdrop-filter: blur(4px); z-index: 200; display: flex; align-items: center; justify-content: center; opacity: 0; pointer-events: none; transition: opacity 0.2s; }
         .modal-overlay.visible { opacity: 1; pointer-events: all; }
-        .modal { background: var(--white); border-radius: 16px; padding: 32px; width: 100%; max-width: 380px; box-shadow: 0 20px 60px rgba(0,0,0,0.3); transform: translateY(12px); transition: transform 0.2s; }
+        .modal { background: var(--white); border-radius: 16px; padding: 32px; width: 100%; max-width: 400px; box-shadow: 0 20px 60px rgba(0,0,0,0.3); transform: translateY(12px); transition: transform 0.2s; }
         .modal-overlay.visible .modal { transform: translateY(0); }
-        .modal-icon { width: 52px; height: 52px; background: var(--blue-lt); border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 24px; margin-bottom: 18px; }
-        .modal-title { font-size: 20px; font-weight: 800; letter-spacing: -0.4px; margin-bottom: 6px; }
-        .modal-subtitle { font-size: 14px; color: var(--gray-500); margin-bottom: 24px; line-height: 1.5; }
-        .modal-actions { display: flex; gap: 10px; }
-        .modal-cancel  { flex: 1; padding: 12px; background: var(--gray-100); color: var(--gray-700); border: 1px solid var(--gray-200); border-radius: 10px; font-family: var(--font); font-size: 14px; font-weight: 600; cursor: pointer; transition: background 0.15s; }
-        .modal-cancel:hover { background: var(--gray-200); }
-        .modal-confirm { flex: 1; padding: 12px; background: var(--blue); color: white; border: none; border-radius: 10px; font-family: var(--font); font-size: 14px; font-weight: 700; cursor: pointer; transition: background 0.15s; }
-        .modal-confirm:hover { background: var(--blue-d); }
-        .modal-confirm:disabled { opacity: 0.6; cursor: not-allowed; }
+        .modal-icon { width: 52px; height: 52px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 24px; margin-bottom: 16px; background: var(--blue-lt); }
+        .modal-title    { font-size: 20px; font-weight: 800; letter-spacing: -0.4px; margin-bottom: 6px; }
+        .modal-subtitle { font-size: 14px; color: var(--gray-500); margin-bottom: 22px; line-height: 1.5; }
+        .modal-action-row { display: flex; gap: 10px; }
+        .modal-action-btn { flex: 1; padding: 14px 12px; border-radius: 10px; font-family: var(--font); font-size: 13px; font-weight: 700; cursor: pointer; border: none; display: flex; flex-direction: column; align-items: center; gap: 5px; transition: opacity 0.15s, transform 0.15s; }
+        .modal-action-btn:hover { opacity: 0.88; transform: translateY(-1px); }
+        .modal-action-btn .btn-icon { font-size: 22px; }
+        .park-btn    { background: var(--blue);   color: white; }
+        .reserve-btn { background: var(--purple); color: white; }
+        .reserve-form { display: none; margin-top: 20px; padding-top: 20px; border-top: 1px solid var(--gray-200); }
+        .reserve-form.visible { display: block; }
+        .form-group { margin-bottom: 14px; }
+        .form-group label { display: block; font-size: 13px; font-weight: 600; color: var(--gray-700); margin-bottom: 5px; }
+        .form-group input[type="date"], .form-group input[type="time"], .form-group select { width: 100%; padding: 10px 14px; border: 1.5px solid var(--gray-200); border-radius: 10px; font-family: var(--font); font-size: 14px; color: var(--gray-900); background: var(--white); outline: none; transition: border-color 0.2s; }
+        .form-group input:focus, .form-group select:focus { border-color: var(--purple); box-shadow: 0 0 0 3px rgba(124,58,237,0.1); }
+        .confirm-reserve-btn { width: 100%; padding: 12px; background: var(--purple); color: white; border: none; border-radius: 10px; font-family: var(--font); font-size: 14px; font-weight: 700; cursor: pointer; margin-top: 4px; }
+        .confirm-reserve-btn:hover { background: #6d28d9; }
+        .confirm-reserve-btn:disabled { opacity: 0.6; cursor: not-allowed; }
+        .modal-cancel-row { margin-top: 14px; text-align: center; }
+        .modal-cancel-link { font-size: 13px; color: var(--gray-400); cursor: pointer; background: none; border: none; font-family: var(--font); }
+        .modal-cancel-link:hover { color: var(--gray-700); }
 
         /* ══ TOAST ══ */
         .toast { position: fixed; bottom: 28px; left: 50%; transform: translateX(-50%) translateY(20px); background: var(--gray-900); color: white; font-size: 14px; font-weight: 600; padding: 12px 20px; border-radius: 10px; box-shadow: 0 8px 24px rgba(0,0,0,0.3); opacity: 0; pointer-events: none; transition: opacity 0.25s, transform 0.25s; z-index: 300; white-space: nowrap; }
-        .toast.show  { opacity: 1; transform: translateX(-50%) translateY(0); }
-        .toast.green { background: var(--green); }
-        .toast.red   { background: var(--red); }
+        .toast.show   { opacity: 1; transform: translateX(-50%) translateY(0); }
+        .toast.green  { background: var(--green); }
+        .toast.red    { background: var(--red); }
+        .toast.purple { background: var(--purple); }
 
         /* ══ FOOTER ══ */
         .footer { background: var(--white); border-top: 1px solid var(--gray-200); padding: 24px 32px; margin-top: auto; }
@@ -150,44 +156,33 @@
         .footer-copy { font-size: 12px; color: var(--gray-400); }
 
         @media (max-width: 640px) {
-            .header-inner { padding: 0 20px; }
-            .nav-links    { display: none; }
-            .page-hero    { padding: 20px; }
+            .header-inner, .page-hero { padding-left: 20px; padding-right: 20px; }
+            .nav-links { display: none; }
             .lot-canvas-wrap { padding: 16px; }
-            .spot         { width: 52px; height: 78px; }
-            .drive-lane   { width: 44px; }
+            .spot { width: 52px; height: 78px; }
+            .drive-lane { width: 44px; }
         }
     </style>
 </head>
 <body>
 
-    <!-- ══ HEADER ══ -->
     <header class="header">
         <div class="header-inner">
-            <a href="/" class="logo">
-                <div class="logo-mark">Q</div>
-                <span class="logo-text">Quick<span>Spot</span></span>
-            </a>
-            <nav>
-                <ul class="nav-links">
-                    <li><a href="#">Find Parking</a></li>
-                    <li><a href="#">Monthly</a></li>
-                    <li><a href="#">Airport</a></li>
-                    <li><a href="#">Event Parking</a></li>
-                </ul>
-            </nav>
+            <a href="/" class="logo"><div class="logo-mark">Q</div><span class="logo-text">Quick<span>Spot</span></span></a>
+            <nav><ul class="nav-links">
+                <li><a href="/">Find Parking</a></li>
+                {% if logged_in %}<li><a href="/my-reservations">🎫 My Reservations</a></li>{% endif %}
+            </ul></nav>
             <div class="live-badge"><div class="live-dot"></div> Live</div>
         </div>
     </header>
 
-
-    <!-- ══ PAGE HERO ══ -->
     <div class="page-hero">
         <div class="page-hero-inner">
             <div>
                 <a href="/" class="back-btn">← Back to lots</a>
                 <div class="lot-title">{{ lot.lot_name }}</div>
-                <div class="lot-subtitle">Live parking layout — click an available spot to park</div>
+                <div class="lot-subtitle">{% if logged_in %}Click an available spot to park or reserve{% else %}<a href="/login" style="color:var(--blue);font-weight:600;">Log in</a> to park or reserve a spot{% endif %}</div>
             </div>
             <div class="stat-pills">
                 <div class="stat-pill total"><div><div class="stat-num">{{ lot.total_spots }}</div><div class="stat-label">Total</div></div></div>
@@ -197,119 +192,102 @@
         </div>
     </div>
 
-
-    <!-- ══ MY SPOT BANNER ══ -->
+    <!-- Blue banner: currently parked -->
     <div class="my-spot-banner {% if user_spot_id %}visible{% endif %}" id="my-spot-banner">
         <div class="my-spot-banner-inner">
-            <div class="my-spot-text">
-                🅿 You are parked in <strong id="my-spot-label">Spot #{{ user_spot_id or '' }}</strong>
-            </div>
+            <div class="my-spot-text">🅿 You are parked in <strong id="my-spot-label">Spot #{{ user_spot_id or '' }}</strong></div>
             <button class="leave-btn" id="leave-btn">Leave Spot</button>
         </div>
     </div>
 
-
-    <!-- ══ LEGEND ══ -->
-    <div class="legend-bar">
-        <div class="legend-inner">
-            <div class="legend-item"><div class="legend-swatch avail"></div> Available{% if logged_in %} — click to park{% endif %}</div>
-            <div class="legend-item"><div class="legend-swatch occ"></div> Occupied</div>
-            <div class="legend-item"><div class="legend-swatch mine"></div> Your spot</div>
-            <div class="legend-item" style="margin-left:auto; color:var(--gray-400); font-size:11px;">
-                {% if not logged_in %}<a href="/login" style="color:var(--blue);font-weight:600;">Log in</a> to claim a spot
-                {% else %}Hover a spot for details{% endif %}
+    <!-- Purple banner: has reservation but not yet parked -->
+    <div class="rsv-banner {% if user_reserved_spot_ids and not user_spot_id %}visible{% endif %}" id="rsv-banner">
+        <div class="rsv-banner-inner">
+            <div class="rsv-banner-text">
+                🗓 You have a reservation at this lot
+                {% if user_reserved_spot_ids %}
+                <span class="rsv-banner-detail">
+                    — Spot{% if user_reserved_spot_ids | length > 1 %}s{% endif %}
+                    {% for sid in user_reserved_spot_ids %}#{{ sid }}{% if not loop.last %}, {% endif %}{% endfor %}
+                </span>
+                {% endif %}
             </div>
+            <button class="rsv-cancel-btn" id="rsv-cancel-btn" onclick="cancelMyReservation()">
+                Cancel Reservation
+            </button>
         </div>
     </div>
 
+    <div class="legend-bar">
+        <div class="legend-inner">
+            <div class="legend-item"><div class="legend-swatch avail"></div> Available</div>
+            <div class="legend-item"><div class="legend-swatch occ"></div> Occupied</div>
+            <div class="legend-item"><div class="legend-swatch mine"></div> Your spot</div>
+            <div class="legend-item"><div class="legend-swatch reserved"></div> Reserved</div>
+        </div>
+    </div>
 
-    <!-- ══ LOT CANVAS ══ -->
     <div class="lot-canvas-wrap">
         <div class="lot-canvas">
             <div class="lot-watermark">{{ lot.lot_name }}</div>
             <div class="lot-section">
-
                 {% set spots_per_row = 5 %}
-                {% set total = spots | length %}
-                {% set num_rows = (total / (spots_per_row * 2)) | round(0, 'ceil') | int %}
-
+                {% set num_rows = (spots | length / (spots_per_row * 2)) | round(0, 'ceil') | int %}
                 {% for row in range(num_rows) %}
-                    {% set left_start  = row * spots_per_row * 2 %}
-                    {% set left_end    = left_start + spots_per_row %}
-                    {% set right_start = left_end %}
-                    {% set right_end   = right_start + spots_per_row %}
-
+                    {% set ls = row * spots_per_row * 2 %}
+                    {% set le = ls + spots_per_row %}
+                    {% set rs = le %}
+                    {% set re = rs + spots_per_row %}
                     <div class="spots-row-pair">
                         <div class="spots-bank left">
-                            {% for spot in spots[left_start:left_end] %}
-                            {% set is_mine = (user_spot_id == spot.spot_id) %}
-                            <div class="spot {{ 'mine' if is_mine else ('occupied' if spot.occupied else 'available') }}" data-spot-id="{{ spot.spot_id }}">
-                                <div class="spot-tooltip">
-                                    {% if is_mine %}Your spot — #{{ spot.spot_id }}
-                                    {% elif spot.occupied %}Spot {{ spot.spot_id }} — Occupied
-                                    {% else %}Spot {{ spot.spot_id }} — Click to park{% endif %}
-                                </div>
+                            {% for spot in spots[ls:le] %}
+                            {% set is_mine   = (user_spot_id == spot.spot_id) %}
+                            {% set is_my_res = (spot.spot_id in user_reserved_spot_ids) %}
+                            {% set is_res    = (spot.spot_id in lot_reservations) %}
+                            {% set cls = 'mine' if is_mine else ('my-reserved' if is_my_res else ('reserved' if is_res else ('occupied' if spot.occupied else 'available'))) %}
+                            <div class="spot {{ cls }}" data-spot-id="{{ spot.spot_id }}">
+                                <div class="spot-tooltip">{% if is_mine %}Your spot — #{{ spot.spot_id }}{% elif is_my_res %}Your reservation — #{{ spot.spot_id }}{% elif is_res %}Reserved — #{{ spot.spot_id }}{% elif spot.occupied %}Spot {{ spot.spot_id }} — Occupied{% else %}Spot {{ spot.spot_id }} — Click to park or reserve{% endif %}</div>
                                 <span class="spot-num">#{{ spot.spot_id }}</span>
                                 <svg class="spot-icon" viewBox="0 0 24 24" fill="none">
-                                    {% if is_mine %}
-                                        <circle cx="12" cy="8" r="4" stroke="#93c5fd" stroke-width="1.4"/>
-                                        <path d="M4 20c0-4 3.6-7 8-7s8 3 8 7" stroke="#93c5fd" stroke-width="1.4" stroke-linecap="round"/>
-                                    {% elif spot.occupied %}
-                                        <path d="M5 11l1.5-4.5h11L19 11" stroke="#fca5a5" stroke-width="1.3" stroke-linecap="round"/>
-                                        <rect x="3" y="11" width="18" height="6" rx="2" fill="rgba(252,165,165,0.25)" stroke="#fca5a5" stroke-width="1.3"/>
-                                        <circle cx="7.5" cy="17.5" r="1.5" fill="#fca5a5"/>
-                                        <circle cx="16.5" cy="17.5" r="1.5" fill="#fca5a5"/>
-                                    {% else %}
-                                        <rect x="4" y="6" width="16" height="12" rx="2" stroke="rgba(52,211,153,0.5)" stroke-width="1.3" stroke-dasharray="3 2" fill="none"/>
-                                        <path d="M9 12h6M12 9v6" stroke="rgba(52,211,153,0.6)" stroke-width="1.3" stroke-linecap="round"/>
+                                    {% if is_mine %}<circle cx="12" cy="8" r="4" stroke="#93c5fd" stroke-width="1.4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7" stroke="#93c5fd" stroke-width="1.4" stroke-linecap="round"/>
+                                    {% elif is_my_res or is_res %}<rect x="4" y="4" width="16" height="16" rx="2" stroke="#c4b5fd" stroke-width="1.3" fill="none"/><path d="M8 2v4M16 2v4M4 10h16" stroke="#c4b5fd" stroke-width="1.3" stroke-linecap="round"/><path d="M9 14h2M13 14h2M9 17h2" stroke="#c4b5fd" stroke-width="1.3" stroke-linecap="round"/>
+                                    {% elif spot.occupied %}<path d="M5 11l1.5-4.5h11L19 11" stroke="#fca5a5" stroke-width="1.3" stroke-linecap="round"/><rect x="3" y="11" width="18" height="6" rx="2" fill="rgba(252,165,165,0.25)" stroke="#fca5a5" stroke-width="1.3"/><circle cx="7.5" cy="17.5" r="1.5" fill="#fca5a5"/><circle cx="16.5" cy="17.5" r="1.5" fill="#fca5a5"/>
+                                    {% else %}<rect x="4" y="6" width="16" height="12" rx="2" stroke="rgba(52,211,153,0.5)" stroke-width="1.3" stroke-dasharray="3 2" fill="none"/><path d="M9 12h6M12 9v6" stroke="rgba(52,211,153,0.6)" stroke-width="1.3" stroke-linecap="round"/>
                                     {% endif %}
                                 </svg>
+                                {% if is_my_res or is_res %}<span class="spot-reserved-label">Reserved</span>{% endif %}
                             </div>
                             {% endfor %}
                         </div>
-
                         <div class="drive-lane"></div>
-
                         <div class="spots-bank right">
-                            {% for spot in spots[right_start:right_end] %}
-                            {% set is_mine = (user_spot_id == spot.spot_id) %}
-                            <div class="spot {{ 'mine' if is_mine else ('occupied' if spot.occupied else 'available') }}" data-spot-id="{{ spot.spot_id }}">
-                                <div class="spot-tooltip">
-                                    {% if is_mine %}Your spot — #{{ spot.spot_id }}
-                                    {% elif spot.occupied %}Spot {{ spot.spot_id }} — Occupied
-                                    {% else %}Spot {{ spot.spot_id }} — Click to park{% endif %}
-                                </div>
+                            {% for spot in spots[rs:re] %}
+                            {% set is_mine   = (user_spot_id == spot.spot_id) %}
+                            {% set is_my_res = (spot.spot_id in user_reserved_spot_ids) %}
+                            {% set is_res    = (spot.spot_id in lot_reservations) %}
+                            {% set cls = 'mine' if is_mine else ('my-reserved' if is_my_res else ('reserved' if is_res else ('occupied' if spot.occupied else 'available'))) %}
+                            <div class="spot {{ cls }}" data-spot-id="{{ spot.spot_id }}">
+                                <div class="spot-tooltip">{% if is_mine %}Your spot — #{{ spot.spot_id }}{% elif is_my_res %}Your reservation — #{{ spot.spot_id }}{% elif is_res %}Reserved — #{{ spot.spot_id }}{% elif spot.occupied %}Spot {{ spot.spot_id }} — Occupied{% else %}Spot {{ spot.spot_id }} — Click to park or reserve{% endif %}</div>
                                 <span class="spot-num">#{{ spot.spot_id }}</span>
                                 <svg class="spot-icon" viewBox="0 0 24 24" fill="none">
-                                    {% if is_mine %}
-                                        <circle cx="12" cy="8" r="4" stroke="#93c5fd" stroke-width="1.4"/>
-                                        <path d="M4 20c0-4 3.6-7 8-7s8 3 8 7" stroke="#93c5fd" stroke-width="1.4" stroke-linecap="round"/>
-                                    {% elif spot.occupied %}
-                                        <path d="M5 11l1.5-4.5h11L19 11" stroke="#fca5a5" stroke-width="1.3" stroke-linecap="round"/>
-                                        <rect x="3" y="11" width="18" height="6" rx="2" fill="rgba(252,165,165,0.25)" stroke="#fca5a5" stroke-width="1.3"/>
-                                        <circle cx="7.5" cy="17.5" r="1.5" fill="#fca5a5"/>
-                                        <circle cx="16.5" cy="17.5" r="1.5" fill="#fca5a5"/>
-                                    {% else %}
-                                        <rect x="4" y="6" width="16" height="12" rx="2" stroke="rgba(52,211,153,0.5)" stroke-width="1.3" stroke-dasharray="3 2" fill="none"/>
-                                        <path d="M9 12h6M12 9v6" stroke="rgba(52,211,153,0.6)" stroke-width="1.3" stroke-linecap="round"/>
+                                    {% if is_mine %}<circle cx="12" cy="8" r="4" stroke="#93c5fd" stroke-width="1.4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7" stroke="#93c5fd" stroke-width="1.4" stroke-linecap="round"/>
+                                    {% elif is_my_res or is_res %}<rect x="4" y="4" width="16" height="16" rx="2" stroke="#c4b5fd" stroke-width="1.3" fill="none"/><path d="M8 2v4M16 2v4M4 10h16" stroke="#c4b5fd" stroke-width="1.3" stroke-linecap="round"/><path d="M9 14h2M13 14h2M9 17h2" stroke="#c4b5fd" stroke-width="1.3" stroke-linecap="round"/>
+                                    {% elif spot.occupied %}<path d="M5 11l1.5-4.5h11L19 11" stroke="#fca5a5" stroke-width="1.3" stroke-linecap="round"/><rect x="3" y="11" width="18" height="6" rx="2" fill="rgba(252,165,165,0.25)" stroke="#fca5a5" stroke-width="1.3"/><circle cx="7.5" cy="17.5" r="1.5" fill="#fca5a5"/><circle cx="16.5" cy="17.5" r="1.5" fill="#fca5a5"/>
+                                    {% else %}<rect x="4" y="6" width="16" height="12" rx="2" stroke="rgba(52,211,153,0.5)" stroke-width="1.3" stroke-dasharray="3 2" fill="none"/><path d="M9 12h6M12 9v6" stroke="rgba(52,211,153,0.6)" stroke-width="1.3" stroke-linecap="round"/>
                                     {% endif %}
                                 </svg>
+                                {% if is_my_res or is_res %}<span class="spot-reserved-label">Reserved</span>{% endif %}
                             </div>
                             {% endfor %}
                         </div>
                     </div>
                     {% if not loop.last %}<div class="row-divider"></div>{% endif %}
                 {% endfor %}
-
             </div>
-            <div class="lot-entrance">
-                <div class="entrance-marker"><span class="entrance-arrow">↕</span> Entrance / Exit</div>
-            </div>
+            <div class="lot-entrance"><div class="entrance-marker"><span class="entrance-arrow">↕</span> Entrance / Exit</div></div>
         </div>
     </div>
 
-
-    <!-- ══ FOOTER ══ -->
     <footer class="footer">
         <div class="footer-inner">
             <div class="footer-logo">Quick<span>Spot</span></div>
@@ -317,187 +295,276 @@
         </div>
     </footer>
 
-
-    <!-- ══ MODAL ══ -->
+    <!-- Action Modal -->
     <div class="modal-overlay" id="modal-overlay">
         <div class="modal">
-            <div class="modal-icon">🅿</div>
-            <div class="modal-title" id="modal-title">Park here?</div>
-            <div class="modal-subtitle" id="modal-subtitle">Confirm your spot</div>
-            <div class="modal-actions">
-                <button class="modal-cancel"  id="modal-cancel">Cancel</button>
-                <button class="modal-confirm" id="modal-confirm">Confirm Park</button>
+            <div class="modal-icon" id="modal-icon">🅿</div>
+            <div class="modal-title"  id="modal-title">Spot #—</div>
+            <div class="modal-subtitle" id="modal-subtitle">What would you like to do?</div>
+            <div class="modal-action-row" id="action-row">
+                <button class="modal-action-btn park-btn"    id="park-now-btn"><span class="btn-icon">🚗</span><span>Park Now</span></button>
+                <button class="modal-action-btn reserve-btn" id="reserve-spot-btn"><span class="btn-icon">🗓</span><span>Reserve</span></button>
             </div>
+            <div class="reserve-form" id="reserve-form">
+                <div class="form-group"><label>Date</label><input type="date" id="res-date"></div>
+                <div class="form-group"><label>Arrival Time</label><input type="time" id="res-time"></div>
+                <div class="form-group"><label>Duration</label>
+                    <select id="res-duration">
+                        <option value="30">30 minutes</option>
+                        <option value="60" selected>1 hour</option>
+                        <option value="90">1.5 hours</option>
+                        <option value="120">2 hours</option>
+                        <option value="180">3 hours</option>
+                        <option value="240">4 hours</option>
+                    </select>
+                </div>
+                <button class="confirm-reserve-btn" id="confirm-reserve-btn">Confirm Reservation</button>
+            </div>
+            <div class="modal-cancel-row"><button class="modal-cancel-link" onclick="closeModal()">Cancel</button></div>
         </div>
     </div>
 
-    <!-- ══ TOAST ══ -->
     <div class="toast" id="toast"></div>
-
 
     <script>
         const LOT_ID    = {{ lot.lot_id }};
         const LOGGED_IN = {{ 'true' if logged_in else 'false' }};
         const USERNAME  = "{{ username }}";
 
-        let pendingSpotId = null;
-        let mySpotId      = {{ user_spot_id or 'null' }};
+        let pendingSpotId     = null;
+        let mySpotId          = {{ user_spot_id or 'null' }};
+        let myReservedSpotIds = new Set({{ user_reserved_spot_ids | list | tojson }});
+        let reservedSpotIds   = new Set({{ lot_reservations.keys() | list | tojson }});
 
-        // ── SVG templates ──────────────────────────────────────────
-        const SVG_AVAILABLE = `
-            <rect x="4" y="6" width="16" height="12" rx="2" stroke="rgba(52,211,153,0.5)" stroke-width="1.3" stroke-dasharray="3 2" fill="none"/>
-            <path d="M9 12h6M12 9v6" stroke="rgba(52,211,153,0.6)" stroke-width="1.3" stroke-linecap="round"/>`;
+        // Reservation ID lookup: spot_id -> reservation_id
+        // We fetch this from the API on load so we can cancel by ID
+        let myReservationMap  = {}; // { spot_id: reservation_id }
 
-        const SVG_OCCUPIED = `
-            <path d="M5 11l1.5-4.5h11L19 11" stroke="#fca5a5" stroke-width="1.3" stroke-linecap="round"/>
-            <rect x="3" y="11" width="18" height="6" rx="2" fill="rgba(252,165,165,0.25)" stroke="#fca5a5" stroke-width="1.3"/>
-            <circle cx="7.5" cy="17.5" r="1.5" fill="#fca5a5"/>
-            <circle cx="16.5" cy="17.5" r="1.5" fill="#fca5a5"/>`;
+        const SVG_AVAILABLE = `<rect x="4" y="6" width="16" height="12" rx="2" stroke="rgba(52,211,153,0.5)" stroke-width="1.3" stroke-dasharray="3 2" fill="none"/><path d="M9 12h6M12 9v6" stroke="rgba(52,211,153,0.6)" stroke-width="1.3" stroke-linecap="round"/>`;
+        const SVG_OCCUPIED  = `<path d="M5 11l1.5-4.5h11L19 11" stroke="#fca5a5" stroke-width="1.3" stroke-linecap="round"/><rect x="3" y="11" width="18" height="6" rx="2" fill="rgba(252,165,165,0.25)" stroke="#fca5a5" stroke-width="1.3"/><circle cx="7.5" cy="17.5" r="1.5" fill="#fca5a5"/><circle cx="16.5" cy="17.5" r="1.5" fill="#fca5a5"/>`;
+        const SVG_MINE      = `<circle cx="12" cy="8" r="4" stroke="#93c5fd" stroke-width="1.4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7" stroke="#93c5fd" stroke-width="1.4" stroke-linecap="round"/>`;
+        const SVG_RESERVED  = `<rect x="4" y="4" width="16" height="16" rx="2" stroke="#c4b5fd" stroke-width="1.3" fill="none"/><path d="M8 2v4M16 2v4M4 10h16" stroke="#c4b5fd" stroke-width="1.3" stroke-linecap="round"/><path d="M9 14h2M13 14h2M9 17h2" stroke="#c4b5fd" stroke-width="1.3" stroke-linecap="round"/>`;
 
-        const SVG_MINE = `
-            <circle cx="12" cy="8" r="4" stroke="#93c5fd" stroke-width="1.4"/>
-            <path d="M4 20c0-4 3.6-7 8-7s8 3 8 7" stroke="#93c5fd" stroke-width="1.4" stroke-linecap="round"/>`;
-
-        // ── Toast ──────────────────────────────────────────────────
+        // ── Toast ─────────────────────────────────────────────
         function showToast(msg, type = '') {
             const t = document.getElementById('toast');
-            t.textContent = msg;
-            t.className   = `toast ${type} show`;
-            setTimeout(() => t.className = `toast ${type}`, 2800);
+            t.textContent = msg; t.className = `toast ${type} show`;
+            setTimeout(() => t.className = `toast ${type}`, 3200);
         }
 
-        // ── Apply state to a spot element ──────────────────────────
-        function applySpotState(el, occupied, isMine) {
-            const spotId = parseInt(el.dataset.spotId);
-            el.className = `spot ${isMine ? 'mine' : (occupied ? 'occupied' : 'available')}`;
-            el.querySelector('.spot-icon').innerHTML   = isMine ? SVG_MINE : (occupied ? SVG_OCCUPIED : SVG_AVAILABLE);
-            const tip = el.querySelector('.spot-tooltip');
-            if (isMine)        tip.textContent = `Your spot — #${spotId}`;
-            else if (occupied) tip.textContent = `Spot ${spotId} — Occupied`;
-            else               tip.textContent = `Spot ${spotId} — Click to park`;
+        // ── Spot state helper ─────────────────────────────────
+        function applySpotState(el, occupied, isMine, isMyReserved, isReserved) {
+            const id = parseInt(el.dataset.spotId);
+            let cls, svg, tip, label = false;
+            if (isMine)            { cls = 'mine';        svg = SVG_MINE;     tip = `Your spot — #${id}`; }
+            else if (isMyReserved) { cls = 'my-reserved'; svg = SVG_RESERVED; tip = `Your reservation — #${id}`; label = true; }
+            else if (isReserved)   { cls = 'reserved';    svg = SVG_RESERVED; tip = `Reserved — #${id}`;          label = true; }
+            else if (occupied)     { cls = 'occupied';    svg = SVG_OCCUPIED; tip = `Spot ${id} — Occupied`; }
+            else                   { cls = 'available';   svg = SVG_AVAILABLE; tip = `Spot ${id} — Click to park or reserve`; }
+            el.className = `spot ${cls}`;
+            el.querySelector('.spot-icon').innerHTML = svg;
+            el.querySelector('.spot-tooltip').textContent = tip;
+            let lbl = el.querySelector('.spot-reserved-label');
+            if (label) { if (!lbl) { lbl = document.createElement('span'); lbl.className = 'spot-reserved-label'; el.appendChild(lbl); } lbl.textContent = 'Reserved'; }
+            else if (lbl) lbl.remove();
         }
 
-        // ── My spot banner ─────────────────────────────────────────
-        function updateBanner(spotId) {
-            const banner = document.getElementById('my-spot-banner');
+        // ── Banner helpers ────────────────────────────────────
+        function updateParkBanner(spotId) {
             document.getElementById('my-spot-label').textContent = spotId ? `Spot #${spotId}` : '';
-            banner.classList.toggle('visible', !!spotId);
+            document.getElementById('my-spot-banner').classList.toggle('visible', !!spotId);
         }
 
-        // ── Click to park ──────────────────────────────────────────
+        function updateRsvBanner() {
+            const banner = document.getElementById('rsv-banner');
+            // Show only if there are reservations and user is NOT currently parked
+            const show = myReservedSpotIds.size > 0 && !mySpotId;
+            banner.classList.toggle('visible', show);
+        }
+
+        // ── Cancel reservation from banner ─────────────────────
+        async function cancelMyReservation() {
+            const btn = document.getElementById('rsv-cancel-btn');
+            btn.disabled = true; btn.textContent = 'Cancelling…';
+
+            // Cancel all reservations this user has at this lot
+            const ids = Object.values(myReservationMap);
+            if (!ids.length) {
+                // Fallback: fetch from API then cancel
+                try {
+                    const r = await fetch('/api/reservations');
+                    const all = await r.json();
+                    const mine = all.filter(res => res.lot_id === LOT_ID);
+                    for (const res of mine) {
+                        await fetch(`/api/reservations/${res.reservation_id}`, { method: 'DELETE' });
+                        const el = document.querySelector(`[data-spot-id="${res.spot_id}"]`);
+                        if (el) {
+                            myReservedSpotIds.delete(res.spot_id);
+                            reservedSpotIds.delete(res.spot_id);
+                            applySpotState(el, false, false, false, false);
+                        }
+                    }
+                } catch(e) { console.warn(e); }
+            } else {
+                for (const [spotId, resId] of Object.entries(myReservationMap)) {
+                    try {
+                        await fetch(`/api/reservations/${resId}`, { method: 'DELETE' });
+                        const sid = parseInt(spotId);
+                        myReservedSpotIds.delete(sid);
+                        reservedSpotIds.delete(sid);
+                        const el = document.querySelector(`[data-spot-id="${sid}"]`);
+                        if (el) applySpotState(el, false, false, false, false);
+                    } catch(e) { console.warn(e); }
+                }
+                myReservationMap = {};
+            }
+
+            updateRsvBanner();
+            showToast('Reservation cancelled.', '');
+            btn.disabled = false; btn.textContent = 'Cancel Reservation';
+            document.querySelectorAll('.spot.available').forEach(attachClickHandler);
+        }
+
+        // ── Load reservation map on page init ─────────────────
+        async function loadMyReservations() {
+            if (!LOGGED_IN) return;
+            try {
+                const res  = await fetch('/api/reservations');
+                const all  = await res.json();
+                const mine = all.filter(r => r.lot_id === LOT_ID);
+                mine.forEach(r => { myReservationMap[r.spot_id] = r.reservation_id; });
+            } catch(e) { console.warn('Could not load reservations', e); }
+        }
+        loadMyReservations();
+
+        // ── Modal helpers ─────────────────────────────────────
+        function openModal(spotId) {
+            pendingSpotId = spotId;
+            document.getElementById('modal-title').textContent    = `Spot #${spotId}`;
+            document.getElementById('modal-subtitle').textContent = `Hi ${USERNAME}! What would you like to do with Spot #${spotId}?`;
+            document.getElementById('action-row').style.display   = 'flex';
+            document.getElementById('reserve-form').classList.remove('visible');
+            document.getElementById('res-date').value = new Date().toISOString().split('T')[0];
+            document.getElementById('modal-overlay').classList.add('visible');
+        }
+
+        function closeModal() {
+            document.getElementById('modal-overlay').classList.remove('visible');
+            pendingSpotId = null;
+        }
+
         function attachClickHandler(el) {
-            if (el._hasClickHandler) return;
-            el._hasClickHandler = true;
+            if (el._hasClick) return; el._hasClick = true;
             el.addEventListener('click', () => {
                 if (!LOGGED_IN) { window.location.href = '/login'; return; }
                 if (!el.classList.contains('available')) return;
-                pendingSpotId = parseInt(el.dataset.spotId);
-                document.getElementById('modal-title').textContent   = `Park in Spot #${pendingSpotId}?`;
-                document.getElementById('modal-subtitle').textContent =
-                    `Hi ${USERNAME}! Confirm that you're parking in Spot #${pendingSpotId} at {{ lot.lot_name }}.`;
-                document.getElementById('modal-overlay').classList.add('visible');
+                openModal(parseInt(el.dataset.spotId));
             });
         }
-
         document.querySelectorAll('.spot.available').forEach(attachClickHandler);
 
-        // ── Modal cancel ───────────────────────────────────────────
-        document.getElementById('modal-cancel').addEventListener('click', () => {
-            document.getElementById('modal-overlay').classList.remove('visible');
-            pendingSpotId = null;
+        // ── Show reserve form ─────────────────────────────────
+        document.getElementById('reserve-spot-btn').addEventListener('click', () => {
+            document.getElementById('action-row').style.display = 'none';
+            document.getElementById('modal-subtitle').textContent = `Choose date and time for Spot #${pendingSpotId}.`;
+            document.getElementById('reserve-form').classList.add('visible');
         });
 
-        // ── Modal confirm ──────────────────────────────────────────
-        document.getElementById('modal-confirm').addEventListener('click', async () => {
+        // ── Park Now ──────────────────────────────────────────
+        document.getElementById('park-now-btn').addEventListener('click', async () => {
             if (!pendingSpotId) return;
-            const btn = document.getElementById('modal-confirm');
-            btn.disabled = true; btn.textContent = 'Parking…';
-
+            const btn = document.getElementById('park-now-btn');
+            btn.disabled = true;
             try {
                 const res  = await fetch(`/lots/${LOT_ID}/park`, {
-                    method: 'POST',
-                    headers: {'Content-Type': 'application/json'},
+                    method: 'POST', headers: {'Content-Type': 'application/json'},
                     body: JSON.stringify({ spot_id: pendingSpotId }),
                 });
                 const data = await res.json();
-
                 if (res.ok) {
                     if (mySpotId) {
                         const old = document.querySelector(`[data-spot-id="${mySpotId}"]`);
-                        if (old) applySpotState(old, true, false);
+                        if (old) applySpotState(old, true, false, myReservedSpotIds.has(mySpotId), reservedSpotIds.has(mySpotId));
                     }
                     mySpotId = data.spot_id;
                     const el = document.querySelector(`[data-spot-id="${mySpotId}"]`);
-                    if (el) applySpotState(el, false, true);
-                    updateBanner(mySpotId);
+                    if (el) applySpotState(el, false, true, false, false);
+                    updateParkBanner(mySpotId);
+                    updateRsvBanner(); // hide reservation banner since now parked
                     showToast(`✓ Parked in Spot #${mySpotId}`, 'green');
-                } else {
-                    showToast(data.error || 'Could not park. Try another spot.', 'red');
-                }
-            } catch(e) {
-                showToast('Something went wrong. Please try again.', 'red');
-            }
-
-            btn.disabled = false; btn.textContent = 'Confirm Park';
-            document.getElementById('modal-overlay').classList.remove('visible');
-            pendingSpotId = null;
+                } else { showToast(data.error || 'Could not park.', 'red'); }
+            } catch(e) { showToast('Something went wrong.', 'red'); }
+            btn.disabled = false; closeModal();
         });
 
-        // ── Leave spot ─────────────────────────────────────────────
+        // ── Confirm Reservation ───────────────────────────────
+        document.getElementById('confirm-reserve-btn').addEventListener('click', async () => {
+            const date     = document.getElementById('res-date').value;
+            const time     = document.getElementById('res-time').value;
+            const duration = parseInt(document.getElementById('res-duration').value);
+            if (!date || !time) { showToast('Please select a date and time.', 'red'); return; }
+            const btn = document.getElementById('confirm-reserve-btn');
+            btn.disabled = true; btn.textContent = 'Reserving…';
+            try {
+                const res  = await fetch('/api/reservations', {
+                    method: 'POST', headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({ lot_id: LOT_ID, spot_id: pendingSpotId, date, time, duration }),
+                });
+                const data = await res.json();
+                if (res.ok) {
+                    myReservedSpotIds.add(pendingSpotId);
+                    reservedSpotIds.add(pendingSpotId);
+                    myReservationMap[pendingSpotId] = data.reservation_id;
+                    const el = document.querySelector(`[data-spot-id="${pendingSpotId}"]`);
+                    if (el) applySpotState(el, false, false, true, true);
+                    updateRsvBanner();
+                    showToast(`🗓 Spot #${pendingSpotId} reserved for ${date} at ${time}`, 'purple');
+                    closeModal();
+                } else { showToast(data.error || 'Reservation failed.', 'red'); }
+            } catch(e) { showToast('Something went wrong.', 'red'); }
+            btn.disabled = false; btn.textContent = 'Confirm Reservation';
+        });
+
+        // ── Leave spot ────────────────────────────────────────
         document.getElementById('leave-btn').addEventListener('click', async () => {
             try {
                 const res  = await fetch(`/lots/${LOT_ID}/leave`, {
-                    method: 'POST',
-                    headers: {'Content-Type': 'application/json'},
+                    method: 'POST', headers: {'Content-Type': 'application/json'}
                 });
                 const data = await res.json();
-
                 if (res.ok) {
                     const el = document.querySelector(`[data-spot-id="${mySpotId}"]`);
-                    if (el) applySpotState(el, false, false);
+                    if (el) applySpotState(el, false, false, myReservedSpotIds.has(mySpotId), reservedSpotIds.has(mySpotId));
                     mySpotId = null;
-                    updateBanner(null);
+                    updateParkBanner(null);
+                    updateRsvBanner(); // show reservation banner again if still has one
                     showToast('You have left the spot.', '');
-                } else {
-                    showToast(data.error || 'Could not leave spot.', 'red');
-                }
-            } catch(e) {
-                showToast('Something went wrong.', 'red');
-            }
+                } else { showToast(data.error || 'Could not leave.', 'red'); }
+            } catch(e) { showToast('Something went wrong.', 'red'); }
         });
 
-        // ── Live poller ────────────────────────────────────────────
+        // ── Live poller ───────────────────────────────────────
         async function refreshSpots() {
             try {
                 const res  = await fetch(`/api/lots/${LOT_ID}/spots`);
                 const data = await res.json();
-
                 document.querySelector('.stat-pill.green .stat-num').textContent = data.available;
                 document.querySelector('.stat-pill.red   .stat-num').textContent = data.occupied;
-
-                // Sync user's spot from server
                 if (data.user_spot_id && data.user_spot_id !== mySpotId) {
-                    mySpotId = data.user_spot_id;
-                    updateBanner(mySpotId);
+                    mySpotId = data.user_spot_id; updateParkBanner(mySpotId);
                 }
-
+                reservedSpotIds   = new Set(data.reserved_spot_ids || []);
+                myReservedSpotIds = new Set(data.user_reserved_spot_ids || []);
                 data.spots.forEach(s => {
                     const el = document.querySelector(`[data-spot-id="${s.spot_id}"]`);
                     if (!el) return;
-                    const isMine = (s.spot_id === mySpotId);
-                    if (!isMine) applySpotState(el, s.occupied, false);
+                    const isMine = s.spot_id === mySpotId;
+                    if (!isMine) applySpotState(el, s.occupied, false, myReservedSpotIds.has(s.spot_id), reservedSpotIds.has(s.spot_id));
                 });
-
-                // Attach handlers to any newly available spots
                 document.querySelectorAll('.spot.available').forEach(attachClickHandler);
-
-            } catch(e) {
-                console.warn('QuickSpot: could not refresh spots', e);
-            }
+            } catch(e) { console.warn('Refresh failed', e); }
         }
-
         setInterval(refreshSpots, 5000);
     </script>
-
 </body>
 </html>
