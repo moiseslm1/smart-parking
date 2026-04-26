@@ -1,1 +1,3 @@
 DataBase/quickspot.db
+__pycache__/
+*.pyc
